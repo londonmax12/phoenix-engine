@@ -1,36 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Phoenix">
+      <UniqueIdentifier>{40FF9C0C-ACDE-1BA8-B5F6-A67E21558209}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Phoenix\Events">
+      <UniqueIdentifier>{240313B4-10D1-06BA-F964-77E0E5D1E21E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Phoenix\glfwWindow">
+      <UniqueIdentifier>{B743E417-A327-A56D-0C88-9FC0F88A8FEF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Phoenix\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Phoenix.h" />
     <ClInclude Include="src\Phoenix\Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>Phoenix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Phoenix\Core.h">
+      <Filter>Phoenix</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\EntryPoint.h">
-      <Filter>Header Files</Filter>
+      <Filter>Phoenix</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phoenix\Events\Event.h">
+      <Filter>Phoenix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Events\KeyboardEvent.h">
+      <Filter>Phoenix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Events\MouseEvent.h">
+      <Filter>Phoenix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Events\WindowEvent.h">
+      <Filter>Phoenix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Log.h">
+      <Filter>Phoenix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\glfwWindow\Window.h">
+      <Filter>Phoenix\glfwWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phoenix\Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Phoenix</Filter>
     </ClCompile>
+    <ClCompile Include="src\Phoenix\Log.cpp">
+      <Filter>Phoenix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\glfwWindow\Window.cpp">
+      <Filter>Phoenix\glfwWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\phxpch.cpp" />
   </ItemGroup>
 </Project>
