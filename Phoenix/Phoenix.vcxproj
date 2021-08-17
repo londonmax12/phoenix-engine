@@ -150,13 +150,11 @@
     <ClInclude Include="src\Phoenix\Events\MouseEvent.h" />
     <ClInclude Include="src\Phoenix\Events\WindowEvent.h" />
     <ClInclude Include="src\Phoenix\Log.h" />
-    <ClInclude Include="src\Phoenix\glfwWindow\Window.h" />
     <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phoenix\Application.cpp" />
     <ClCompile Include="src\Phoenix\Log.cpp" />
-    <ClCompile Include="src\Phoenix\glfwWindow\Window.cpp" />
     <ClCompile Include="src\phxpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

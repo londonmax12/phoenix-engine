@@ -37,9 +37,6 @@
     <ClInclude Include="src\Phoenix\Log.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\glfwWindow\Window.h">
-      <Filter>Phoenix\glfwWindow</Filter>
-    </ClInclude>
     <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +45,6 @@
     </ClCompile>
     <ClCompile Include="src\Phoenix\Log.cpp">
       <Filter>Phoenix</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Phoenix\glfwWindow\Window.cpp">
-      <Filter>Phoenix\glfwWindow</Filter>
     </ClCompile>
     <ClCompile Include="src\phxpch.cpp" />
   </ItemGroup>
