@@ -1,5 +1,6 @@
 #include "phxpch.h"
 #include "Application.h"
+#include "Phoenix/Log.h"
 
 #include <GLFW/glfw3.h>
 
@@ -19,7 +20,10 @@ namespace phx {
 
 	void Application::OnEvent(Event& e)
 	{
-		PHX_CORE_INFO("{0}", e);
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
+
+		PHX_CORE_TRACE("{0}", e);
 	}
 
 	void Application::Run()
@@ -32,4 +36,10 @@ namespace phx {
 		};
 	}
 	
+	bool Application::OnWindowClosed(WindowCloseEvent& e)
+	{
+		m_Running = false;
+		return true;
+	}
+
 }

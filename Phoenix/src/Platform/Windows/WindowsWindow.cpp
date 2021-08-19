@@ -1,5 +1,6 @@
 #include "phxpch.h"
 #include "WindowsWindow.h"
+#include "Phoenix/Log.h"
 
 #include "Phoenix/Events/KeyboardEvent.h"
 #include "Phoenix/Events/WindowEvent.h"
@@ -79,15 +80,19 @@ namespace phx {
 					KeyPressedEvent event(key, 0);
 					data.EventCallback(event);
 					break;
-				}				
+				}								
 				case GLFW_RELEASE:
+				{
 					KeyReleasedEvent event(key);
 					data.EventCallback(event);
 					break;
+				}					
 				case GLFW_REPEAT:
+				{
 					KeyPressedEvent event(key, 1);
 					data.EventCallback(event);
 					break;
+				}			
 				}
 			}
 		);
