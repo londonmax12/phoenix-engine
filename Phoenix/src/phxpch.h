@@ -5,6 +5,7 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <sstream>
 
 
 #include <string>
@@ -15,3 +16,8 @@
 #ifdef PHX_PLATFORM_WINDOWS
 	#include<Windows.h>
 #endif 
+
+
+#ifdef PHX_DEBUG_MODE
+	#include "Phoenix/Log.h"
+#endif // PHX_DEBUG_MODE

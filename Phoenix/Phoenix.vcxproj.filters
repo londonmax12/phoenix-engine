@@ -7,8 +7,11 @@
     <Filter Include="Phoenix\Events">
       <UniqueIdentifier>{240313B4-10D1-06BA-F964-77E0E5D1E21E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Phoenix\glfwWindow">
-      <UniqueIdentifier>{B743E417-A327-A56D-0C88-9FC0F88A8FEF}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +40,12 @@
     <ClInclude Include="src\Phoenix\Log.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phoenix\Window.h">
+      <Filter>Phoenix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="src\Phoenix\Log.cpp">
       <Filter>Phoenix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\phxpch.cpp" />
   </ItemGroup>

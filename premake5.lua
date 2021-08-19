@@ -1,5 +1,3 @@
---premake.lua
-
 workspace "Phoenix"
 	architecture "x64"
 
@@ -7,18 +5,18 @@ workspace "Phoenix"
 	{
 		"Debug",
 		"Release",
-		"Distrabution"
+		"Dist"
 	}
 
-outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "Phoenix"
 	location "Phoenix"
 	kind "SharedLib"
 	language "C++"
 
-	targetdir ("bin/" ..outputDir.. "/%{prj.name}")
-	objdir ("bin-int/" ..outputDir.. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "phxpch.h"
 	pchsource "Phoenix/src/phxpch.cpp"
@@ -26,21 +24,28 @@ project "Phoenix"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/glfw/include",
-		"%{prj.name}/src/Phoenix",
-		"%{prj.name}/src"
+		"%{prj.name}/vendor/GLFW/include"
 	}
 
-    libdirs
-    {
-        "%{prj.name}/vendor/glfw/lib-vc2019"
-    }
+	links 
+	{ 
+		"GLFW",
+		"opengl32.lib"
+	}
+
+	links 
+	{ 
+		"GLFW",
+		"opengl32.lib"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -54,7 +59,7 @@ project "Phoenix"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" ..outputDir.. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
 		}
 
 	filter "configurations:Debug"
@@ -63,31 +68,29 @@ project "Phoenix"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		symbols "On"
+		optimize "On"
 
-	filter "configurations:Distrabution"
-		defines "PHX_DIST_MODE"
-		symbols "On"
+	filter "configurations:Dist_MODE"
+		defines "PHX_DIST"
+		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
+	language "C++"
 
-		language "C++"
-
-	targetdir ("bin/" ..outputDir.. "/%{prj.name}")
-	objdir ("bin-int/" ..outputDir.. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	includedirs
 	{
 		"Phoenix/vendor/spdlog/include",
-		"Phoenic/vendor/glfw/include",
 		"Phoenix/src"
 	}
 
@@ -107,13 +110,65 @@ project "Sandbox"
 		}
 
 	filter "configurations:Debug"
-		defines "PHX_DEBUG_MODE"
+		defines 
+		{
+			"PHX_DEBUG_MODE",
+			"PHX_ENABLE_ASSERTS"
+		}
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		symbols "On"
+		optimize "On"
 
-	filter "configurations:Distrabution"
+	filter "configurations:Dist"
 		defines "PHX_DIST_MODE"
-		symbols "On"
+		optimize "On"
+
+
+project "GLFW"
+	location "GLFW"
+	kind "StaticLib"
+	language "C"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"Phoenix/vendor/GLFW/include/GLFW/glfw3.h",
+		"Phoenix/vendor/GLFW/include/GLFW/glfw3native.h",
+		"Phoenix/vendor/GLFW/src/glfw_config.h",
+		"Phoenix/vendor/GLFW/src/context.c",
+		"Phoenix/vendor/GLFW/src/init.c",
+		"Phoenix/vendor/GLFW/src/input.c",
+		"Phoenix/vendor/GLFW/src/monitor.c",
+		"Phoenix/vendor/GLFW/src/vulkan.c",
+		"Phoenix/vendor/GLFW/src/window.c"
+	}
+	
+	filter "system:windows"
+		buildoptions { "-std=c11", "-lgdi32" }
+		systemversion ""
+		staticruntime "On"
+		
+		files
+		{
+			"Phoenix/vendor/GLFW/src/win32_init.c",
+			"Phoenix/vendor/GLFW/src/win32_joystick.c",
+			"Phoenix/vendor/GLFW/src/win32_monitor.c",
+			"Phoenix/vendor/GLFW/src/win32_time.c",
+			"Phoenix/vendor/GLFW/src/win32_thread.c",
+			"Phoenix/vendor/GLFW/src/win32_window.c",
+			"Phoenix/vendor/GLFW/src/wgl_context.c",
+			"Phoenix/vendor/GLFW/src/egl_context.c",
+			"Phoenix/vendor/GLFW/src/osmesa_context.c"
+		}
+
+		defines 
+		{ 
+			"_GLFW_WIN32",
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+	filter { "system:windows", "configurations:Release" }
+		buildoptions "/MT"

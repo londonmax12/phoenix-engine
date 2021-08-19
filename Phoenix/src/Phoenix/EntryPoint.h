@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 {
 #ifdef PHX_DEBUG_MODE
 	phx::Log::Init();
-	PHX_CORE_TRACE("Phoenix Intialized Logging System");	
+	PHX_CORE_INFO("Phoenix Intialized Logging System");	
 #endif
 	auto app = phx::CreateApplication();
 	app->Run();

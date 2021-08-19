@@ -1,7 +1,7 @@
 #pragma once
 #include "phxpch.h"
-#include "Core.h"
-#include <sstream>
+#include "..\Core.h"
+
 
 namespace phx {
 	enum class EventType
