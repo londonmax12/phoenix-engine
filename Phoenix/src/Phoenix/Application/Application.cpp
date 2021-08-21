@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "Phoenix/Logging/Log.h"
 
-#include <GLFW/glfw3.h>
+
+#include <Glad/glad.h>
 
 namespace phx {
 
@@ -43,7 +44,7 @@ namespace phx {
 	{
 		while (m_Running)
 		{
-			glClearColor(1, 0, 1, 1);
+			glClearColor(1, 1, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->OnUpdate();
 			for (Layer* layer : m_LayerStack)

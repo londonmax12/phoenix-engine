@@ -31,18 +31,14 @@ project "Phoenix"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/GLFW/include"
+		"%{prj.name}/vendor/GLFW/include",
+		"%{prj.name}/vendor/GLAD/include"
 	}
 
 	links 
 	{ 
 		"GLFW",
-		"opengl32.lib"
-	}
-
-	links 
-	{ 
-		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 
@@ -54,7 +50,8 @@ project "Phoenix"
 		defines
 		{
 			"PHX_PLATFORM_WINDOWS",
-			"PHX_BUILD_DLL"
+			"PHX_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -104,7 +101,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -156,7 +153,7 @@ project "GLFW"
 	filter "system:windows"
 		buildoptions { "-std=c11", "-lgdi32" }
 		systemversion ""
-		staticruntime "On"
+		staticruntime "Off"
 		
 		files
 		{
@@ -178,3 +175,35 @@ project "GLFW"
 		}
 	filter { "system:windows", "configurations:Release" }
 		buildoptions "/MT"
+
+project "GLAD"
+	location "GLAD"	
+	kind "StaticLib"
+	language "C"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+        "Phoenix/vendor/Glad/include/glad/glad.h",
+        "Phoenix/vendor/Glad/include/KHR/khrplatform.h",
+        "Phoenix/vendor/Glad/src/glad.c"
+	}
+
+	includedirs
+	{
+		"%{prj.name}/vendor/Glad/include"
+	}
+	
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"

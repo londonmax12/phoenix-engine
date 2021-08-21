@@ -84,13 +84,6 @@ if (MSVC)
                       CMAKE_C_FLAGS_MINSIZEREL
                       CMAKE_C_FLAGS_RELWITHDEBINFO)
 
-            if (${flag} MATCHES "/MD")
-                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-            endif()
-            if (${flag} MATCHES "/MDd")
-                string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
-            endif()
-
         endforeach()
     endif()
 endif()
