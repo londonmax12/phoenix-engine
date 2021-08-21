@@ -48,7 +48,7 @@ project "Phoenix"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -64,17 +64,20 @@ project "Phoenix"
 
 	filter "configurations:Debug"
 		defines "PHX_DEBUG_MODE"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist_MODE"
 		defines "PHX_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
-project "Sandbox"
+project "Sandbox" 
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
@@ -115,14 +118,17 @@ project "Sandbox"
 			"PHX_DEBUG_MODE",
 			"PHX_ENABLE_ASSERTS"
 		}
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "PHX_DIST_MODE"
+		buildoptions "/MD"
 		optimize "On"
 
 

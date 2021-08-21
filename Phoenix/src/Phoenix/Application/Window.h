@@ -3,7 +3,7 @@
 #include "phxpch.h"
 
 #include "Core.h"
-#include "Events/Event.h"
+#include "Phoenix/Events/Event.h"
 
 namespace phx {
 

@@ -16,13 +16,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Phoenix.h" />
-    <ClInclude Include="src\Phoenix\Application.h">
+    <ClInclude Include="src\Phoenix\Application\Application.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Core.h">
+    <ClInclude Include="src\Phoenix\Application\Core.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\EntryPoint.h">
+    <ClInclude Include="src\Phoenix\Application\EntryPoint.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Events\Event.h">
@@ -37,10 +37,16 @@
     <ClInclude Include="src\Phoenix\Events\WindowEvent.h">
       <Filter>Phoenix\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Log.h">
+    <ClInclude Include="src\Phoenix\Layer\Layer.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Window.h">
+    <ClInclude Include="src\Phoenix\Layer\LayerStack.h">
+      <Filter>Phoenix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Logging\Log.h">
+      <Filter>Phoenix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Application\Window.h">
       <Filter>Phoenix</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
@@ -49,10 +55,16 @@
     <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Phoenix\Application.cpp">
+    <ClCompile Include="src\Phoenix\Application\Application.cpp">
       <Filter>Phoenix</Filter>
     </ClCompile>
-    <ClCompile Include="src\Phoenix\Log.cpp">
+    <ClCompile Include="src\Phoenix\Layer\Layer.cpp">
+      <Filter>Phoenix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Layer\LayerStack.cpp">
+      <Filter>Phoenix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Logging\Log.cpp">
       <Filter>Phoenix</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">

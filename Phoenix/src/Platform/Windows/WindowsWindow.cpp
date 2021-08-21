@@ -1,6 +1,6 @@
 #include "phxpch.h"
 #include "WindowsWindow.h"
-#include "Phoenix/Log.h"
+#include "Phoenix/Logging/Log.h"
 
 #include "Phoenix/Events/KeyboardEvent.h"
 #include "Phoenix/Events/WindowEvent.h"
@@ -37,8 +37,6 @@ namespace phx {
 		m_Data.Height = props.Height;
 
 		PHX_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
-
-		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
 			PHX_CORE_ASSERT(success, "Could not intialize GLFW!");

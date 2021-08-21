@@ -80,10 +80,11 @@
       <PrecompiledHeaderFile>phxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PHX_PLATFORM_WINDOWS;PHX_BUILD_DLL;PHX_DEBUG_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -102,13 +103,14 @@
       <PrecompiledHeaderFile>phxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PHX_PLATFORM_WINDOWS;PHX_BUILD_DLL;PHX_RELEASE_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -128,9 +130,9 @@
       <PrecompiledHeaderFile>phxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PHX_PLATFORM_WINDOWS;PHX_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,21 +146,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Phoenix.h" />
-    <ClInclude Include="src\Phoenix\Application.h" />
-    <ClInclude Include="src\Phoenix\Core.h" />
-    <ClInclude Include="src\Phoenix\EntryPoint.h" />
+    <ClInclude Include="src\Phoenix\Application\Application.h" />
+    <ClInclude Include="src\Phoenix\Application\Core.h" />
+    <ClInclude Include="src\Phoenix\Application\EntryPoint.h" />
     <ClInclude Include="src\Phoenix\Events\Event.h" />
     <ClInclude Include="src\Phoenix\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Phoenix\Events\MouseEvent.h" />
     <ClInclude Include="src\Phoenix\Events\WindowEvent.h" />
-    <ClInclude Include="src\Phoenix\Log.h" />
-    <ClInclude Include="src\Phoenix\Window.h" />
+    <ClInclude Include="src\Phoenix\Layer\Layer.h" />
+    <ClInclude Include="src\Phoenix\Layer\LayerStack.h" />
+    <ClInclude Include="src\Phoenix\Logging\Log.h" />
+    <ClInclude Include="src\Phoenix\Application\Window.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\phxpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Phoenix\Application.cpp" />
-    <ClCompile Include="src\Phoenix\Log.cpp" />
+    <ClCompile Include="src\Phoenix\Application\Application.cpp" />
+    <ClCompile Include="src\Phoenix\Layer\Layer.cpp" />
+    <ClCompile Include="src\Phoenix\Layer\LayerStack.cpp" />
+    <ClCompile Include="src\Phoenix\Logging\Log.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\phxpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Phoenix/Window.h"
+#include "Phoenix/Application/Window.h"
 
 #include <GLFW/glfw3.h>
 
