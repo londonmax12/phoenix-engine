@@ -32,13 +32,17 @@ project "Phoenix"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLFW/include",
-		"%{prj.name}/vendor/GLAD/include"
+		"%{prj.name}/vendor/GLAD/include",
+		"%{prj.name}/vendor/ImGui",
+		"%{prj.name}/vendor/Discord/include"
 	}
 
 	links 
 	{ 
 		"GLFW",
 		"GLAD",
+		"imgui",
+		"Discord",
 		"opengl32.lib"
 	}
 
@@ -130,7 +134,7 @@ project "Sandbox"
 
 
 project "GLFW"
-	location "GLFW"
+	location "vendor/GLFW"
 	kind "StaticLib"
 	language "C"
 	
@@ -177,7 +181,7 @@ project "GLFW"
 		buildoptions "/MT"
 
 project "GLAD"
-	location "GLAD"	
+	location "vendor/GLAD"	
 	kind "StaticLib"
 	language "C"
 	staticruntime "on"
@@ -194,12 +198,103 @@ project "GLAD"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/Glad/include"
+		"Phoenix/vendor/Glad/include"
 	}
 	
 	filter "system:windows"
 		systemversion "latest"
 
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+project "ImGui"
+	location "vendor/imgui"
+	kind "StaticLib"
+	language "C++"
+	staticruntime "off"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"Phoenix/vendor/imgui/imconfig.h",
+		"Phoenix/vendor/imgui/imgui.h",
+		"Phoenix/vendor/imgui/imgui.cpp",
+		"Phoenix/vendor/imgui/imgui_draw.cpp",
+		"Phoenix/vendor/imgui/imgui_internal.h",
+		"Phoenix/vendor/imgui/imgui_widgets.cpp",
+		"Phoenix/vendor/imgui/imstb_rectpack.h",
+		"Phoenix/vendor/imgui/imstb_textedit.h",
+		"Phoenix/vendor/imgui/imstb_truetype.h",
+		"Phoenix/vendor/imgui/imgui_demo.cpp"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+
+	filter "system:linux"
+		pic "On"
+		systemversion "latest"
+		cppdialect "C++17"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+	
+project "Discord"
+	location "vendor/Discord"
+	kind "StaticLib"
+	language "C++"
+	staticruntime "off"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"Phoenix/vendor/Discord/include/discord_register.h",
+		"Phoenix/vendor/Discord/include/discord_rpc.h",
+		"Phoenix/vendor/Discord/src/backoff.h",
+		"Phoenix/vendor/Discord/src/connection.h",
+		"Phoenix/vendor/Discord/src/discord_rpc.cpp",
+		"Phoenix/vendor/Discord/src/dllmain.cpp",
+		"Phoenix/vendor/Discord/src/msg_queue.h",
+		"Phoenix/vendor/Discord/src/rpc_connection.cpp",
+		"Phoenix/vendor/Discord/src/rpc_connection.h",
+		"Phoenix/vendor/Discord/src/serialization.cpp",
+		"Phoenix/vendor/Discord/src/serialization.h"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+		files 
+		{
+			"Phoenix/vendor/Discord/src/connection_win.cpp",
+			"Phoenix/vendor/Discord/src/discord_register_win.cpp"
+		}
+		
+		
+
+	filter "system:linux"
+		pic "On"
+		systemversion "latest"
+		cppdialect "C++17"
+		files
+		{
+			"Phoenix/vendor/Discord/src/discord_register_linux.h"
+		}
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
