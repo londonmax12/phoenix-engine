@@ -4,6 +4,7 @@
 #include "discord_rpc.h"
 #include "discord_register.h"
 #include <Glad/glad.h>
+#include "Phoenix/Input/Input.h"
 
 namespace phx {
 
