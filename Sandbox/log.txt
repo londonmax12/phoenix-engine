@@ -1,0 +1,8 @@
+[15:11:36] Phoenix: Phoenix Intialized Logging System
+[15:11:36] Phoenix: Creating window Phoenix Engine (1280, 720)
+[15:11:36] Phoenix: Discord RPC Initialized
+[15:11:36] Phoenix: Discord status updated to: In Menu
+[15:11:46] Phoenix: Phoenix Intialized Logging System
+[15:11:46] Phoenix: Creating window Phoenix Engine (1280, 720)
+[15:11:47] Phoenix: Discord RPC Initialized
+[15:11:47] Phoenix: Discord status updated to: In Menu

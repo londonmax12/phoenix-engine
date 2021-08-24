@@ -1,0 +1,3 @@
+[submodule "Phoenix/vendor/spdlog"]
+	path = Phoenix/vendor/spdlog
+	url = https://github.com/gabime/spdlog
