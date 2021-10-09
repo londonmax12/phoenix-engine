@@ -6,6 +6,8 @@
 #include "Phoenix/Events/Event.h"
 #include "Phoenix/Events/WindowEvent.h"
 
+#include "Phoenix/ImGui/ImGuiLayer.h"
+
 namespace phx {
 	class PHX_API Application
 	{
@@ -24,15 +26,16 @@ namespace phx {
 
 		inline static Application& Get() { return *s_Instance; }
 
-		bool OnWindowClose(WindowCloseEvent& e);
-
 		void SetupDiscord();
 		static void UpdateDiscord();
 		bool gRPC = true;
 		void UpdateDiscordStatus(char* status);
 		
 	private:
+		bool OnWindowClose(WindowCloseEvent& e);
+
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 	private:
