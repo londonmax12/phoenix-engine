@@ -1,6 +1,7 @@
 #pragma once
 #include "Phoenix/Application/Window.h"
-#include "GLFW/glfw3.h"
+#include "Phoenix/Renderer/Renderer.h"
+#include <GLFW/glfw3.h>
 
 namespace phx {
 
@@ -26,6 +27,7 @@ namespace phx {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		RenderContext* m_Context;
 
 		struct WindowData
 		{
