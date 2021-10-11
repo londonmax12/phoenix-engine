@@ -1,5 +1,7 @@
 #include <Phoenix.h>
 
+#include "../../Phoenix/vendor/imgui/imgui.h"
+
 class ExampleLayer : public phx::Layer
 {
 public:
@@ -8,14 +10,15 @@ public:
 	{
 
 	}
-
 	void OnEvent(phx::Event& event) override
 	{
 		if (phx::Input::IsKeyPressed(PHX_KEY_TAB))
 			PHX_CORE_INFO(phx::Input::IsKeyPressed(PHX_KEY_TAB));
 	}
+	virtual void OnImGuiRender() override 
+	{
 
-
+	}
 };
 
 class Sandbox : public phx::Application

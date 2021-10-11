@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "Phoenix"
 	location "Phoenix"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -47,8 +49,6 @@ project "Phoenix"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -58,30 +58,27 @@ project "Phoenix"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
-
 	filter "configurations:Debug"
 		defines "PHX_DEBUG_MODE"
-		buildoptions "/MDd"
-		symbols "On"
+		buildoptions "/MTd"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		buildoptions "/MD"
-		optimize "On"
+		buildoptions "/MT"
+		optimize "on"
 
 	filter "configurations:Dist_MODE"
 		defines "PHX_DIST"
-		buildoptions "/MD"
-		optimize "On"
+		buildoptions "/MT"
+		optimize "on"
 
 project "Sandbox" 
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -104,8 +101,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -119,24 +114,25 @@ project "Sandbox"
 			"PHX_DEBUG_MODE",
 			"PHX_ENABLE_ASSERTS"
 		}
-		buildoptions "/MDd"
-		symbols "On"
+		buildoptions "/MTd"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		buildoptions "/MD"
-		optimize "On"
+		buildoptions "/MT"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "PHX_DIST_MODE"
-		buildoptions "/MD"
-		optimize "On"
+		buildoptions "/MT"
+		optimize "on"
 
 
 project "GLFW"
 	location "vendor/GLFW"
 	kind "StaticLib"
 	language "C"
+	staticruntime "on"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -155,9 +151,7 @@ project "GLFW"
 	}
 	
 	filter "system:windows"
-		buildoptions { "-std=c11", "-lgdi32" }
-		systemversion ""
-		staticruntime "Off"
+		systemversion "latest"
 		
 		files
 		{
@@ -177,37 +171,43 @@ project "GLFW"
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
-	filter { "system:windows", "configurations:Release" }
-		buildoptions "/MT"
+	filter "configurations:Debug"
+		defines "PHX_DEBUG_MODE"
+		buildoptions "/MTd"
+		symbols "on"
 
-project "GLAD"
-	location "vendor/GLAD"	
+	filter "configurations:Release"
+		defines "PHX_RELEASE_MODE"
+		buildoptions "/MT"
+		optimize "on"
+
+project "Glad"
 	kind "StaticLib"
 	language "C"
 	staticruntime "on"
-	
+		
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
+	
 	files
 	{
-        "Phoenix/vendor/Glad/include/glad/glad.h",
-        "Phoenix/vendor/Glad/include/KHR/khrplatform.h",
-        "Phoenix/vendor/Glad/src/glad.c"
-	}
-
-	includedirs
-	{
-		"Phoenix/vendor/Glad/include"
+		"include/glad/glad.h",
+		"include/KHR/khrplatform.h",
+		"src/glad.c"
 	}
 	
+	includedirs
+	{
+		"include"
+	}
+		
 	filter "system:windows"
 		systemversion "latest"
-
+	
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
-
+	
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
@@ -216,7 +216,7 @@ project "ImGui"
 	location "vendor/imgui"
 	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -258,7 +258,8 @@ project "Discord"
 	location "vendor/Discord"
 	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -280,7 +281,6 @@ project "Discord"
 
 	filter "system:windows"
 		systemversion "latest"
-		cppdialect "C++17"
 		files 
 		{
 			"Phoenix/vendor/Discord/src/connection_win.cpp",
