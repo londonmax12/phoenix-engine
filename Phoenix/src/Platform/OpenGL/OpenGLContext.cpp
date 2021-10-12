@@ -1,5 +1,6 @@
 #include "phxpch.h"
 #include "Phoenix/Application/Core.h"
+#include "Phoenix/Logging/Log.h"
 #include "OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
@@ -18,6 +19,10 @@ namespace phx {
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		PHX_CORE_ASSERT(status, "Failed to initialize Glad!");
+		PHX_CORE_INFO("OpenGL Renderer:");
+		PHX_CORE_INFO("   - Vendor: {0}", glGetString(GL_VENDOR));
+		PHX_CORE_INFO("   - Renderer: {0}", glGetString(GL_RENDERER));
+		PHX_CORE_INFO("   - Version: {0}", glGetString(GL_VERSION));
 	}
 
 	void OpenGLContext::SwapBuffers()
