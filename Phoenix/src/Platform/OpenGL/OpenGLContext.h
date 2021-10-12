@@ -1,5 +1,5 @@
 #pragma once
-#include "Phoenix/Renderer/Renderer.h"
+#include "Phoenix/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
 
