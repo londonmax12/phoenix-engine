@@ -10,6 +10,7 @@
 
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Buffer.h"
+#include "Phoenix/Renderer/VertexArray.h"
 
 namespace phx {
 	class PHX_API Application
@@ -29,11 +30,6 @@ namespace phx {
 
 		inline static Application& Get() { return *s_Instance; }
 
-		void SetupDiscord();
-		static void UpdateDiscord();
-		bool gRPC = true;
-		void UpdateDiscordStatus(char* status);
-		
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
@@ -42,10 +38,11 @@ namespace phx {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		unsigned int m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+
+		std::shared_ptr<Shader> m_BlueShader;
+		std::shared_ptr<VertexArray> m_SquareVA;
 	private:
 		static Application* s_Instance;
 	};

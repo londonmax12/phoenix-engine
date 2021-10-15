@@ -17,7 +17,8 @@ public:
 	}
 	virtual void OnImGuiRender() override 
 	{
-
+		ImGui::Begin("Test Window");
+		ImGui::End();
 	}
 };
 

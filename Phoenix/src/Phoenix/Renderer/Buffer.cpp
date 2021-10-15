@@ -11,8 +11,8 @@ namespace phx {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
 		}
 
 		PHX_CORE_ASSERT(false, "No render API")
@@ -22,8 +22,8 @@ namespace phx {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
-		case RendererAPI::OpenGL:  return new OpenGLIndexBuffer(indices, size);
+		case RendererAPI::API::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
+		case RendererAPI::API::OpenGL:  return new OpenGLIndexBuffer(indices, size);
 		}
 
 		PHX_CORE_ASSERT(false, "No render API")

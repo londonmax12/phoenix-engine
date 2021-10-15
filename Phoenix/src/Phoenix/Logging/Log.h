@@ -21,6 +21,7 @@ namespace phx {
 
 }
 
+#ifdef PHX_DEBUG_MODE
 #define PHX_CORE_FATAL(...)::phx::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 #define PHX_CORE_ERROR(...)::phx::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define PHX_CORE_WARN(...)::phx::Log::GetCoreLogger()->warn(__VA_ARGS__)
@@ -32,3 +33,16 @@ namespace phx {
 #define PHX_CLIENT_WARN(...)::phx::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define PHX_CLIENT_INFO(...)::phx::Log::GetClientLogger()->info(__VA_ARGS__)
 #define PHX_CLIENT_TRACE(...)::phx::Log::GetClientLogger()->trace(__VA_ARGS__)
+#else 
+#define PHX_CORE_FATAL
+#define PHX_CORE_ERROR
+#define PHX_CORE_WARN
+#define PHX_CORE_INFO
+#define PHX_CORE_TRACE
+
+#define PHX_CLIENT_FATAL
+#define PHX_CLIENT_ERROR
+#define PHX_CLIENT_WARN
+#define PHX_CLIENT_INFO
+#define PHX_CLIENT_TRACE
+#endif
