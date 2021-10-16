@@ -5,6 +5,9 @@
 #include "Phoenix/Logging/Log.h"
 
 namespace phx {
+	static int64_t eptime;
+	static char* discordStatus;
+	static const bool gRPC = true;
 	class discordRPC {
 	public:
 		static void SetupDiscord()
@@ -42,9 +45,5 @@ namespace phx {
 			discordPresence.partyId = "ae488379-351d-4a4f-ad32-2b9b01c91657";
 			Discord_UpdatePresence(&discordPresence);
 		}
-	private:
-		static int64_t eptime;
-		static char* discordStatus;
-		static const bool gRPC = true;
 	};
 }

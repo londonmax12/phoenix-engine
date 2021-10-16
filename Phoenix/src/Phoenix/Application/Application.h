@@ -11,6 +11,7 @@
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/VertexArray.h"
+#include "Phoenix/Renderer/Camera.h"
 
 namespace phx {
 	class PHX_API Application
@@ -43,6 +44,8 @@ namespace phx {
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVA;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};

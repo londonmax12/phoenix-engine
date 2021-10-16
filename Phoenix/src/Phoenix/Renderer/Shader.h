@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include "../vendor/glm/glm/glm.hpp"
 
 namespace phx {
+
 	class Shader
 	{
 	public:
@@ -10,7 +12,10 @@ namespace phx {
 
 		void Bind() const;
 		void Unbind() const;
+
+		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 	private:
 		uint32_t m_RendererID;
 	};
+
 }
