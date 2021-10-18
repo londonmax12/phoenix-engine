@@ -8,6 +8,8 @@
 
 #include "Phoenix/ImGui/ImGuiLayer.h"
 
+#include "Phoenix/Time/DeltaTime.h"
+
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/VertexArray.h"
@@ -31,21 +33,14 @@ namespace phx {
 
 		inline static Application& Get() { return *s_Instance; }
 
+		virtual void OnInit() {}
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-
+		float m_DeltaTime = 0.0f;
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<Shader> m_BlueShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-
-		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};

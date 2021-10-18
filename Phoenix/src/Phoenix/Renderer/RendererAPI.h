@@ -1,7 +1,7 @@
 #pragma once
 #include "phxpch.h"
 #include "VertexArray.h"
-#include <glm/glm.hpp>
+#include <../vendor/glm/glm/glm.hpp>
 
 namespace phx {
 	class RendererAPI

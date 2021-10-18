@@ -12,9 +12,9 @@ int main(int argc, char** argv)
 #endif
 
 	auto app = phx::CreateApplication();
+	app->OnInit();
 	app->Run();
 	delete app;
-	
 }
 #endif
 

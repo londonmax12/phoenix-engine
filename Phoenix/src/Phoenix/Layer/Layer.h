@@ -3,6 +3,8 @@
 #include "Phoenix/Application/Core.h"
 #include "Phoenix/Events/Event.h"
 
+#include "Phoenix/Time/DeltaTime.h"
+
 namespace phx {
 
 	class PHX_API Layer
@@ -13,7 +15,7 @@ namespace phx {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
