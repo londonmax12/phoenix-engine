@@ -26,7 +26,9 @@ project "Phoenix"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h"
 	}
 
 	includedirs
@@ -36,7 +38,9 @@ project "Phoenix"
 		"%{prj.name}/vendor/GLFW/include",
 		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/ImGui",
-		"%{prj.name}/vendor/Discord/include"
+		"%{prj.name}/vendor/Discord/include",
+		"%{prj.name}/vendor/glm",
+		"%{prj.name}/vendor/stb_image"
 	}
 
 	links 
@@ -92,6 +96,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Phoenix/vendor/spdlog/include",
+		"Phoenix/vendor/glm",
+		"Phoenix/vendor/imgui",
 		"Phoenix/src"
 	}
 
@@ -182,6 +188,7 @@ project "GLFW"
 		optimize "on"
 
 project "Glad"
+	location "vendor/Glad"
 	kind "StaticLib"
 	language "C"
 	staticruntime "on"
@@ -191,9 +198,9 @@ project "Glad"
 	
 	files
 	{
-		"include/glad/glad.h",
-		"include/KHR/khrplatform.h",
-		"src/glad.c"
+		"Phoenix/vendor/Glad/include/glad/glad.h",
+		"Phoenix/vendor/Glad/include/KHR/khrplatform.h",
+		"Phoenix/vendor/Glad/src/glad.c"
 	}
 	
 	includedirs

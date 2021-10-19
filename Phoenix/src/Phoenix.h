@@ -30,6 +30,7 @@
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/VertexArray.h"
 #include "Phoenix/Renderer/Camera.h"
+#include "Phoenix/Renderer/Texture.h"
 //----------------------------------------
 
 //--------------Entry-Point---------------

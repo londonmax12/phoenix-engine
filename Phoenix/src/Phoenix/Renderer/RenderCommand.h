@@ -5,6 +5,10 @@
 namespace phx {
 	class RenderCommand {
 	public:
+		inline static void Init()
+		{
+			s_RendererAPI->Init();
+		}
 		inline static void ClearColor(const glm::vec4& color)
 		{
 			s_RendererAPI->ClearColor(color);
