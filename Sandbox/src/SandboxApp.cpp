@@ -36,69 +36,8 @@ public:
 		squareIB.reset(phx::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		std::string blueShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-	
-			out vec3 v_Position;
-
-			void main()
-			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string blueShaderFragmentSrc = R"(
-						#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
-			
-			uniform vec3 u_Color;
-			void main()
-			{
-				color = vec4(u_Color, 1.0);
-			}
-		)";
-		m_BlueShader.reset(phx::Shader::Create(blueShaderVertexSrc, blueShaderFragmentSrc));
-
-		std::string textureShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			out vec2 v_TexCoord;
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string textureShaderFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			in vec2 v_TexCoord;
-			
-			uniform sampler2D u_Texture;
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-		m_TextureShader.reset(phx::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
-
+		m_TextureShader = phx::Shader::Create("assets/shaders/texture.glsl");
 		m_Texture = phx::Texture2D::Create("assets/textures/doggo.png");
-		m_Texture2 = phx::Texture2D::Create("assets/textures/r6sm.png");
 
 		std::dynamic_pointer_cast<phx::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<phx::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -152,20 +91,16 @@ public:
 
 		phx::Renderer::BeginScene(m_Camera);
 
-		std::dynamic_pointer_cast<phx::OpenGLShader>(m_BlueShader)->Bind();
-		std::dynamic_pointer_cast<phx::OpenGLShader>(m_BlueShader)->UploadUniformVec3("u_Color", m_SquareColor);
-
 		m_Texture->Bind();
 		phx::Renderer::Submit(m_TextureShader, m_SquareVA);
-		m_Texture2->Bind();
-		phx::Renderer::Submit(m_TextureShader, m_SquareVA);
+
 		phx::Renderer::EndScene();
 	}
 private:
-	phx::Ref<phx::Shader> m_BlueShader, m_TextureShader;
+	phx::Ref<phx::Shader> m_TextureShader;
 	phx::Ref<phx::VertexArray> m_SquareVA;
 
-	phx::Ref<phx::Texture2D> m_Texture, m_Texture2;
+	phx::Ref<phx::Texture2D> m_Texture;
 
 	phx::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
