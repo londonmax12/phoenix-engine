@@ -51,8 +51,15 @@ public:
 		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
 		ImGui::End();
 	}
-	void OnEvent(phx::Event& event) override
+	void OnEvent(phx::Event& e) override
 	{
+		m_CameraController.OnEvent(e);
+
+		if (e.GetEventType() == phx::EventType::WindowResize)
+		{
+			auto& re = (phx::WindowResizeEvent&)e;
+		
+		}
 	}
 
 	void OnUpdate(phx::DeltaTime dt) override

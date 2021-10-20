@@ -2,18 +2,12 @@
 
 #include <memory>
 
-#ifdef PHX_PLATFORM_WINDOWS
-#if PHX_DLL
-	#ifdef PHX_BUILD_DLL
-		#define PHX_API __declspec(dllexport)
+#ifdef _WIN32
+	#ifdef _WIN64
+		#define PHX_PLATFORM_WINDOWS
 	#else
-		#define PHX_API __declspec(dllimport)
-	#endif 
-#else 
-#define PHX_API
-#endif
-#else
-	#error Invalid platform!
+		#error "x86 builds are not supported"
+	#endif	
 #endif
 
 #ifdef PHX_ENABLE_ASSERTS
