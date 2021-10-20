@@ -17,6 +17,8 @@ namespace phx {
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
+
+		void SetProjection(float left, float right, float bottom, float top);
 	private:
 		void RecalculateViewMatrix();
 	private:
@@ -27,5 +29,4 @@ namespace phx {
 		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
 		float m_Rotation = 0.0f;
 	};
-
 }

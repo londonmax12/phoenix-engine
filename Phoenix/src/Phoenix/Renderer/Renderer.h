@@ -2,7 +2,7 @@
 
 #include "RenderCommand.h"
 
-#include "Phoenix/Renderer/Camera.h"
+#include "Phoenix/Renderer/OrthographicCamera.h"
 
 #include "Shader.h"
 

@@ -29,7 +29,8 @@
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/VertexArray.h"
-#include "Phoenix/Renderer/Camera.h"
+#include "Phoenix/Renderer/OrthographicCamera.h"
+#include "Phoenix/Renderer/OrthographicCameraController.h"
 #include "Phoenix/Renderer/Texture.h"
 //----------------------------------------
 

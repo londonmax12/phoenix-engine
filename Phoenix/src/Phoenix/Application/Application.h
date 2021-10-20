@@ -13,7 +13,7 @@
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/VertexArray.h"
-#include "Phoenix/Renderer/Camera.h"
+#include "Phoenix/Renderer/OrthographicCamera.h"
 
 namespace phx {
 	class PHX_API Application
