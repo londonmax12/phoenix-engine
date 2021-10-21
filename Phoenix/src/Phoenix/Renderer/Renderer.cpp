@@ -1,6 +1,8 @@
 #include "phxpch.h"
 #include "Renderer.h"
 
+#include "Phoenix/Renderer/Renderer2D.h"
+
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace phx {
@@ -10,6 +12,7 @@ namespace phx {
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

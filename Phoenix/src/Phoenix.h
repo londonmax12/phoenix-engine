@@ -1,6 +1,7 @@
 #pragma once
 
 //--------------Application---------------
+#include "Phoenix/Application/Core.h"
 #include "Phoenix/Application/Application.h"
 //----------------------------------------
 
@@ -25,6 +26,7 @@
 
 //---------------Renderer-----------------
 #include "Phoenix/Renderer/Renderer.h"
+#include "Phoenix/Renderer/Renderer2D.h"
 #include "Phoenix/Renderer/RenderCommand.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Shader.h"
@@ -35,5 +37,5 @@
 //----------------------------------------
 
 //--------------Entry-Point---------------
-#include "Phoenix/Application/EntryPoint.h"
+//#include "Phoenix/Application/EntryPoint.h"
 //----------------------------------------

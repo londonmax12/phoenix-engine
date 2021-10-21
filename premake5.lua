@@ -57,7 +57,6 @@ project "Phoenix"
 
 		defines
 		{
-			"PHX_PLATFORM_WINDOWS",
 			"PHX_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -108,12 +107,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines
-		{
-			"PHX_PLATFORM_WINDOWS"
-		}
-
+		
 	filter "configurations:Debug"
 		defines 
 		{

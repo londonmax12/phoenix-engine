@@ -28,10 +28,10 @@ namespace phx {
 		float m_ZoomLevel = 1.0f;
 		OrthographicCamera m_Camera;
 
-		bool m_Rotation = false;
+		bool m_Rotation;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		float m_CameraRotation = 0.0f;
-		float m_CameraTranslationSpeed = 25.0f, m_CameraRotationSpeed = 45.0f;
+		float m_CameraTranslationSpeed = 200.0f, m_CameraRotationSpeed = 60.0f;
 	};
 }

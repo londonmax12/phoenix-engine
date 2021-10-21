@@ -1,12 +1,12 @@
 #include "phxpch.h"
-#include "Application.h"
+#include "Phoenix/Application/Application.h"
 #include "Phoenix/Logging/Log.h"
 
 #include "Phoenix/Input/Input.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Renderer.h"
 
-#include "DiscordRPC.h"
+#include "Phoenix/Application/DiscordRPC.h"
 
 #include "GLFW/glfw3.h"
 
@@ -14,13 +14,12 @@ namespace phx {
 
 	Application* Application::s_Instance = nullptr;
 
+	#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application::Application()
 		
 	{
 		s_Instance = this;
-
-		#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
@@ -54,8 +53,8 @@ namespace phx {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(PHX_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(PHX_BIND_EVENT_FN(Application::OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{

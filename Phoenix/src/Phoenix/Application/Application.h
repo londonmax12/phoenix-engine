@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "Window.h"
+#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Window.h"
 #include "Phoenix/Layer/LayerStack.h"
 #include "Phoenix/Events/Event.h"
 #include "Phoenix/Events/WindowEvent.h"
@@ -16,7 +16,7 @@
 #include "Phoenix/Renderer/OrthographicCamera.h"
 
 namespace phx {
-	class PHX_API Application
+	class Application
 	{
 	public:
 		Application();

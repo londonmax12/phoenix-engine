@@ -6,7 +6,7 @@
 
 namespace phx
 {
-	class PHX_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();
