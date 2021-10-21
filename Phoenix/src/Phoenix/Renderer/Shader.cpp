@@ -61,5 +61,4 @@ namespace phx {
 	{
 		return m_Shaders.find(name) != m_Shaders.end();
 	}
-
 }

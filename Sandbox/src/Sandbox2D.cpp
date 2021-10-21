@@ -10,7 +10,7 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-
+	m_Texture = phx::Texture2D::Create("assets/textures/doggo.png");
 }
 
 void Sandbox2D::OnDetach()
@@ -25,11 +25,11 @@ void Sandbox2D::OnUpdate(phx::DeltaTime dt)
 	phx::RenderCommand::Clear();
 
 	phx::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	phx::Renderer2D::DrawQuadFilled({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_SquareColor);
+	phx::Renderer2D::DrawQuadFilled({ -1.0f, 0.0f }, { 0.8f, 0.8f }, m_SquareColor);
+	phx::Renderer2D::DrawQuadFilled({ 0.5f, 0.5f }, { 0.5f, 0.75f }, { 0.8f, 0.3f, 0.3f, 1.0f });
+	phx::Renderer2D::DrawQuadFilled({ 0.0f, 0.0f, -0.01f }, { 10.0f, 10.0f }, m_Texture);
+
 	phx::Renderer2D::EndScene();
-	//std::dynamic_pointer_cast<phx::OpenGLShader>(m_Shader)->Bind();
-	//std::dynamic_pointer_cast<phx::OpenGLShader>(m_Shader)->UploadUniformVec4("u_Color", m_SquareColor);
-	//phx::Renderer::Submit(m_Shader, m_SquareVA);
 }
 
 void Sandbox2D::OnImGuiRender()
