@@ -181,6 +181,12 @@ namespace phx {
 
 		UploadUniformInt(name, value);
 	}
+	void OpenGLShader::SetFloat(const std::string& name, const float& value)
+	{
+		PHX_PROFILE_FUNCTION();
+
+		UploadUniformFloat(name, value);
+	}
 	void OpenGLShader::SetVec3(const std::string& name, const glm::vec3& value)
 	{
 		PHX_PROFILE_FUNCTION();

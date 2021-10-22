@@ -1,6 +1,5 @@
 #include "phxpch.h"
 #include "WindowsWindow.h"
-#include "Phoenix/Logging/Log.h"
 
 #include "Phoenix/Events/KeyboardEvent.h"
 #include "Phoenix/Events/WindowEvent.h"

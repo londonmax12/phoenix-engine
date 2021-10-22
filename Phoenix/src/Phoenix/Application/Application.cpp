@@ -1,6 +1,5 @@
 #include "phxpch.h"
 #include "Phoenix/Application/Application.h"
-#include "Phoenix/Logging/Log.h"
 
 #include "Phoenix/Input/Input.h"
 #include "Phoenix/Renderer/Buffer.h"

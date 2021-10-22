@@ -16,6 +16,7 @@
 #include <unordered_set>
 
 #include "Phoenix/Debug/Instramentor.h"
+#include "Phoenix/Logging/Log.h"
 
 #ifdef PHX_PLATFORM_WINDOWS
 	#include<Windows.h>

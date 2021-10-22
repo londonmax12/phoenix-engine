@@ -18,6 +18,7 @@ namespace phx {
 		virtual void Unbind() const override;
 
 		virtual void SetInt(const std::string& name, const int& value) override;
+		virtual void SetFloat(const std::string& name, const float& value) override;
 		virtual void SetVec3(const std::string& name, const glm::vec3& value) override;
 		virtual void SetVec4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;

@@ -2,8 +2,6 @@
 #include "phxpch.h"
 #include "discord_rpc.h"
 #include "discord_register.h"
-#include "Phoenix/Logging/Log.h"
-
 namespace phx {
 	static int64_t eptime;
 	static char* discordStatus;
