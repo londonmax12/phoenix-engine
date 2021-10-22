@@ -19,6 +19,9 @@ namespace phx {
 	Application::Application()
 		
 	{
+		PHX_PROFILE_FUNCTION();
+
+		PHX_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -36,22 +39,26 @@ namespace phx {
 
 	Application::~Application()
 	{
+		PHX_PROFILE_FUNCTION();
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
+		PHX_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		PHX_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		PHX_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(PHX_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(PHX_BIND_EVENT_FN(Application::OnWindowResize));
@@ -66,19 +73,26 @@ namespace phx {
 
 	void Application::Run()
 	{
+		PHX_PROFILE_FUNCTION();
 		while (m_Running)
-		{
+		{		
+			PHX_PROFILE_SCOPE("RunLoop");
 			float time = (float)glfwGetTime();
 			DeltaTime deltaTime = time - m_DeltaTime;
 			m_DeltaTime = time;
 			if (!m_Minimized)
 			{
+				PHX_PROFILE_SCOPE("LayerStack OnUpdate");
 				for (Layer* layer : m_LayerStack)
 					layer->OnUpdate(deltaTime);
 			}		
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+			{
+				PHX_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+			}			
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
@@ -92,6 +106,7 @@ namespace phx {
 	}
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		PHX_PROFILE_FUNCTION();
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

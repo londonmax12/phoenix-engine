@@ -21,6 +21,8 @@ namespace phx {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		std::string shaderSrc = ReadFile(filepath);
 		auto shaderSources = PreProcess(shaderSrc);
 		Compile(shaderSources);
@@ -35,6 +37,8 @@ namespace phx {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -42,10 +46,14 @@ namespace phx {
 	}
 	OpenGLShader::~OpenGLShader()
 	{
+		PHX_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -65,6 +73,8 @@ namespace phx {
 	}
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -87,6 +97,8 @@ namespace phx {
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		GLuint program = glCreateProgram();
 		PHX_CORE_ASSERT(shaderSources.size() <=2, "Only use 2 shaders")
 		std::array<GLenum, 2> glShaderIDs;
@@ -153,26 +165,38 @@ namespace phx {
 	
 	void OpenGLShader::Bind() const
 	{
+		PHX_PROFILE_FUNCTION();
+
 		glUseProgram(m_RendererID);
 	}
 	void OpenGLShader::Unbind() const
 	{
+		PHX_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 	void OpenGLShader::SetInt(const std::string& name, const int& value)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		UploadUniformInt(name, value);
 	}
 	void OpenGLShader::SetVec3(const std::string& name, const glm::vec3& value)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		UploadUniformVec3(name, value);
 	}
 	void OpenGLShader::SetVec4(const std::string& name, const glm::vec4& value)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		UploadUniformVec4(name, value);
 	}
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		PHX_PROFILE_FUNCTION();
+
 		UploadUniformMat4(name, value);
 	}
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int& value)

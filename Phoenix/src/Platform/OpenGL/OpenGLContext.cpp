@@ -16,6 +16,8 @@ namespace phx {
 
 	void OpenGLContext::Init()
 	{
+		PHX_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		PHX_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -27,6 +29,8 @@ namespace phx {
 
 	void OpenGLContext::SwapBuffers()
 	{
+		PHX_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_WindowHandle);
 	}
 }

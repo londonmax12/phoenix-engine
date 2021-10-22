@@ -11,6 +11,8 @@ namespace phx {
 
 	void Renderer::Init()
 	{
+		PHX_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}

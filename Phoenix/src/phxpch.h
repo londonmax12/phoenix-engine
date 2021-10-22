@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Phoenix/Debug/Instramentor.h"
+
 #ifdef PHX_PLATFORM_WINDOWS
 	#include<Windows.h>
 #endif 

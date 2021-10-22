@@ -24,6 +24,7 @@ namespace phx {
 
 	void ImGuiLayer::OnAttach()
 	{
+		PHX_PROFILE_FUNCTION();
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -57,6 +58,7 @@ namespace phx {
 
 	void ImGuiLayer::OnDetach()
 	{
+		PHX_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -64,6 +66,7 @@ namespace phx {
 
 	void ImGuiLayer::Begin()
 	{
+		PHX_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
