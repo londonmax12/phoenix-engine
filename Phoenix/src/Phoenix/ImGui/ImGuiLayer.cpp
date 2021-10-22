@@ -87,9 +87,4 @@ namespace phx {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
-
-	void ImGuiLayer::OnImGuiRender()
-	{
-		//ImGui::ShowDemoWindow();
-	}
 }
