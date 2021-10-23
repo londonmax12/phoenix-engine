@@ -121,7 +121,7 @@ namespace phx {
     };
 }
 
-#define PHX_PROFILE 1
+#define PHX_PROFILE 0
 #if PHX_PROFILE
 #define PHX_PROFILE_BEGIN_SESSION(name, filepath) ::phx::Instrumentor::Get().BeginSession(name, filepath)
 #define PHX_PROFILE_END_SESSION() ::phx::Instrumentor::Get().EndSession()

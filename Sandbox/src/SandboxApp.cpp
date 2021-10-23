@@ -17,33 +17,7 @@ public:
 	MainLayer()
 		: Layer("Example"), m_CameraController(1280.0f / 720.0f)
 	{
-		m_SquareVA = phx::VertexArray::Create();
-	
-		float squareVertices[5 * 4] = {
-			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
-			 0.75f, -0.75f, 0.0f, 1.0f, 0.0f,
-			 0.75f,  0.75f, 0.0f, 1.0f, 1.0f,
-			-0.75f,  0.75f, 0.0f, 0.0f, 1.0f
-		};
 
-		std::shared_ptr<phx::VertexBuffer> squareVB;
-		squareVB.reset(phx::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-		squareVB->SetLayout({
-			{ phx::ShaderDataType::vec3, "a_Position" },
-			{ phx::ShaderDataType::vec2, "a_TexCoord" }
-			});
-		m_SquareVA->AddVertexBuffer(squareVB);
-
-		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<phx::IndexBuffer> squareIB;
-		squareIB.reset(phx::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-		m_SquareVA->SetIndexBuffer(squareIB);
-
-		m_TextureShader = phx::Shader::Create("assets/shaders/texture.glsl");
-		m_Texture = phx::Texture2D::Create("assets/textures/doggo.png");
-
-		std::dynamic_pointer_cast<phx::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<phx::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 	virtual void OnImGuiRender() override
 	{
