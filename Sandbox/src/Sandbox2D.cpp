@@ -40,6 +40,8 @@ void Sandbox2D::OnUpdate(phx::DeltaTime dt)
 		phx::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		phx::Renderer2D::DrawQuadFilled({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		phx::Renderer2D::DrawQuadFilled({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+		phx::Renderer2D::DrawQuadFilled({ -5.0f, -5.0f, -0.01}, { 10.0f, 10.0f }, m_Texture, tiling);
+		phx::Renderer2D::DrawQuadFilled({ -1.5f, -1.5f }, { 3.0f, 3.0f }, m_Texture, tiling * 2);
 
 		//phx::Renderer2D::DrawRotatedQuadFilled({ 0.0f, 0.0f, -0.01f }, { 10.0f, 10.0f }, glm::radians(45.0f), m_Texture, tiling, m_SquareColor);
 		phx::Renderer2D::EndScene();

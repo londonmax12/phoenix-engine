@@ -17,17 +17,20 @@ namespace phx {
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual void SetInt(const std::string& name, const int& value) override;
-		virtual void SetFloat(const std::string& name, const float& value) override;
+		virtual void SetInt(const std::string& name, int value) override;
+		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
+		virtual void SetFloat(const std::string& name, float value) override;
 		virtual void SetVec3(const std::string& name, const glm::vec3& value) override;
 		virtual void SetVec4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 
 		virtual const std::string& GetName() const override { return m_Name; }
 
-		void UploadUniformInt(const std::string& name, const int& value);
+		void UploadUniformInt(const std::string& name, int value);
+		void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
 
-		void UploadUniformFloat(const std::string& name, const float& value);
+
+		void UploadUniformFloat(const std::string& name, float value);
 		void UploadUniformVec2(const std::string& name, const glm::vec2& vec2);
 		void UploadUniformVec3(const std::string& name, const glm::vec3& vec3);
 		void UploadUniformVec4(const std::string& name, const glm::vec4& vec4);
