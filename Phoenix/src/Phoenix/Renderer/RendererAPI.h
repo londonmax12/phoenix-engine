@@ -18,7 +18,7 @@ namespace phx {
 
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
 
-		inline static API getAPI() { return s_API; }
+		static API getAPI() { return s_API; }
 	private:
 		static API s_API;
 	};
