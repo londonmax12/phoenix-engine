@@ -28,6 +28,4 @@ namespace phx {
 		PHX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
-
 }
-

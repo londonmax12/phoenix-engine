@@ -6,7 +6,6 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace phx {
-
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
 	void Renderer::Init()

@@ -9,11 +9,11 @@ namespace phx {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
-			case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLVertexArray>();
+		case RendererAPI::API::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
+		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLVertexArray>();
 		}
 
 		PHX_CORE_ASSERT(false, "No render API")
-		return nullptr;
+			return nullptr;
 	}
 }

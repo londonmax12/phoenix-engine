@@ -31,7 +31,7 @@ namespace phx {
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
 		PHX_CORE_ASSERT(!Exists(name), "Shader already exists")
-		m_Shaders[name] = shader;
+			m_Shaders[name] = shader;
 	}
 
 	void ShaderLibrary::Add(const Ref<Shader>& shader)
@@ -54,7 +54,7 @@ namespace phx {
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
 		PHX_CORE_ASSERT(Exists(name) != m_Shaders.end(), "Shader not found")
-		return m_Shaders[name];
+			return m_Shaders[name];
 	}
 
 	bool ShaderLibrary::Exists(const std::string& name) const

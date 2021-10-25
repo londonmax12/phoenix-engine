@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 
 namespace phx {
-
 	class Shader
 	{
 	public:
@@ -29,10 +28,10 @@ namespace phx {
 	};
 	class ShaderLibrary
 	{
-	public: 
+	public:
 		void Add(const std::string& name, const Ref<Shader>& shader);
 		void Add(const Ref<Shader>& shader);
-		
+
 		Ref<Shader> Load(const std::string& filepath);
 		Ref<Shader> Load(const std::string& name, const std::string& filepath);
 

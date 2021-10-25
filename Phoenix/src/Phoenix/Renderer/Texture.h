@@ -4,7 +4,6 @@
 #include "Phoenix/Application/Base.h"
 
 namespace phx {
-
 	class Texture
 	{
 	public:

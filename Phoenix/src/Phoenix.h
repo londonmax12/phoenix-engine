@@ -34,6 +34,7 @@
 #include "Phoenix/Renderer/OrthographicCamera.h"
 #include "Phoenix/Renderer/OrthographicCameraController.h"
 #include "Phoenix/Renderer/Texture.h"
+#include "Phoenix/Renderer/Framebuffer.h"
 //----------------------------------------
 
 //--------------Entry-Point---------------

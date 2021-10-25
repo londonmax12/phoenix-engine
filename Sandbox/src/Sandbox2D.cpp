@@ -15,8 +15,15 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach()
 {
 	PHX_PROFILE_FUNCTION();
+
 	ImGuiIO& io = ImGui::GetIO();
 	io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Light.ttf", 14.0f);
+
+	phx::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_FrameBuffer = phx::Framebuffer::Create(fbSpec);
+
 	m_Texture = phx::Texture2D::Create("assets/textures/placeholder.png");
 }
 
@@ -35,6 +42,7 @@ void Sandbox2D::OnUpdate(phx::DeltaTime dt)
 
 	{
 		PHX_PROFILE_SCOPE("Renderer Prep");
+		m_FrameBuffer->Bind();
 		phx::RenderCommand::ClearColor({ 0.1, 0.1, 0.1, 1 });
 		phx::RenderCommand::Clear();
 	}
@@ -64,6 +72,7 @@ void Sandbox2D::OnUpdate(phx::DeltaTime dt)
 			}
 		}
 		phx::Renderer2D::EndScene();
+		m_FrameBuffer->Unbind();
 	}
 	
 }
@@ -144,6 +153,10 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::End();
 
+	ImGui::Begin("Scene");
+	uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
+	ImGui::End();
 
     ImGui::End();
 }
