@@ -19,7 +19,8 @@ private:
 	phx::Ref<phx::Shader> m_Shader;
 	phx::Ref<phx::VertexArray> m_SquareVA;	
 
-	float tiling = 1.0f;
+	float tiling = 5.0f;
+	float deltatimems;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
