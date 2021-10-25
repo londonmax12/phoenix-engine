@@ -1,7 +1,7 @@
 #pragma once
 
 #include "phxpch.h"
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include "Layer.h"
 
 namespace phx

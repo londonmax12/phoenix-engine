@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include "Phoenix/Events/Event.h"
 
 #include "Phoenix/Time/DeltaTime.h"

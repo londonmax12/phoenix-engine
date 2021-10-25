@@ -1,5 +1,5 @@
 #include "phxpch.h"
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include "OpenGLContext.h"
 
 #include <GLFW/glfw3.h>

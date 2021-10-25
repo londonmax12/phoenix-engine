@@ -1,5 +1,5 @@
 #pragma once
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 
 namespace phx {
 	enum class ShaderDataType
@@ -49,8 +49,8 @@ namespace phx {
 			case ShaderDataType::vec2: return 2;
 			case ShaderDataType::vec3: return 3;
 			case ShaderDataType::vec4: return 4;
-			case ShaderDataType::mat3: return 3 * 3;
-			case ShaderDataType::mat4: return 4 * 4;
+			case ShaderDataType::mat3: return 3; // * 3;
+			case ShaderDataType::mat4: return 4; // * 4;
 			case ShaderDataType::Int:  return 1;
 			case ShaderDataType::int2: return 2;
 			case ShaderDataType::int3: return 3;

@@ -2,7 +2,7 @@
 
 #include "phxpch.h"
 
-#include "Core.h"
+#include "Phoenix/Application/Base.h"
 #include "Phoenix/Events/Event.h"
 
 namespace phx {

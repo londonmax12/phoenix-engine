@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 
 namespace phx {
 	class Input

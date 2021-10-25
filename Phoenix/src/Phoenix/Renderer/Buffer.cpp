@@ -1,6 +1,6 @@
 #include "phxpch.h"
 #include "Buffer.h"
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 
 #include "Renderer.h"
 

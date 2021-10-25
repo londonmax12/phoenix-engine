@@ -1,7 +1,7 @@
 #pragma once
 
 //--------------Application---------------
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include "Phoenix/Application/Application.h"
 //----------------------------------------
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include "Phoenix/Application/Window.h"
 #include "Phoenix/Layer/LayerStack.h"
 #include "Phoenix/Events/Event.h"
@@ -31,6 +31,8 @@ namespace phx {
 
 		Window& GetWindow() { return *m_Window; }
 
+		void Close();
+		 
 		static Application& Get() { return *s_Instance; }
 
 		virtual void OnInit() {}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #pragma warning(push, 0) 
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"

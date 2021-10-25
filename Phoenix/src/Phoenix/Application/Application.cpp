@@ -7,7 +7,7 @@
 
 #include "Phoenix/Application/DiscordRPC.h"
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace phx {
 
@@ -55,6 +55,11 @@ namespace phx {
 		layer->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		PHX_PROFILE_FUNCTION();
@@ -64,9 +69,9 @@ namespace phx {
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
-			(*--it)->OnEvent(e);
 			if (e.Handled)
 				break;
+			(*--it)->OnEvent(e);		
 		}
 	}
 

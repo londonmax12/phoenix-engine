@@ -1,5 +1,5 @@
 #pragma once
-#include "Phoenix/Application/Core.h"
+#include "Phoenix/Application/Base.h"
 #include <string>
 #include <unordered_map>
 #include <glm/glm.hpp>
