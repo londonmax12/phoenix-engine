@@ -1,13 +1,23 @@
 #pragma once
 #include "phxpch.h"
-#include "discord_rpc.h"
-#include "discord_register.h"
+#include "../vendor/Discord/include/discord_rpc.h"
+#include "../vendor/Discord/include/discord_register.h"
 namespace phx {
 	static int64_t eptime;
 	static char* discordStatus;
 	static const bool gRPC = true;
-	class discordRPC {
+	class DiscordRPC {
 	public:
+		DiscordRPC() 
+		{
+			SetupDiscord();
+		}
+		
+		~DiscordRPC() 
+		{
+
+		}
+
 		static void SetupDiscord()
 		{
 			if (gRPC)

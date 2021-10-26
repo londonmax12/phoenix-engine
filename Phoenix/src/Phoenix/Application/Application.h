@@ -19,7 +19,7 @@ namespace phx {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Phoenix Application");
 		virtual ~Application();
 
 		void Run();

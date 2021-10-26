@@ -5,6 +5,10 @@
 #include "Phoenix/Application/Application.h"
 //----------------------------------------
 
+//--------------Discord-RPC---------------
+#include "Phoenix/Application/DiscordRPC.h"
+//----------------------------------------
+
 //---------------Logging------------------
 #include "Phoenix/Logging/Log.h"
 //----------------------------------------

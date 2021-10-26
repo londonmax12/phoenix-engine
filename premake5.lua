@@ -10,6 +10,186 @@ workspace "Phoenix"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+group "Dependencies"
+	project "GLFW"
+		location "vendor/GLFW"
+		kind "StaticLib"
+		language "C"
+		staticruntime "on"
+	
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/GLFW/include/GLFW/glfw3.h",
+			"Phoenix/vendor/GLFW/include/GLFW/glfw3native.h",
+			"Phoenix/vendor/GLFW/src/glfw_config.h",
+			"Phoenix/vendor/GLFW/src/context.c",
+			"Phoenix/vendor/GLFW/src/init.c",
+			"Phoenix/vendor/GLFW/src/input.c",
+			"Phoenix/vendor/GLFW/src/monitor.c",
+			"Phoenix/vendor/GLFW/src/vulkan.c",
+			"Phoenix/vendor/GLFW/src/window.c"
+		}
+	
+		filter "system:windows"
+			systemversion "latest"
+		
+			files
+			{
+				"Phoenix/vendor/GLFW/src/win32_init.c",
+				"Phoenix/vendor/GLFW/src/win32_joystick.c",
+				"Phoenix/vendor/GLFW/src/win32_monitor.c",
+				"Phoenix/vendor/GLFW/src/win32_time.c",
+				"Phoenix/vendor/GLFW/src/win32_thread.c",
+				"Phoenix/vendor/GLFW/src/win32_window.c",
+				"Phoenix/vendor/GLFW/src/wgl_context.c",
+				"Phoenix/vendor/GLFW/src/egl_context.c",
+				"Phoenix/vendor/GLFW/src/osmesa_context.c"
+			}
+
+			defines 
+			{ 
+				"_GLFW_WIN32",
+				"_CRT_SECURE_NO_WARNINGS"
+			}
+		filter "configurations:Debug"
+			defines "PHX_DEBUG_MODE"
+			buildoptions "/MTd"
+			symbols "on"
+
+		filter "configurations:Release"
+			defines "PHX_RELEASE_MODE"
+			buildoptions "/MT"
+			optimize "on"
+
+	project "Glad"
+		location "vendor/Glad"
+		kind "StaticLib"
+		language "C"
+		staticruntime "on"
+		
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
+		files
+		{
+			"Phoenix/vendor/Glad/include/glad/glad.h",
+			"Phoenix/vendor/Glad/include/KHR/khrplatform.h",
+			"Phoenix/vendor/Glad/src/glad.c"
+		}
+	
+		includedirs
+		{
+			"include"
+		}
+		
+		filter "system:windows"
+			systemversion "latest"
+	
+		filter "configurations:Debug"
+			runtime "Debug"
+			symbols "on"
+	
+		filter "configurations:Release"
+			runtime "Release"
+			optimize "on"
+
+	project "ImGui"
+		location "vendor/imgui"
+		kind "StaticLib"
+		language "C++"
+		staticruntime "on"
+
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/imgui/imconfig.h",
+			"Phoenix/vendor/imgui/imgui.h",
+			"Phoenix/vendor/imgui/imgui.cpp",
+			"Phoenix/vendor/imgui/imgui_draw.cpp",
+			"Phoenix/vendor/imgui/imgui_internal.h",
+			"Phoenix/vendor/imgui/imgui_widgets.cpp",
+			"Phoenix/vendor/imgui/imstb_rectpack.h",
+			"Phoenix/vendor/imgui/imstb_textedit.h",
+			"Phoenix/vendor/imgui/imstb_truetype.h",
+			"Phoenix/vendor/imgui/imgui_demo.cpp"
+		}
+
+		defines { "IMGUI_API=__declspec(dllexport)" }
+	
+		filter "system:windows"
+			systemversion "latest"
+			cppdialect "C++17"
+
+		filter "system:linux"
+			pic "On"
+			systemversion "latest"
+			cppdialect "C++17"
+
+		filter "configurations:Debug"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			runtime "Release"
+			optimize "on"
+	
+	project "Discord"
+		location "vendor/Discord"
+		kind "StaticLib"
+		language "C++"
+		cppdialect "C++17"
+		staticruntime "on"
+
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/Discord/include/discord_register.h",
+			"Phoenix/vendor/Discord/include/discord_rpc.h",
+			"Phoenix/vendor/Discord/src/backoff.h",
+			"Phoenix/vendor/Discord/src/connection.h",
+			"Phoenix/vendor/Discord/src/discord_rpc.cpp",
+			"Phoenix/vendor/Discord/src/dllmain.cpp",
+			"Phoenix/vendor/Discord/src/msg_queue.h",
+			"Phoenix/vendor/Discord/src/rpc_connection.cpp",
+			"Phoenix/vendor/Discord/src/rpc_connection.h",
+			"Phoenix/vendor/Discord/src/serialization.cpp",
+			"Phoenix/vendor/Discord/src/serialization.h"
+		}
+
+		filter "system:windows"
+			systemversion "latest"
+			files 
+			{
+				"Phoenix/vendor/Discord/src/connection_win.cpp",
+				"Phoenix/vendor/Discord/src/discord_register_win.cpp"
+			}
+		
+		
+
+		filter "system:linux"
+			pic "On"
+			systemversion "latest"
+			cppdialect "C++17"
+			files
+			{
+				"Phoenix/vendor/Discord/src/discord_register_linux.h"
+			}
+		filter "configurations:Debug"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			runtime "Release"
+			optimize "on"
+group ""
+
 project "Phoenix"
 	location "Phoenix"
 	kind "StaticLib"
@@ -128,136 +308,9 @@ project "Sandbox"
 		optimize "on"
 
 
-project "GLFW"
-	location "vendor/GLFW"
-	kind "StaticLib"
-	language "C"
-	staticruntime "on"
-	
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"Phoenix/vendor/GLFW/include/GLFW/glfw3.h",
-		"Phoenix/vendor/GLFW/include/GLFW/glfw3native.h",
-		"Phoenix/vendor/GLFW/src/glfw_config.h",
-		"Phoenix/vendor/GLFW/src/context.c",
-		"Phoenix/vendor/GLFW/src/init.c",
-		"Phoenix/vendor/GLFW/src/input.c",
-		"Phoenix/vendor/GLFW/src/monitor.c",
-		"Phoenix/vendor/GLFW/src/vulkan.c",
-		"Phoenix/vendor/GLFW/src/window.c"
-	}
-	
-	filter "system:windows"
-		systemversion "latest"
-		
-		files
-		{
-			"Phoenix/vendor/GLFW/src/win32_init.c",
-			"Phoenix/vendor/GLFW/src/win32_joystick.c",
-			"Phoenix/vendor/GLFW/src/win32_monitor.c",
-			"Phoenix/vendor/GLFW/src/win32_time.c",
-			"Phoenix/vendor/GLFW/src/win32_thread.c",
-			"Phoenix/vendor/GLFW/src/win32_window.c",
-			"Phoenix/vendor/GLFW/src/wgl_context.c",
-			"Phoenix/vendor/GLFW/src/egl_context.c",
-			"Phoenix/vendor/GLFW/src/osmesa_context.c"
-		}
-
-		defines 
-		{ 
-			"_GLFW_WIN32",
-			"_CRT_SECURE_NO_WARNINGS"
-		}
-	filter "configurations:Debug"
-		defines "PHX_DEBUG_MODE"
-		buildoptions "/MTd"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "PHX_RELEASE_MODE"
-		buildoptions "/MT"
-		optimize "on"
-
-project "Glad"
-	location "vendor/Glad"
-	kind "StaticLib"
-	language "C"
-	staticruntime "on"
-		
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-	
-	files
-	{
-		"Phoenix/vendor/Glad/include/glad/glad.h",
-		"Phoenix/vendor/Glad/include/KHR/khrplatform.h",
-		"Phoenix/vendor/Glad/src/glad.c"
-	}
-	
-	includedirs
-	{
-		"include"
-	}
-		
-	filter "system:windows"
-		systemversion "latest"
-	
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-	
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"
-
-project "ImGui"
-	location "vendor/imgui"
-	kind "StaticLib"
-	language "C++"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"Phoenix/vendor/imgui/imconfig.h",
-		"Phoenix/vendor/imgui/imgui.h",
-		"Phoenix/vendor/imgui/imgui.cpp",
-		"Phoenix/vendor/imgui/imgui_draw.cpp",
-		"Phoenix/vendor/imgui/imgui_internal.h",
-		"Phoenix/vendor/imgui/imgui_widgets.cpp",
-		"Phoenix/vendor/imgui/imstb_rectpack.h",
-		"Phoenix/vendor/imgui/imstb_textedit.h",
-		"Phoenix/vendor/imgui/imstb_truetype.h",
-		"Phoenix/vendor/imgui/imgui_demo.cpp"
-	}
-
-	defines { "IMGUI_API=__declspec(dllexport)" }
-	
-	filter "system:windows"
-		systemversion "latest"
-		cppdialect "C++17"
-
-	filter "system:linux"
-		pic "On"
-		systemversion "latest"
-		cppdialect "C++17"
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"
-	
-project "Discord"
-	location "vendor/Discord"
-	kind "StaticLib"
+project "Phoenix-Editor" 
+	location "Phoenix-Editor"
+	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
@@ -267,41 +320,42 @@ project "Discord"
 
 	files
 	{
-		"Phoenix/vendor/Discord/include/discord_register.h",
-		"Phoenix/vendor/Discord/include/discord_rpc.h",
-		"Phoenix/vendor/Discord/src/backoff.h",
-		"Phoenix/vendor/Discord/src/connection.h",
-		"Phoenix/vendor/Discord/src/discord_rpc.cpp",
-		"Phoenix/vendor/Discord/src/dllmain.cpp",
-		"Phoenix/vendor/Discord/src/msg_queue.h",
-		"Phoenix/vendor/Discord/src/rpc_connection.cpp",
-		"Phoenix/vendor/Discord/src/rpc_connection.h",
-		"Phoenix/vendor/Discord/src/serialization.cpp",
-		"Phoenix/vendor/Discord/src/serialization.h"
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Phoenix/vendor/spdlog/include",
+		"Phoenix/vendor/glm",
+		"Phoenix/vendor/imgui",
+		"Phoenix/src"
+	}
+
+	links
+	{
+		"Phoenix"
 	}
 
 	filter "system:windows"
 		systemversion "latest"
-		files 
-		{
-			"Phoenix/vendor/Discord/src/connection_win.cpp",
-			"Phoenix/vendor/Discord/src/discord_register_win.cpp"
-		}
 		
-		
-
-	filter "system:linux"
-		pic "On"
-		systemversion "latest"
-		cppdialect "C++17"
-		files
-		{
-			"Phoenix/vendor/Discord/src/discord_register_linux.h"
-		}
 	filter "configurations:Debug"
-		runtime "Debug"
+		defines 
+		{
+			"PHX_DEBUG_MODE",
+			"PHX_ENABLE_ASSERTS"
+		}
+		buildoptions "/MTd"
 		symbols "on"
 
 	filter "configurations:Release"
-		runtime "Release"
+		defines "PHX_RELEASE_MODE"
+		buildoptions "/MT"
 		optimize "on"
+
+	filter "configurations:Dist"
+		defines "PHX_DIST_MODE"
+		buildoptions "/MT"
+		optimize "on"
+

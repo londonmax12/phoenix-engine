@@ -18,7 +18,6 @@ private:
 
 	phx::Ref<phx::Shader> m_Shader;
 	phx::Ref<phx::VertexArray> m_SquareVA;
-	phx::Ref<phx::Framebuffer> m_FrameBuffer;
 
 	float tiling = 5.0f;
 	float deltatimems;
