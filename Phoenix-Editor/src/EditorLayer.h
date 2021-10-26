@@ -20,12 +20,12 @@ namespace phx {
 
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_SquareVA;
-		Ref<Framebuffer> m_FrameBuffer;	
+		Ref<Framebuffer> m_Framebuffer;	
 
 		float tiling = 5.0f;
 		float deltatimems;
 
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
 		Ref<Texture2D> m_Texture;
 
