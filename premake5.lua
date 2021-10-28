@@ -220,7 +220,8 @@ project "Phoenix"
 		"%{prj.name}/vendor/ImGui",
 		"%{prj.name}/vendor/Discord/include",
 		"%{prj.name}/vendor/glm",
-		"%{prj.name}/vendor/stb_image"
+		"%{prj.name}/vendor/stb_image",
+		"%{prj.name}/vendor/entt/include"
 	}
 
 	links 
@@ -277,7 +278,8 @@ project "Sandbox"
 		"Phoenix/vendor/spdlog/include",
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
-		"Phoenix/src"
+		"Phoenix/src",
+		"Phoenix/vendor/entt/include"
 	}
 
 	links
@@ -329,7 +331,8 @@ project "Phoenix-Editor"
 		"Phoenix/vendor/spdlog/include",
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
-		"Phoenix/src"
+		"Phoenix/src",
+		"Phoenix/vendor/entt/include"
 	}
 
 	links
