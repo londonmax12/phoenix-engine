@@ -24,7 +24,7 @@ namespace phx {
 		Ref<Framebuffer> m_Framebuffer;	
 
 		Ref<Scene> m_ActiveScene;
-		entt::entity m_SquareEntity;
+		Entity m_SquareEntity;
 
 		float tiling = 5.0f;
 		float deltatimems;

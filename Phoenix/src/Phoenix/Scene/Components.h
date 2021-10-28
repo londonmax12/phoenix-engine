@@ -3,6 +3,16 @@
 #include <glm/glm.hpp>
 
 namespace phx {
+	struct TagComponent
+	{
+		std::string Tag;
+
+		TagComponent() = default;
+		TagComponent(const TagComponent&) = default;
+		TagComponent(const std::string tag)
+			: Tag(tag) {}
+	};
+
 	struct TransformComponent
 	{
 		glm::mat4 Transform{ 1.0f };
@@ -19,7 +29,6 @@ namespace phx {
 	struct SpriteRendererComponent
 	{
 		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
-
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)

@@ -5,6 +5,7 @@
 #include "Phoenix/Renderer/Renderer2D.h"
 
 #include "Phoenix/Scene/Components.h"
+#include "Phoenix/Scene/Entity.h"
 
 namespace phx {
 	Scene::Scene()
@@ -17,9 +18,13 @@ namespace phx {
 	{
 
 	}
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string name)
 	{
-		return m_Registry.create();
+		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "Entity" : name;
+		return entity;
 	}
 
 	void Scene::OnUpdate(DeltaTime dt)
