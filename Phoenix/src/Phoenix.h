@@ -28,6 +28,11 @@
 #include "Phoenix/Layer/Layer.h"
 //----------------------------------------
 
+//----------------Scene-------------------
+#include "Phoenix/Scene/Scene.h"
+#include "Phoenix/Scene/Components.h"
+//----------------------------------------
+
 //---------------Renderer-----------------
 #include "Phoenix/Renderer/Renderer.h"
 #include "Phoenix/Renderer/Renderer2D.h"

@@ -97,6 +97,7 @@ namespace phx {
 
 			m_Window->OnUpdate();
 		}
+		DiscordRPC::Shutdown();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

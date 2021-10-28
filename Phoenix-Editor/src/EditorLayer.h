@@ -16,20 +16,22 @@ namespace phx {
 		void OnEvent(phx::Event& e) override;
 	private:
 		OrthographicCameraController m_CameraController;
-		DiscordRPC m_RPC;
+
+		Ref<DiscordRPC> m_RPC;
 
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_SquareVA;
 		Ref<Framebuffer> m_Framebuffer;	
+
+		Ref<Scene> m_ActiveScene;
+		entt::entity m_SquareEntity;
 
 		float tiling = 5.0f;
 		float deltatimems;
 
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
+
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-
-		Ref<Texture2D> m_Texture;
-
 	};
 }

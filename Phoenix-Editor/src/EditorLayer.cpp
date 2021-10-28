@@ -18,17 +18,24 @@ namespace phx
 	{
 		PHX_PROFILE_FUNCTION();
 
-		ImGuiIO& io = ImGui::GetIO();
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Light.ttf", 14.0f);
-
-		m_RPC.UpdateDiscordStatus("In Menu");
-
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
-		m_Texture = Texture2D::Create("assets/textures/placeholder.png");
+		m_ActiveScene = CreateRef<Scene>();
+
+		/*m_RPC = DiscordRPC::Create("878503814603345930");
+		CurrentDiscordSpec.Status = "Test";
+		CurrentDiscordSpec.LargeImageKey = "phoenix_new";
+		m_RPC->RefreshDiscord();*/
+
+		auto square = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(square);
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		m_SquareEntity = square;
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -40,55 +47,23 @@ namespace phx
 	{
 		PHX_PROFILE_FUNCTION();
 
-		Renderer2D::ResetStats();
+		deltatimems = dt.GetMilliseconds();
 
-		if (phx::FramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
-		{
-			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-		}
-
-
-		if(m_ViewportFocused)
+		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(dt);
 
-		{
-			PHX_PROFILE_SCOPE("Renderer Prep");
-			m_Framebuffer->Bind();
-			RenderCommand::ClearColor({ 0.1, 0.1, 0.1, 1 });
-			RenderCommand::Clear();
-		}
+		Renderer2D::ResetStats();
+		m_Framebuffer->Bind();
+		RenderCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
 
-		{
-			PHX_PROFILE_SCOPE("Renderer Draw");
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			deltatimems = dt.GetMilliseconds();
+		m_ActiveScene->OnUpdate(dt);
 
-			static float rotation = 0.0f;
-			rotation += 30 * dt;
+		Renderer2D::EndScene();
 
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			Renderer2D::DrawQuadFilled({ -0.23f, -0.23f, -0.01 }, { 10.5f, 10.5f }, m_Texture, tiling);
-			//Renderer2D::DrawRotatedQuadFilled({ 0.0f, 0.0f, -0.01f }, { 10.0f, 10.0f }, rotation, m_Texture, tiling, m_SquareColor);
-			//Renderer2D::DrawRotatedQuadFilled({ 0.0f, 0.0f, -0.005f }, { 5.0f, 5.0f }, rotation, m_SquareColor);
-
-			Renderer2D::EndScene();
-
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			for (float y = -5.0f; y < 5.0f; y += 0.5f)
-			{
-				for (float x = -5.0f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-					Renderer2D::DrawQuadFilled({ x, y }, { 0.45f, 0.45f }, color);
-				}
-			}
-			Renderer2D::EndScene();
-			m_Framebuffer->Unbind();
-		}
-
+		m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
