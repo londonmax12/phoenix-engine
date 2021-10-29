@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Phoenix/Renderer/Camera.h"
+
 namespace phx {
 	struct TagComponent
 	{
@@ -33,5 +35,15 @@ namespace phx {
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: Color(color) {}
+	};
+	struct CameraComponent
+	{
+		Camera Camera;
+		bool Primary = true;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection)
+			: Camera(projection) {}
 	};
 }
