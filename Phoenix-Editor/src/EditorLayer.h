@@ -26,7 +26,9 @@ namespace phx {
 		Ref<Scene> m_ActiveScene;
 
 		Entity m_CameraEntity;
+		Entity m_SecondCamera;
 
+		bool m_PrimaryCamera = true;
 
 		float tiling = 5.0f;
 		float deltatimems;
