@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Phoenix.h>
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace phx {
 	class EditorLayer : public Layer
@@ -37,5 +38,7 @@ namespace phx {
 		bool m_ViewportHovered = false;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 	};
 }

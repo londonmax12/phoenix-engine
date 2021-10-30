@@ -2,7 +2,6 @@
 #include "entt.hpp"
 #include "Phoenix/Time/DeltaTime.h"
 
-
 namespace phx {
 	class Entity;
 
@@ -26,5 +25,6 @@ namespace phx {
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		friend class Entity;
+		friend class SceneHierarchyPanel;
 	};
 }
