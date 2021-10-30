@@ -168,48 +168,31 @@ namespace phx
 
 		m_SceneHierarchyPanel.OnImGuiRender();
 
-		ImGui::Begin("Metrics");
-		float fps = 1000.0f / deltatimems;
+	#ifdef PHX_DEBUG_MODE
+			ImGui::Begin("Metrics");
+			float fps = 1000.0f / deltatimems;
 
-		if (fps > highfps)
-			highfps = fps;
+			if (fps > highfps)
+				highfps = fps;
 
-		auto stats = Renderer2D::GetStats();
-		ImGui::Text("FPS: %.0f", fps);
-		ImGui::SameLine();
-		ImGui::Text("High: %.0f", highfps);
-		ImGui::SameLine();
-		if (ImGui::Button("Reset"))
-			highfps = 0;
-		ImGui::Separator();
-		ImGui::Text("Renderer2D Stats");
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::Separator();
-		ImGui::Text("Scene Stats");
-		ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
-		ImGui::End();
-
-		ImGui::Begin("Settings");
-		if (ImGui::Checkbox("Camera A", &m_CameraEntity.GetComponent<CameraComponent>().Primary))
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().Primary = true;
-			m_SecondCamera.GetComponent<CameraComponent>().Primary = false;
-		}
-		ImGui::DragFloat3("Camera Transform A",
-			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-		ImGui::Separator();
-		if (ImGui::Checkbox("Camera B", &m_SecondCamera.GetComponent<CameraComponent>().Primary))
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().Primary = false;
-			m_SecondCamera.GetComponent<CameraComponent>().Primary = true;
-		}
-		ImGui::DragFloat3("Camera Transform B",
-			glm::value_ptr(m_SecondCamera.GetComponent<TransformComponent>().Transform[3]));
-
-		ImGui::End();
+			auto stats = Renderer2D::GetStats();
+			ImGui::Text("FPS: %.0f", fps);
+			ImGui::SameLine();
+			ImGui::Text("High: %.0f", highfps);
+			ImGui::SameLine();
+			if (ImGui::Button("Reset"))
+				highfps = 0;
+			ImGui::Separator();
+			ImGui::Text("Renderer2D Stats");
+			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+			ImGui::Text("Quads: %d", stats.QuadCount);
+			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+			ImGui::Separator();
+			ImGui::Text("Scene Stats");
+			ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
+			ImGui::End();
+	#endif
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
