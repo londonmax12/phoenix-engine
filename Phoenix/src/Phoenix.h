@@ -32,6 +32,7 @@
 #include "Phoenix/Scene/Scene.h"
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
+#include "Phoenix/Scene/ScriptableEntity.h"
 //----------------------------------------
 
 //---------------Renderer-----------------
