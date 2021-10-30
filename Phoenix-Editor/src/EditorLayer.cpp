@@ -67,6 +67,7 @@ namespace phx
 				}
 			}
 		};
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
@@ -182,6 +183,9 @@ namespace phx
 		ImGui::Text("Quads: %d", stats.QuadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+		ImGui::Separator();
+		ImGui::Text("Scene Stats");
+		ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
 		ImGui::End();
 
 		ImGui::Begin("Settings");

@@ -16,6 +16,8 @@ namespace phx {
 
 		entt::registry& Reg() { return m_Registry; }
 
+		uint32_t GetRegistrySize() { return m_Registry.size(); };
+
 		void OnUpdate(DeltaTime dt);
 		void OnViewportResize(uint32_t width, uint32_t height);
 	private:

@@ -6,7 +6,10 @@
 #include <iomanip>
 #include <string>
 #include <thread>
-#include <Phoenix/Logging/Log.h>
+#include <mutex>
+#include <sstream>
+
+#include "Phoenix/Logging/Log.h"
 
 namespace phx {
 
