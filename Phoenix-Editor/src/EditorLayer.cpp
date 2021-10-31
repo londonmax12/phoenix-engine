@@ -54,19 +54,22 @@ namespace phx
 			}
 			void OnUpdate(DeltaTime dt)
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
 				auto& cameraComponent = GetComponent<CameraComponent>();
-				float speed = 5.0f;
+
 				if (cameraComponent.Primary)
 				{
-					if (Input::IsKeyPressed(KeyCode::A))
-						transform[3][0] -= speed * dt;
-					if (Input::IsKeyPressed(KeyCode::D))
-						transform[3][0] += speed * dt;
-					if (Input::IsKeyPressed(KeyCode::W))
-						transform[3][1] += speed * dt;
-					if (Input::IsKeyPressed(KeyCode::S))
-						transform[3][1] -= speed * dt;
+						auto& translation = GetComponent<TransformComponent>().Translation;
+
+						float speed = 5.0f;
+
+						if (Input::IsKeyPressed(PHX_KEY_A))
+							translation.x -= speed * dt;
+						if (Input::IsKeyPressed(PHX_KEY_D))
+							translation.x += speed * dt;
+						if (Input::IsKeyPressed(PHX_KEY_W))
+							translation.y += speed * dt;
+						if (Input::IsKeyPressed(PHX_KEY_S))
+							translation.y -= speed * dt;
 				}
 			}
 		};

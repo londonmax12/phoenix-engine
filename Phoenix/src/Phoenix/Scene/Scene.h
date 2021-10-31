@@ -11,7 +11,7 @@ namespace phx {
 		Scene();
 		~Scene();
 
-		Entity CreateEntity(const std::string name = std::string());
+		Entity CreateEntity(const std::string& name = std::string());
 
 		entt::registry& Reg() { return m_Registry; }
 
