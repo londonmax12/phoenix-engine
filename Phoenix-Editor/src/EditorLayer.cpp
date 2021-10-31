@@ -25,11 +25,6 @@ namespace phx
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		/*m_RPC = DiscordRPC::Create("878503814603345930");
-		CurrentDiscordSpec.Status = "Test";
-		CurrentDiscordSpec.LargeImageKey = "phoenix_new";
-		m_RPC->RefreshDiscord();*/
-
 		auto square = m_ActiveScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
@@ -120,6 +115,8 @@ namespace phx
 	void EditorLayer::OnImGuiRender()
 	{
 		PHX_PROFILE_FUNCTION();
+
+		//ImGui::ShowDemoWindow();
 
 		static bool p_open = true;
 		static bool opt_fullscreen = true;
