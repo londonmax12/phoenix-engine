@@ -3,6 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include "Panels/ThemeEditor.h"
+
 #include <chrono>
 
 float highfps = 0;
@@ -153,11 +155,18 @@ namespace phx
 			ImGui::PopStyleVar(2);
 
 		ImGuiIO& io = ImGui::GetIO();
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		float minWinSizeX = style.WindowMinSize.x;
+		style.WindowMinSize.x = 370;
+
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
+
+		style.WindowMinSize.x = minWinSizeX;
 
 		if (ImGui::BeginMenuBar())
 		{
@@ -196,6 +205,8 @@ namespace phx
 			ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
 			ImGui::End();
 	#endif
+
+		//renderThemeEditor();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
