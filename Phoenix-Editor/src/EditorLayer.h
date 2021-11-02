@@ -16,6 +16,13 @@ namespace phx {
 		virtual void OnImGuiRender() override;
 		void OnEvent(phx::Event& e) override;
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void SaveSceneAs();
+		void SaveScene();
+		void OpenScene();
+
 		OrthographicCameraController m_CameraController;
 
 		Ref<DiscordRPC> m_RPC;

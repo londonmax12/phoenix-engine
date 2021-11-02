@@ -27,52 +27,6 @@ namespace phx
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		auto square = m_ActiveScene->CreateEntity("Green Square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
-
-		auto square2 = m_ActiveScene->CreateEntity("Red Square");
-		square2.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
-		m_CameraEntity.AddComponent<CameraComponent>();
-
-		m_SecondCamera = m_ActiveScene->CreateEntity("Camera B");
-		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
-		cc.Primary = false;
-
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			void OnCreate()
-			{
-			}
-			void OnDestroy()
-			{
-			}
-			void OnUpdate(DeltaTime dt)
-			{
-				auto& cameraComponent = GetComponent<CameraComponent>();
-
-				if (cameraComponent.Primary)
-				{
-						auto& translation = GetComponent<TransformComponent>().Translation;
-
-						float speed = 5.0f;
-
-						if (Input::IsKeyPressed(PHX_KEY_A))
-							translation.x -= speed * dt;
-						if (Input::IsKeyPressed(PHX_KEY_D))
-							translation.x += speed * dt;
-						if (Input::IsKeyPressed(PHX_KEY_W))
-							translation.y += speed * dt;
-						if (Input::IsKeyPressed(PHX_KEY_S))
-							translation.y -= speed * dt;
-				}
-			}
-		};
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
@@ -172,7 +126,31 @@ namespace phx
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Quit")) { Application::Get().Close(); }
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+				{
+					NewScene();
+				}
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				{
+					SaveScene();
+				}
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				{
+					SaveSceneAs();
+				}
+
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+				{
+					OpenScene();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Quit", "Alt+F4"))
+				{ 
+					Application::Get().Close(); 
+				}
+
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
@@ -230,6 +208,105 @@ namespace phx
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(PHX_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		//	ShortCuts
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(PHX_KEY_LEFT_CONTROL) || Input::IsKeyPressed(PHX_KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(PHX_KEY_LEFT_SHIFT) || Input::IsKeyPressed(PHX_KEY_RIGHT_SHIFT);
+
+		switch (e.GetKeyCode())
+		{
+		case (int)PHX_KEY_S:
+		{
+			if (control && shift)
+			{
+				SaveSceneAs();
+			}
+			else if (control)
+			{
+				SaveScene();
+			}
+			break;
+		}
+
+		case (int)PHX_KEY_O:
+		{
+			if (control)
+			{
+				OpenScene();
+			}
+			break;
+		}
+		case (int)PHX_KEY_N:
+		{
+			if (control)
+			{
+				NewScene();
+			}
+			break;
+		}
+		}
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Phoenix Scene (*.phoenix)\0*.phoenix\0", ".phoenix");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+			m_ActiveScene->SetFilePath(filepath);
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		if (m_ActiveScene->GetFilePath().empty())
+		{
+			std::string filepath = FileDialogs::SaveFile("Phoenix Scene (*.phoenix)\0*.phoenix\0", ".phoenix");
+			if (!filepath.empty())
+			{
+				SceneSerializer serializer(m_ActiveScene);
+				serializer.Serialize(filepath);
+			}
+		}
+		else
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(m_ActiveScene->GetFilePath());
+		}
+
+	}
+
+	void EditorLayer::OpenScene()
+	{
+
+		std::string filepath = FileDialogs::OpenFile("Phoenix Scene (*.phoenix)\0*.phoenix\0");
+		if (!filepath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+			m_ActiveScene->SetFilePath(filepath);
+
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+
 }
 

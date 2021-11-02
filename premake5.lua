@@ -188,6 +188,46 @@ group "Dependencies"
 		filter "configurations:Release"
 			runtime "Release"
 			optimize "on"
+
+	project "yaml-cpp"
+		location "vendor/yaml-cpp"
+		kind "StaticLib"
+		language "C++"
+
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/yaml_cpp/src/**.h",
+			"Phoenix/vendor/yaml_cpp/src/**.cpp",
+		
+			"Phoenix/vendor/yaml_cpp/include/**.h"
+		}
+
+		includedirs
+		{
+			"Phoenix/vendor/yaml_cpp/include/"
+		}
+
+		filter "system:windows"
+			systemversion "latest"
+			cppdialect "C++17"
+			staticruntime "On"
+
+		filter "system:linux"
+			pic "On"
+			systemversion "latest"
+			cppdialect "C++17"
+			staticruntime "On"
+
+		filter "configurations:Debug"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			runtime "Release"
+			optimize "on"
 group ""
 
 project "Phoenix"
@@ -221,7 +261,8 @@ project "Phoenix"
 		"%{prj.name}/vendor/Discord/include",
 		"%{prj.name}/vendor/glm",
 		"%{prj.name}/vendor/stb_image",
-		"%{prj.name}/vendor/entt/include"
+		"%{prj.name}/vendor/entt/include",
+		"%{prj.name}/vendor/yaml_cpp/include"
 	}
 
 	links 
@@ -230,6 +271,7 @@ project "Phoenix"
 		"GLAD",
 		"imgui",
 		"Discord",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 

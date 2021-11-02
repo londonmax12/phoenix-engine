@@ -9,7 +9,6 @@
 #include "Phoenix/ImGui/GuiWidgets.h"
 
 namespace phx {
-
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
 		SetContext(context);
@@ -18,11 +17,14 @@ namespace phx {
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_SelectionContext = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Scene Hierarchy");
+
+		ItemRowsBackground(ImGui::GetFontSize());
 
 		m_Context->m_Registry.each([&](auto entityID)
 			{
