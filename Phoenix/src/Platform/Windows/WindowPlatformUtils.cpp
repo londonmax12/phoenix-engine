@@ -1,6 +1,7 @@
 #include "phxpch.h"
 #include "Phoenix/Utils/PlatfromUtils.h"
 
+#include <sstream>
 #include <commdlg.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -27,7 +28,7 @@ namespace phx {
 		}
 		return std::string();
 	}
-	std::string FileDialogs::SaveFile(const char* filter, const char* extension)
+	std::string FileDialogs::SaveFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[260] = { 0 };
@@ -38,7 +39,7 @@ namespace phx {
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = filter;
 		ofn.nFilterIndex = 1;
-		ofn.lpstrDefExt = (LPCSTR)extension;
+		ofn.lpstrDefExt = std::strchr(filter, '\0') + 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetSaveFileNameA(&ofn) == TRUE)
 		{

@@ -248,7 +248,9 @@ project "Phoenix"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/stb_image/**.cpp",
-		"%{prj.name}/vendor/stb_image/**.h"
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs
@@ -262,7 +264,8 @@ project "Phoenix"
 		"%{prj.name}/vendor/glm",
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/entt/include",
-		"%{prj.name}/vendor/yaml_cpp/include"
+		"%{prj.name}/vendor/yaml_cpp/include",
+		"%{prj.name}/vendor/ImGuizmo"
 	}
 
 	links 
@@ -274,6 +277,9 @@ project "Phoenix"
 		"yaml-cpp",
 		"opengl32.lib"
 	}
+
+	filter "files:vendor/ImGuizmo/ImGuizmo.cpp"
+		flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"

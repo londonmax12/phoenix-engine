@@ -7,6 +7,6 @@ namespace phx {
 	{
 	public:
 		static std::string OpenFile(const char* filter);
-		static std::string SaveFile(const char* filter, const char* extension);
+		static std::string SaveFile(const char* filter);
 	};
 }

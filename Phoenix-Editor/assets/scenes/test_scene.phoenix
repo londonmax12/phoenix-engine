@@ -1,0 +1,74 @@
+Scene: Untitled
+Entities:
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0, 0, -1]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.564183533, 0, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Yellow Square
+    TransformComponent:
+      Translation: [0.5, 0, -0.5]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.854139507, 0, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Pink Square
+    TransformComponent:
+      Translation: [0, -0.5, -0.5]
+      Rotation: [1.57079637, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 0.847956657, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Main Camera
+    TransformComponent:
+      Translation: [-3.20000005, 1.10000002, 1.20000005]
+      Rotation: [-0.535816073, -0.979129672, -0.453785598]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Red Square
+    TransformComponent:
+      Translation: [0, 0.5, -0.5]
+      Rotation: [1.57079637, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 0, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Green Square
+    TransformComponent:
+      Translation: [-0.5, 0, -0.5]
+      Rotation: [0, 1.57079637, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.198435545, 1, 0, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Blue Square
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 0.0476953983, 1, 1]
