@@ -3,6 +3,7 @@
 #include "Phoenix/Scene/Scene.h"
 #include "Phoenix/Application/Base.h"
 #include "Phoenix/Scene/Entity.h"
+#include <imgui.h>
 
 namespace phx {
 	class SceneHierarchyPanel

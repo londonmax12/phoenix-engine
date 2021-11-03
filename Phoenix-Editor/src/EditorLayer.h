@@ -46,6 +46,8 @@ namespace phx {
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 
+		bool m_ShowMetrics = true;
+
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
 		int m_GizmoType = -1;

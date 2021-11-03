@@ -1,6 +1,5 @@
 #include "EditorLayer.h"
-#include "imgui.h"
-#include <glm/gtc/type_ptr.hpp>
+
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include "Phoenix/Math/Math.h"
@@ -9,7 +8,10 @@
 
 #include <chrono>
 
+#include <imgui.h>
+#include <imgui_internal.h>
 #include <ImGuizmo.h>
+#include <glm/gtc/type_ptr.hpp>
 
 float highfps = 0;
 
@@ -34,6 +36,9 @@ namespace phx
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowMenuButtonPosition = ImGuiDir_None;
 	}
 
 	void EditorLayer::OnDetach()
@@ -162,12 +167,22 @@ namespace phx
 
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("View"))
+			{
+				if (ImGui::BeginMenu("Windows"))
+				{
+					ImGui::MenuItem("Metrics", NULL, &m_ShowMetrics);
+					ImGui::EndMenu();
+				}		
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenuBar();
 		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
 
-	#ifdef PHX_DEBUG_MODE
+		if (m_ShowMetrics)
+		{
 			ImGui::Begin("Metrics");
 			float fps = 1000.0f / deltatimems;
 
@@ -191,7 +206,7 @@ namespace phx
 			ImGui::Text("Scene Stats");
 			ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
 			ImGui::End();
-	#endif
+		}
 
 		//renderThemeEditor();
 
