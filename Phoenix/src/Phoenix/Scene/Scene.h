@@ -1,6 +1,9 @@
 #pragma once
-#include "entt.hpp"
+
 #include "Phoenix/Time/DeltaTime.h"
+#include "Phoenix/Renderer/EditorCamera.h"
+
+#include "entt.hpp"
 
 namespace phx {
 	class Entity;
@@ -21,7 +24,8 @@ namespace phx {
 		std::string GetFilePath() { return m_Filepath; }
 		void SetFilePath(std::string& filepath) { m_Filepath = filepath; }
 
-		void OnUpdate(DeltaTime dt);
+		void OnUpdateRuntime(DeltaTime dt);
+		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCameraEntity();

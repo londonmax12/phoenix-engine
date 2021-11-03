@@ -197,7 +197,7 @@ namespace phx {
 		{
 			DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 				{
-					DrawVec3Controls("Position", component.Translation);
+					DrawVec3Controls("Translation", component.Translation);
 					glm::vec3 rotation = glm::degrees(component.Rotation);
 					DrawVec3Controls("Rotation", rotation);
 					component.Rotation = glm::radians(rotation);

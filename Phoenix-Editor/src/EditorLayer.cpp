@@ -31,6 +31,8 @@ namespace phx
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
@@ -50,6 +52,7 @@ namespace phx
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
@@ -58,6 +61,8 @@ namespace phx
 		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(dt);
 
+		m_EditorCamera.OnUpdate(dt);
+
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
 		RenderCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -65,7 +70,7 @@ namespace phx
 
 		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		m_ActiveScene->OnUpdate(dt);
+		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 
 		//Renderer2D::EndScene();
 
@@ -217,10 +222,13 @@ namespace phx
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 			// Camera
-			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			//auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			//const glm::mat4& cameraProjection = camera.GetProjection();
+			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
@@ -260,6 +268,7 @@ namespace phx
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+		m_EditorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(PHX_BIND_EVENT_FN(EditorLayer::OnKeyPressed));

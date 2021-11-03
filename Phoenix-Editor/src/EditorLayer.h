@@ -1,6 +1,6 @@
 #pragma once
-
 #include <Phoenix.h>
+#include <Phoenix/Renderer/EditorCamera.h>
 #include "Panels/SceneHierarchyPanel.h"
 
 namespace phx {
@@ -37,6 +37,8 @@ namespace phx {
 		Entity m_SecondCamera;
 
 		bool m_PrimaryCamera = true;
+
+		EditorCamera m_EditorCamera;
 
 		float tiling = 5.0f;
 		float deltatimems;

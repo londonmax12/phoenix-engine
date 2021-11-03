@@ -2,6 +2,7 @@
 
 #include "Phoenix/Renderer/OrthographicCamera.h"
 #include "Phoenix/Renderer/Camera.h"
+#include "Phoenix/Renderer/EditorCamera.h"
 #include "Phoenix/Renderer/Texture.h"
 
 namespace phx {
@@ -12,6 +13,7 @@ namespace phx {
 		static void Shutdown();
 
 		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 
 		static void EndScene();

@@ -4,6 +4,7 @@
 
 #include "Phoenix/Renderer/Renderer2D.h"
 
+
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
 
@@ -30,7 +31,7 @@ namespace phx {
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(DeltaTime dt)
+	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
 		// Update scripts
 		{
@@ -47,6 +48,7 @@ namespace phx {
 					nsc.Instance->OnUpdate(dt);
 				});
 		}
+		
 
 		// Render 2D
 		Camera* mainCamera = nullptr;
@@ -81,6 +83,21 @@ namespace phx {
 			Renderer2D::EndScene();
 		}
 
+	}
+
+	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuadFilled(transform.GetTransform(), sprite.Color);
+		}
+
+		Renderer2D::EndScene();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
