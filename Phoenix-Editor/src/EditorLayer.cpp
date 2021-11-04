@@ -26,10 +26,11 @@ namespace phx
 	{
 		PHX_PROFILE_FUNCTION();
 
-		FramebufferSpecification fbSpec;
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_Framebuffer = Framebuffer::Create(fbSpec);
+		FramebufferSpecification framebufferSpec;
+		framebufferSpec.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+		framebufferSpec.Width = 1280;
+		framebufferSpec.Height = 720;
+		m_Framebuffer = Framebuffer::Create(framebufferSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
 

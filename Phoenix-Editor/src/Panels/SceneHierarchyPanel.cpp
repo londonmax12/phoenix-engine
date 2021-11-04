@@ -61,10 +61,14 @@ namespace phx {
 						Entity& newEntity = m_Context->CreateEntity("Camera Object");
 						newEntity.AddComponent<CameraComponent>();
 					}
-					if (ImGui::MenuItem("Square Object"))
-					{
-						Entity& newEntity = m_Context->CreateEntity("Square Object");
-						newEntity.AddComponent<SpriteRendererComponent>();
+					if (ImGui::BeginMenu("2D Objects"))
+					{					
+						if (ImGui::MenuItem("Square Object"))
+						{
+							Entity& newEntity = m_Context->CreateEntity("Square Object");
+							newEntity.AddComponent<SpriteRendererComponent>();
+						}
+						ImGui::EndMenu();
 					}
 					ImGui::EndMenu();
 				}
