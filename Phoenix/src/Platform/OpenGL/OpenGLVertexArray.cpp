@@ -68,6 +68,17 @@ namespace phx {
 				case ShaderDataType::vec2:
 				case ShaderDataType::vec3:
 				case ShaderDataType::vec4:
+				{
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(index,
+						element.GetComponentCount(),
+						ShaderTypeToOpenGLType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.Offset);
+					index++;
+					break;
+				}
 				case ShaderDataType::Int:
 				case ShaderDataType::int2:
 				case ShaderDataType::int3:
@@ -75,10 +86,9 @@ namespace phx {
 				case ShaderDataType::Bool:
 				{
 					glEnableVertexAttribArray(index);
-					glVertexAttribPointer(index,
+					glVertexAttribIPointer(index,
 						element.GetComponentCount(),
 						ShaderTypeToOpenGLType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.GetStride(),
 						(const void*)element.Offset);
 					index++;

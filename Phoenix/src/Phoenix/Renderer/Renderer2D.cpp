@@ -16,6 +16,9 @@ namespace phx
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
+
+		// Editor-only
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -56,7 +59,8 @@ namespace phx
 			{ ShaderDataType::vec4, "a_Color" },
 			{ ShaderDataType::vec2, "a_TexCoord" },
 			{ ShaderDataType::Float, "a_TexIndex" },
-			{ ShaderDataType::Float, "a_TilingFactor" }
+			{ ShaderDataType::Float, "a_TilingFactor" },
+			{ ShaderDataType::Int, "a_EntityID" }
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -209,7 +213,7 @@ namespace phx
 		DrawQuadFilled(transform, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuadFilled(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawQuadFilled(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
 		PHX_PROFILE_FUNCTION();
 
@@ -228,6 +232,7 @@ namespace phx
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -241,7 +246,7 @@ namespace phx
 		DrawRotatedQuadFilled({ position.x, position.y, 0.0f }, size, rotation, color);
 	}
 
-	void Renderer2D::DrawQuadFilled(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuadFilled(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		PHX_PROFILE_FUNCTION();
 
@@ -278,6 +283,7 @@ namespace phx
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -311,6 +317,11 @@ namespace phx
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuadFilled(transform, texture, tilingFactor, tintColor);
+	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
+	{
+		DrawQuadFilled(transform, src.Color, entityID);
 	}
 
 	void Renderer2D::ResetStats()

@@ -27,7 +27,7 @@ namespace phx
 		PHX_PROFILE_FUNCTION();
 
 		FramebufferSpecification framebufferSpec;
-		framebufferSpec.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+		framebufferSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		framebufferSpec.Width = 1280;
 		framebufferSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(framebufferSpec);
@@ -74,9 +74,24 @@ namespace phx
 		RenderCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
+		m_Framebuffer->ClearAttachment(1, -1);
 		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+		}
 
 		//Renderer2D::EndScene();
 
@@ -206,6 +221,10 @@ namespace phx
 			ImGui::Separator();
 			ImGui::Text("Scene Stats");
 			ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
+			std::string name = "None";
+			if (m_HoveredEntity)
+				name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+			ImGui::Text("Hovered Entity: %s", name.c_str());
 			ImGui::End();
 		}
 
@@ -220,12 +239,18 @@ namespace phx
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-		
+
 		// Gizmos
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity && m_GizmoType != -1)
@@ -233,9 +258,7 @@ namespace phx
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			float windowWidth = (float)ImGui::GetWindowWidth();
-			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 			// Camera
 			//auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
@@ -288,6 +311,7 @@ namespace phx
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(PHX_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(PHX_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
@@ -331,19 +355,52 @@ namespace phx
 		}
 
 		case (int)PHX_KEY_Q:
-			m_GizmoType = -1;
-			break;
-		case (int)PHX_KEY_W:
-			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-			break;
-		case (int)PHX_KEY_E:
-			m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-			break;
-		case (int)PHX_KEY_R:
-			m_GizmoType = ImGuizmo::OPERATION::SCALE;
-			break;
-
+		{
+			if (!ImGuizmo::IsUsing())
+			{
+				m_GizmoType = -1;
+				break;
+			}
 		}
+			
+		case (int)PHX_KEY_W:
+		{
+			if (!ImGuizmo::IsUsing())
+			{
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+		}
+			
+		case (int)PHX_KEY_E:
+		{
+			if (!ImGuizmo::IsUsing())
+			{
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+		}
+			
+		case (int)PHX_KEY_R:
+		{
+			if (!ImGuizmo::IsUsing())
+			{
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
+			}
+		}
+		
+		}
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == (int)Mouse::ButtonLeft)
+		{
+			if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+		}
+		return false;
 	}
 
 	void EditorLayer::NewScene()

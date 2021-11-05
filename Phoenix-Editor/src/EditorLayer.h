@@ -17,6 +17,7 @@ namespace phx {
 		void OnEvent(phx::Event& e) override;
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 		void NewScene();
 		void SaveSceneAs();
@@ -33,8 +34,7 @@ namespace phx {
 
 		Ref<Scene> m_ActiveScene;
 
-		Entity m_CameraEntity;
-		Entity m_SecondCamera;
+		Entity m_HoveredEntity;
 
 		bool m_PrimaryCamera = true;
 
@@ -49,6 +49,7 @@ namespace phx {
 		bool m_ShowMetrics = true;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		glm::vec2 m_ViewportBounds[2];
 
 		int m_GizmoType = -1;
 
