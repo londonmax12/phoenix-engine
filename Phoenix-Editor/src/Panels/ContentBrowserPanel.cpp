@@ -34,7 +34,7 @@ namespace phx {
 			else
 			{
 				std::string extension = itr.path().extension().string();
-				if (extension == ".png" || extension == ".jpg" || extension == ".bmp")
+				if (extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".jfif")
 				{
 					newFileIcon.FileType = FileType::Image;
 				}

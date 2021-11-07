@@ -17,6 +17,8 @@ namespace phx {
 		void OnUpdate(phx::DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
 		void OnEvent(phx::Event& e) override;
+
+		void UI_Toolbar();
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
@@ -26,6 +28,9 @@ namespace phx {
 		void SaveScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& path);
+
+		void OnScenePlay();
+		void OnSceneStop();
 
 		OrthographicCameraController m_CameraController;
 
@@ -58,5 +63,15 @@ namespace phx {
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
+
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+
+		SceneState m_SceneState = SceneState::Edit;
+
+		// Resources
+		Ref<Texture2D> m_PlayIcon, m_StopIcon;		
 	};
 }
