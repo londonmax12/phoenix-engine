@@ -25,6 +25,7 @@ namespace phx {
 		void SaveSceneAs();
 		void SaveScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path& path);
 
 		OrthographicCameraController m_CameraController;
 

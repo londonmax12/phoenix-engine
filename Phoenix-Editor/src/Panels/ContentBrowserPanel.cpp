@@ -4,7 +4,7 @@
 #include <imgui.h>
 
 namespace phx {
-	static const std::filesystem::path s_AssetPath = "assets";
+	extern const std::filesystem::path s_AssetPath = "assets";
 
 	static float padding = 16.0f;
 	static float thumbnailSize = 100.0f;
@@ -38,6 +38,10 @@ namespace phx {
 				{
 					newFileIcon.FileType = FileType::Image;
 				}
+				else if (extension == ".phoenix")
+				{
+					newFileIcon.FileType = FileType::Phoenix;
+				}
 				else
 				{
 					newFileIcon.FileType = FileType::Other;
@@ -56,6 +60,8 @@ namespace phx {
 		m_DirectoryIcon = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
 		m_FileIcon = Texture2D::Create("resources/icons/content-browser/file-icon.png");
 		m_ImageIcon = Texture2D::Create("resources/icons/content-browser/image-icon.png");
+		m_PhoenixIcon = Texture2D::Create("resources/icons/content-browser/phoenix.png");
+
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		Refresh();
@@ -98,8 +104,6 @@ namespace phx {
 
 		ImGui::Columns(columnCount, 0, false);
 
-		
-
 		for (auto& itr : m_Files)
 		{	
 			Ref<Texture2D> icon;
@@ -120,16 +124,29 @@ namespace phx {
 				icon = m_ImageIcon;
 				break;
 			}
+			case FileType::Phoenix:
+			{
+				icon = m_PhoenixIcon;
+				break;
+			}
 			default:
 			{
 				icon = m_FileIcon;
 				break;
 			}
 			}
-
 			
+			auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);			
+			
+			ImGui::PushID(itr.Path.c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			if (ImGui::BeginDragDropSource())
+			{
+				const wchar_t* itemPath = relativePath.c_str();
+				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
 			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered())
@@ -147,6 +164,7 @@ namespace phx {
 			ImGui::TextWrapped(itr.Path.filename().string().c_str());
 
 			ImGui::NextColumn();
+			ImGui::PopID();
 		}
 
 

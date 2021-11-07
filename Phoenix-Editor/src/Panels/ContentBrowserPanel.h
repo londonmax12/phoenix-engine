@@ -7,7 +7,7 @@
 namespace phx {
 	enum FileType {
 		Dir, DirEmpty,
-		Image,
+		Phoenix, Image,
 		Other
 	};
 	struct FileIcon
@@ -35,6 +35,8 @@ namespace phx {
 		Ref<Texture2D> m_DirectoryEmptyIcon;
 		Ref<Texture2D> m_ImageIcon;
 		Ref<Texture2D> m_FileIcon;
+		Ref<Texture2D> m_PhoenixIcon;
+
 		Ref<Texture2D> m_RefreshIcon;
 
 		std::vector<FileIcon> m_Files;
