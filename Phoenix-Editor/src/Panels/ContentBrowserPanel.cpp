@@ -56,6 +56,7 @@ namespace phx {
 		m_DirectoryIcon = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
 		m_FileIcon = Texture2D::Create("resources/icons/content-browser/file-icon.png");
 		m_ImageIcon = Texture2D::Create("resources/icons/content-browser/image-icon.png");
+		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		Refresh();
 	}
@@ -64,7 +65,9 @@ namespace phx {
 	{
 		ImGui::Begin("Content Browser");
 
-		if (ImGui::Button("<-"))
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		int size = ImGui::GetFontSize();
+		if (ImGui::Button("<", ImVec2(size, size)))
 		{
 			if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
 			{
@@ -73,12 +76,19 @@ namespace phx {
 			}		
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("+"))
+		if (ImGui::Button("+", ImVec2(size, size)))
 		{
 			std::string newDir = std::string(std::filesystem::absolute(m_CurrentDirectory).string() + "\\New Folder");
 			int temp = mkdir(newDir.c_str());
 			refresh = true;
 		}
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(ImGui::GetWindowSize().x - (size * 2));
+		if (ImGui::ImageButton((ImTextureID)m_RefreshIcon->GetRendererID(), ImVec2(size, size)))
+		{
+			refresh = true;
+		}
+		ImGui::PopStyleColor();
 		ImGui::Separator();
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
