@@ -16,10 +16,22 @@
 #include "Phoenix/Renderer/OrthographicCamera.h"
 
 namespace phx {
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			PHX_CORE_ASSERT(index < Count, "");
+			return Args[index];
+		}
+	};
+
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Phoenix Application");
+		Application(const std::string& name = "Phoenix Application", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
 		virtual ~Application();
 
 		void Run();
@@ -37,10 +49,14 @@ namespace phx {
 
 		static Application& Get() { return *s_Instance; }
 
+		ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
+
 		virtual void OnInit() {}
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+
+		ApplicationCommandLineArgs m_CommandLineArgs;
 
 		float m_DeltaTime = 0.0f;
 		Scope<Window> m_Window;
@@ -55,7 +71,7 @@ namespace phx {
 	};
 
 	// To be defined in CLIENT
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 
 }
 	

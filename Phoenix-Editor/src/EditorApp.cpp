@@ -8,8 +8,8 @@ namespace phx {
 	class PhoenixEditor : public phx::Application
 	{
 	public:
-		PhoenixEditor()
-			: Application("Phoenix Editor")
+		PhoenixEditor(ApplicationCommandLineArgs args)
+			: Application("Phoenix Editor", args)
 		{
 			PushLayer(new EditorLayer());
 		}
@@ -19,8 +19,8 @@ namespace phx {
 		}
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
-		return new PhoenixEditor();
+		return new PhoenixEditor(args);
 	}
 }

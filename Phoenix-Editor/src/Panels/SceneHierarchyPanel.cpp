@@ -36,6 +36,10 @@ namespace phx {
 
 		if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y)))
 		{
+			if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered())
+			{
+				m_SelectionContext = {};
+			}
 			
 			ItemRowsBackground(ImGui::GetFontSize());
 			m_Context->m_Registry.each([&](auto entityID)
@@ -77,11 +81,6 @@ namespace phx {
 			ImGui::ListBoxFooter();
 		}
 		ImGui::PopStyleColor();
-
-		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-		{
-			m_SelectionContext = {};
-		}
 
 		ImGui::End();
 

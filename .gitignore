@@ -2,6 +2,7 @@
 .vs/
 bin/
 bin-int/
+Phoenix/vendor/VulkanSDK
 
 #Files
 *.user
@@ -12,3 +13,4 @@ bin-int/
 Sandbox/PhoenixSesson-Shutdown.json
 Sandbox/PhoenixSesson-Runtime.json
 Sandbox/PhoenixSesson-Startup.json
+Phoenix/

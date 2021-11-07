@@ -56,14 +56,17 @@ group "Dependencies"
 			}
 		filter "configurations:Debug"
 			defines "PHX_DEBUG_MODE"
-			buildoptions "/MTd"
+			buildoptions "/MDd"
 			symbols "on"
 
 		filter "configurations:Release"
 			defines "PHX_RELEASE_MODE"
-			buildoptions "/MT"
+			buildoptions "/MD"
 			optimize "on"
-
+		filter "configurations:Dist"
+			defines "PHX_DIST_MODE"
+			buildoptions "/MD"
+			optimize "on"
 	project "Glad"
 		location "vendor/Glad"
 		kind "StaticLib"
@@ -83,19 +86,18 @@ group "Dependencies"
 		includedirs
 		{
 			"include"
-		}
-		
+		}		
 		filter "system:windows"
 			systemversion "latest"
 	
 		filter "configurations:Debug"
 			runtime "Debug"
 			symbols "on"
-	
+			buildoptions "/MDd"
 		filter "configurations:Release"
 			runtime "Release"
 			optimize "on"
-
+			buildoptions "/MD"
 	project "ImGui"
 		location "vendor/imgui"
 		kind "StaticLib"
@@ -133,11 +135,16 @@ group "Dependencies"
 		filter "configurations:Debug"
 			runtime "Debug"
 			symbols "on"
-
+			buildoptions "/MDd"
 		filter "configurations:Release"
 			runtime "Release"
 			optimize "on"
-	
+			buildoptions "/MD"
+		filter "configurations:Dist"
+			runtime "Release"
+			optimize "on"
+			buildoptions "/MD"
+
 	project "Discord"
 		location "vendor/Discord"
 		kind "StaticLib"
@@ -171,8 +178,6 @@ group "Dependencies"
 				"Phoenix/vendor/Discord/src/discord_register_win.cpp"
 			}
 		
-		
-
 		filter "system:linux"
 			pic "On"
 			systemversion "latest"
@@ -184,11 +189,15 @@ group "Dependencies"
 		filter "configurations:Debug"
 			runtime "Debug"
 			symbols "on"
-
+			buildoptions "/MDd"
 		filter "configurations:Release"
 			runtime "Release"
 			optimize "on"
-
+			buildoptions "/MDd"
+		filter "configurations:Dist"
+			runtime "Release"
+			optimize "on"
+			buildoptions "/MDd"
 	project "yaml-cpp"
 		location "vendor/yaml-cpp"
 		kind "StaticLib"
@@ -222,10 +231,15 @@ group "Dependencies"
 			staticruntime "On"
 
 		filter "configurations:Debug"
+			buildoptions "/MDd"
 			runtime "Debug"
 			symbols "on"
-
 		filter "configurations:Release"
+			buildoptions "/MD"
+			runtime "Release"
+			optimize "on"
+		filter "configurations:Dist"
+			buildoptions "/MD"
 			runtime "Release"
 			optimize "on"
 group ""
@@ -235,14 +249,28 @@ project "Phoenix"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "phxpch.h"
 	pchsource "Phoenix/src/phxpch.cpp"
+	
+	VULKAN_SDK = os.getenv("VULKAN_SDK")
 
+	LibraryDir = {}
+
+	LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+
+	Library = {}
+	Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+	Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+	Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+	Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+	Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
+	
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -250,7 +278,11 @@ project "Phoenix"
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
-		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp",
+		"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.h",
+		"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.cpp",
+		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.h",
+		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp"
 	}
 
 	includedirs
@@ -265,7 +297,8 @@ project "Phoenix"
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/entt/include",
 		"%{prj.name}/vendor/yaml_cpp/include",
-		"%{prj.name}/vendor/ImGuizmo"
+		"%{prj.name}/vendor/ImGuizmo",
+		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
 
 	links 
@@ -292,25 +325,47 @@ project "Phoenix"
 
 	filter "configurations:Debug"
 		defines "PHX_DEBUG_MODE"
-		buildoptions "/MTd"
+		buildoptions "/MDd"
 		symbols "on"
+		libdirs
+		{
+			"%{prj.name}/vendor/VulkanSDK/Lib/"
+		}
+		links
+		{
+			"shaderc_sharedd.lib",
+			"spirv-cross-cored.lib",
+			"spirv-cross-glsld.lib",
+			"SPIRV-Toolsd.lib",
+		}
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		optimize "on"
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}		
 
-	filter "configurations:Dist_MODE"
-		defines "PHX_DIST"
-		buildoptions "/MT"
+	filter "configurations:Dist"
+		defines "PHX_DIST_MODE"
+		buildoptions "/MD"
 		optimize "on"
-
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 project "Sandbox" 
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -344,17 +399,17 @@ project "Sandbox"
 			"PHX_DEBUG_MODE",
 			"PHX_ENABLE_ASSERTS"
 		}
-		buildoptions "/MTd"
+		buildoptions "/MDd"
 		symbols "on"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		optimize "on"
 
 	filter "configurations:Dist"
 		defines "PHX_DIST_MODE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		optimize "on"
 
 
@@ -363,7 +418,7 @@ project "Phoenix-Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -380,7 +435,8 @@ project "Phoenix-Editor"
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
 		"Phoenix/src",
-		"Phoenix/vendor/entt/include"
+		"Phoenix/vendor/entt/include",
+		"Phoenix/vendor/ImGuizmo"
 	}
 
 	links
@@ -397,16 +453,16 @@ project "Phoenix-Editor"
 			"PHX_DEBUG_MODE",
 			"PHX_ENABLE_ASSERTS"
 		}
-		buildoptions "/MTd"
+		buildoptions "/MDd"
 		symbols "on"
 
 	filter "configurations:Release"
 		defines "PHX_RELEASE_MODE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		optimize "on"
 
 	filter "configurations:Dist"
 		defines "PHX_DIST_MODE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		optimize "on"
 
