@@ -14,11 +14,37 @@ namespace phx {
 	{
 		m_Files.clear();
 
+		FileIcon newFileIcon;
+
 		for (auto& itr : std::filesystem::directory_iterator(m_CurrentDirectory))
-		{
-			FileIcon newFileIcon;
+		{			
 			newFileIcon.Path = itr;
 			
+			if (std::filesystem::is_directory(itr.path()))
+			{
+				if (std::filesystem::is_empty(itr.path()))
+				{
+					newFileIcon.FileType = FileType::DirEmpty;
+				}
+				else
+				{
+					newFileIcon.FileType = FileType::Dir;
+				}
+			}
+			else
+			{
+				std::string extension = itr.path().extension().string();
+				if (extension == ".png" || extension == ".jpg" || extension == ".bmp")
+				{
+					newFileIcon.FileType = FileType::Image;
+				}
+				else
+				{
+					newFileIcon.FileType = FileType::Other;
+				}
+
+			}
+
 			m_Files.push_back(newFileIcon);
 		}
 	}
@@ -43,13 +69,15 @@ namespace phx {
 			if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
+				refresh = true;
 			}		
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("+"))
 		{
 			std::string newDir = std::string(std::filesystem::absolute(m_CurrentDirectory).string() + "\\New Folder");
-			mkdir(newDir.c_str());
+			int temp = mkdir(newDir.c_str());
+			refresh = true;
 		}
 		ImGui::Separator();
 
@@ -60,39 +88,36 @@ namespace phx {
 
 		ImGui::Columns(columnCount, 0, false);
 
+		
 
 		for (auto& itr : m_Files)
-		{
-			const auto& path = itr;
-			auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);
-			std::string filenameString = relativePath.filename().string();
-
+		{	
 			Ref<Texture2D> icon;
+			switch (itr.FileType)
+			{
+			case FileType::Dir:
+			{
+				icon = m_DirectoryIcon;
+				break;
+			}
+			case FileType::DirEmpty:
+			{
+				icon = m_DirectoryEmptyIcon;
+				break;
+			}
+			case FileType::Image:
+			{
+				icon = m_ImageIcon;
+				break;
+			}
+			default:
+			{
+				icon = m_FileIcon;
+				break;
+			}
+			}
 
-			if (std::filesystem::is_directory(itr.Path))
-			{
-				if (std::filesystem::is_empty(itr.Path))
-				{
-					icon = m_DirectoryEmptyIcon;
-				}
-				else
-				{
-					icon = m_DirectoryIcon;
-				}
-			}
-			else
-			{
-				std::string extension = itr.Path.extension().string();
-				if (extension == ".png" || extension == ".jpg")
-				{
-					icon = m_ImageIcon;
-				}
-				else
-				{
-					icon = m_FileIcon;
-				}
-				
-			}
+			
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 			ImGui::PopStyleColor();
@@ -104,17 +129,24 @@ namespace phx {
 					if (std::filesystem::is_directory(itr.Path))
 					{
 						m_CurrentDirectory /= itr.Path.filename();
+						refresh = true;
 					}
 				}
 			}
 
-			ImGui::TextWrapped(filenameString.c_str());
+			ImGui::TextWrapped(itr.Path.filename().string().c_str());
 
 			ImGui::NextColumn();
 		}
 
 
 		ImGui::Columns(1);
+
+		if (refresh)
+		{
+			Refresh();
+			refresh = false;
+		}
 
 		ImGui::End();
 	}

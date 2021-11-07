@@ -5,11 +5,17 @@
 #include "Phoenix/Renderer/Texture.h"
 
 namespace phx {
+	enum FileType {
+		Dir, DirEmpty,
+		Image,
+		Other
+	};
 	struct FileIcon
 	{
 		FileIcon() = default;
+
 		std::filesystem::path Path;
-		Ref<Texture2D> icon;
+		FileType FileType;
 
 		operator std::filesystem::path() const { return Path; }
 	};
@@ -22,6 +28,8 @@ namespace phx {
 		void OnImGuiRender();	
 	private:
 		std::filesystem::path m_CurrentDirectory;
+
+		bool refresh = false;
 
 		Ref<Texture2D> m_DirectoryIcon;
 		Ref<Texture2D> m_DirectoryEmptyIcon;
