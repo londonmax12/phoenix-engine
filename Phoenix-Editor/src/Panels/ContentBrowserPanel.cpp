@@ -1,0 +1,50 @@
+#include "phxpch.h"
+#include "ContentBrowserPanel.h"
+
+#include <imgui.h>
+
+namespace phx {
+	static const std::filesystem::path s_AssetPath = "assets";
+
+	ContentBrowserPanel::ContentBrowserPanel()
+		: m_CurrentDirectory(s_AssetPath)
+	{
+
+	}
+
+	void ContentBrowserPanel::OnImGuiRender()
+	{
+		ImGui::Begin("Content Browser");
+
+		if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
+		{
+			if (ImGui::Button("<-"))
+			{
+				m_CurrentDirectory = m_CurrentDirectory.parent_path();
+			}
+		}
+
+		for (auto& itr : std::filesystem::directory_iterator(m_CurrentDirectory))
+		{
+			const auto& path = itr.path();
+			auto relativePath = std::filesystem::relative(itr.path(), s_AssetPath);
+			std::string filenameString = relativePath.filename().string();
+
+			if (itr.is_directory())
+			{
+				if (ImGui::Button(filenameString.c_str()))
+				{
+					m_CurrentDirectory /= itr.path().filename();
+				}
+			}
+			else
+			{
+				if (ImGui::Button(filenameString.c_str()))
+				{
+				}
+			}
+		}
+
+		ImGui::End();
+	}
+}

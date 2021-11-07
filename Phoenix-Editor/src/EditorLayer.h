@@ -1,7 +1,9 @@
 #pragma once
 #include <Phoenix.h>
 #include <Phoenix/Renderer/EditorCamera.h>
+
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
 namespace phx {
 	class EditorLayer : public Layer
@@ -54,5 +56,6 @@ namespace phx {
 		int m_GizmoType = -1;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 }

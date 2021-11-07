@@ -203,6 +203,7 @@ namespace phx
 		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
+		m_ContentBrowserPanel.OnImGuiRender();
 
 		if (m_ShowMetrics)
 		{
