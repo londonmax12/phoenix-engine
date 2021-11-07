@@ -1,3 +1,5 @@
+#include <filesystem>
+
 #include "SceneHierarchyPanel.h"
 
 #include <imgui_internal.h>
@@ -8,6 +10,9 @@
 #include "Phoenix/ImGui/GuiWidgets.h"
 
 namespace phx {
+
+	extern const std::filesystem::path s_AssetPath;
+
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
 		SetContext(context);
@@ -302,7 +307,22 @@ namespace phx {
 		{
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
-					DrawVec4ColorControls("Color", component.Color);			
+					DrawVec4ColorControls("Color", component.Color);
+					DrawGap();
+					DrawButton("Texture");
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							std::filesystem::path texturePath = std::filesystem::path(s_AssetPath) / path;
+							component.Texture = Texture2D::Create(texturePath.string());
+						}
+
+						ImGui::EndDragDropTarget();
+					}
+
+					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
 		}
 	}

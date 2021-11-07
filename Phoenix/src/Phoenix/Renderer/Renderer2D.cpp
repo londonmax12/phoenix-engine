@@ -327,7 +327,15 @@ namespace phx
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
 	{
-		DrawQuadFilled(transform, src.Color, entityID);
+		if (src.Texture)
+		{
+			DrawQuadFilled(transform, src.Texture, src.TilingFactor, src.Color, entityID);
+		}
+		else
+		{
+			DrawQuadFilled(transform, src.Color, entityID);
+		}
+			
 	}
 
 	void Renderer2D::ResetStats()

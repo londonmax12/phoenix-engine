@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 
 namespace phx {
+	static float GapHeight = 1;
+
 	static void ItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64))
 	{
 		auto* drawList = ImGui::GetWindowDrawList();
@@ -112,10 +114,11 @@ namespace phx {
 		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 		ImGui::PopStyleVar();
-
 		ImGui::Columns(1);
-
+		
+		ImGui::PopStyleVar();
 		ImGui::PopID();
 	}
 	static void DrawVec4ColorControls(const std::string& label, glm::vec4& values, float resetValue = 1.0f, float columnWidth = 100.0f)
@@ -215,11 +218,11 @@ namespace phx {
 		ImGui::PopStyleVar();
 
 		ImGui::Columns(1);
-
 		ImGui::PopID();
 	}
 	static bool DrawCheckbox(const std::string& label, bool *value, float columnWidth = 100.0f)
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 		ImGui::PushID(label.c_str());
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, columnWidth);
@@ -230,22 +233,51 @@ namespace phx {
 
 		ImGui::Columns(1);
 		ImGui::PopID();
-
+		ImGui::PopStyleVar();
 		return result;
 	}
-	static bool DrawDragFloat(const std::string& label, float* value, float columnWidth = 100.0f)
+	static bool DrawDragFloat(const std::string& label, float* value, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.2f", float columnWidth = 100.0f)
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 		ImGui::PushID(label.c_str());
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, columnWidth);
 		ImGui::Text(label.c_str());
 
 		ImGui::NextColumn();
-		bool result = ImGui::DragFloat("##DragFloat", value);
+		bool result = ImGui::DragFloat("##DragFloat", value, v_speed, v_min, v_max, format);
 
 		ImGui::Columns(1);
 		ImGui::PopID();
+		ImGui::PopStyleVar();
 
 		return result;
+	}
+
+	static bool DrawButton(const std::string& label, float columnWidth = 100.0f)
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+
+		ImGui::NextColumn();
+		ImVec2 size = ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetFontSize() * 1.5);
+		bool result = ImGui::Button(label.c_str(), size);
+
+		ImGui::Columns(1);
+		ImGui::PopID();
+		ImGui::PopStyleVar();
+		return result;
+	}
+
+	static void DrawGap()
+	{
+		ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_SeparatorActive, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::Separator();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
 	}
 }
