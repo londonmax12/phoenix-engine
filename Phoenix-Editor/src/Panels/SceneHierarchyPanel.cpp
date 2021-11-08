@@ -13,9 +13,13 @@ namespace phx {
 
 	extern const std::filesystem::path s_AssetPath;
 
+	SceneHierarchyPanel::SceneHierarchyPanel()
+	{
+	}
+
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
-		SetContext(context);
+		SetContext(context);		
 	}
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
@@ -220,6 +224,23 @@ namespace phx {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+			if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
+			{
+				if (ImGui::MenuItem("Rigidbody 2D"))
+				{
+					m_SelectionContext.AddComponent<Rigidbody2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!m_SelectionContext.HasComponent<BoxCollider2DComponent>())
+			{
+				if (ImGui::MenuItem("Box Collider 2D"))
+				{
+					m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			ImGui::EndPopup();
 		}
 		ImGui::PopItemWidth();
@@ -316,7 +337,11 @@ namespace phx {
 						{
 							const wchar_t* path = (const wchar_t*)payload->Data;
 							std::filesystem::path texturePath = std::filesystem::path(s_AssetPath) / path;
-							component.Texture = Texture2D::Create(texturePath.string());
+							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
+							if (texture->IsLoaded())
+								component.Texture = texture;
+							else
+								PHX_CORE_WARN("Could not load texture {0}", texturePath.filename().string());
 						}
 
 						ImGui::EndDragDropTarget();
@@ -324,6 +349,51 @@ namespace phx {
 
 					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
+		}
+		if (entity.HasComponent<Rigidbody2DComponent>())
+		{
+			DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
+				{
+					const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
+					const char* currentBodyTypeString = bodyTypeStrings[(int)component.Type];
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, 100.0f);
+					ImGui::Text("Body Type");
+
+					ImGui::NextColumn();
+					if (ImGui::BeginCombo("##Body Type", currentBodyTypeString))
+					{
+						for (int i = 0; i < 2; i++)
+						{
+							bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
+							if (ImGui::Selectable(bodyTypeStrings[i], isSelected))
+							{
+								currentBodyTypeString = bodyTypeStrings[i];
+								component.Type = (Rigidbody2DComponent::BodyType)i;
+							}
+
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+
+						ImGui::EndCombo();
+					}
+					ImGui::Columns(1);
+					DrawCheckbox("Fixed Rotation", &component.FixedRotation);
+				});
+		}
+		if (entity.HasComponent<BoxCollider2DComponent>())
+		{
+			DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+				{
+					DrawVec2Controls("Offset", component.Offset);
+					DrawVec2Controls("Size", component.Size, 0.5f); \
+					DrawGap();
+					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+				});
 		}
 	}
 

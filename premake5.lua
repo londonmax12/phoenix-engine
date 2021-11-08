@@ -242,6 +242,47 @@ group "Dependencies"
 			buildoptions "/MD"
 			runtime "Release"
 			optimize "on"
+
+	project "Box2D"
+		kind "StaticLib"
+		language "C++"
+		location "vendor/Box2D"
+		cppdialect "C++11"
+		staticruntime "off"
+
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/box2d/src/**.h",
+			"Phoenix/vendor/box2d/src/**.cpp",
+			"Phoenix/vendor/box2d/include/**.h"
+		}
+
+		includedirs
+		{
+			"Phoenix/vendor/box2d/include",
+			"Phoenix/vendor/box2d/src"
+		}
+
+		filter "system:windows"
+			systemversion "latest"
+
+		filter "configurations:Debug"
+			runtime "Debug"
+			buildoptions "/MDd"
+			symbols "on"
+
+		filter "configurations:Release"
+			runtime "Release"
+			buildoptions "/MD"
+			optimize "on"
+
+		filter "configurations:Dist"
+			runtime "Release"
+			buildoptions "/MD"
+			optimize "on"
 group ""
 
 project "Phoenix"
@@ -297,12 +338,14 @@ project "Phoenix"
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/entt/include",
 		"%{prj.name}/vendor/yaml_cpp/include",
+		"%{prj.name}/vendor/box2d/include",
 		"%{prj.name}/vendor/ImGuizmo",
 		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
 
 	links 
 	{ 
+		"Box2D",
 		"GLFW",
 		"GLAD",
 		"imgui",

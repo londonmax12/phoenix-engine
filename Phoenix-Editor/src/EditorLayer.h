@@ -72,6 +72,6 @@ namespace phx {
 		SceneState m_SceneState = SceneState::Edit;
 
 		// Resources
-		Ref<Texture2D> m_PlayIcon, m_StopIcon;		
+		Ref<Texture2D> m_PlayIcon, m_StopIcon;
 	};
 }

@@ -3,13 +3,14 @@
 #include "Phoenix/Scene/Scene.h"
 #include "Phoenix/Application/Base.h"
 #include "Phoenix/Scene/Entity.h"
+#include "Phoenix/Renderer/Texture.h"
 #include <imgui.h>
 
 namespace phx {
 	class SceneHierarchyPanel
 	{
 	public:
-		SceneHierarchyPanel() = default;
+		SceneHierarchyPanel();
 		SceneHierarchyPanel(const Ref<Scene>& scene);
 
 		void SetContext(const Ref<Scene>& scene);
@@ -21,8 +22,9 @@ namespace phx {
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);
-	private:
+
 		Ref<Scene> m_Context;
+
 		Entity m_SelectionContext;
 	};
 }
