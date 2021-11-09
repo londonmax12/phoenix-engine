@@ -282,8 +282,27 @@ namespace phx
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
+		
+				std::filesystem::path fsPath = std::filesystem::path(s_AssetPath) / path;
+				std::string ext = fsPath.extension().string();
 
-				OpenScene(std::filesystem::path(s_AssetPath) / path);
+				if (ext == ".phoenix")
+				{
+					if (m_SceneState == SceneState::Play)
+					{
+						m_SceneState = SceneState::Edit;
+					}
+					OpenScene(fsPath);
+				}
+				else if (ext == ".png" || ext == ".jpg" || ext == ".bmp")
+				{
+					if (m_HoveredEntity.HasComponent<SpriteRendererComponent>())
+					{
+						auto& src = m_HoveredEntity.GetComponent<SpriteRendererComponent>();
+						src.Texture = Texture2D::Create(fsPath.string());
+						src.Path = fsPath.string();
+					}
+				}
 			}		
 
 			ImGui::EndDragDropTarget();

@@ -49,6 +49,8 @@ namespace phx {
 		Ref<Texture2D> Texture; 
 		float TilingFactor = 1.0f;
 
+		std::string Path = std::string();
+
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)

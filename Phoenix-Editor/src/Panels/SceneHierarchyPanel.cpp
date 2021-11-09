@@ -339,7 +339,10 @@ namespace phx {
 							std::filesystem::path texturePath = std::filesystem::path(s_AssetPath) / path;
 							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
 							if (texture->IsLoaded())
+							{
 								component.Texture = texture;
+								component.Path = texturePath.string();
+							}							
 							else
 								PHX_CORE_WARN("Could not load texture {0}", texturePath.filename().string());
 						}

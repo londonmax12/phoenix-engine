@@ -136,11 +136,12 @@ namespace phx {
 			}
 			}
 			
-			auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);			
-			
+			auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);
+
 			ImGui::PushID(itr.Path.c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+
 			if (ImGui::BeginDragDropSource())
 			{
 				const wchar_t* itemPath = relativePath.c_str();
@@ -160,7 +161,6 @@ namespace phx {
 					}
 				}
 			}
-
 			ImGui::TextWrapped(itr.Path.filename().string().c_str());
 
 			ImGui::NextColumn();

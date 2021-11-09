@@ -1,0 +1,137 @@
+Scene: Untitled
+Entities:
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [4.96705008, 5.57000017, 0]
+      Rotation: [0, 0, 1.57003963]
+      Scale: [2.70014954, 2.70014954, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.469999999
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [-5.34478331, -4.61998177, 0.018131258]
+      Rotation: [0, 0, -2.97538233]
+      Scale: [0.999924362, 0.999924362, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 0, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [-0.318918973, -4.39396906, 0]
+      Rotation: [0, 0, -2.97538257]
+      Scale: [12.7205858, 0.187299043, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Camera Object
+    TransformComponent:
+      Translation: [0, -2.0999999, 38.205616]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 21.1000004
+        OrthographicNear: -50
+        OrthographicFar: 488
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Platform
+    TransformComponent:
+      Translation: [0, -6.05853367, 0]
+      Rotation: [0, 0, 0]
+      Scale: [41.4510612, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.535714209, 0, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0.00460291747, -5.0386529, 9.31322575e-10]
+      Rotation: [0, 0, 0.000157367569]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0, 0, -0.200000003]
+      Rotation: [0, 0, 0]
+      Scale: [36.1486397, 19.8627262, 0.761023939]
+    SpriteRendererComponent:
+      Color: [0.142197251, 0.142183036, 0.142183036, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1

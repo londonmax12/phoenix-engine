@@ -196,7 +196,20 @@ namespace phx {
 			out << YAML::BeginMap; // SpriteRendererComponent
 
 			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+
+			
+
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
+			if (!spriteRendererComponent.Path.empty())
+			{
+				out << YAML::Key << "Textured" << YAML::Value << true;
+				out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Path;
+			}
+			else
+			{
+				out << YAML::Key << "Textured" << YAML::Value << false;
+			}
+			out << YAML::Key << "TextureTiling" << YAML::Value << spriteRendererComponent.TilingFactor;
 
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
@@ -328,6 +341,12 @@ namespace phx {
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
+					if (spriteRendererComponent["Textured"].as<bool>())
+					{
+						src.Texture = Texture2D::Create(spriteRendererComponent["TexturePath"].as<std::string>());
+						src.Path = spriteRendererComponent["TexturePath"].as<std::string>();
+					}					
+					src.TilingFactor = spriteRendererComponent["TextureTiling"].as<float>();
 				}
 
 				auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
