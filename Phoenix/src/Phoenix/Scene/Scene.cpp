@@ -6,6 +6,7 @@
 
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
+#include "Phoenix/Scene/ScriptableEntity.h"
 
 #include "box2d/b2_world.h"
 #include "box2d/b2_body.h"
@@ -37,6 +38,17 @@ namespace phx {
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<IDComponent>();
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "Entity" : name;
+		return entity;
+	}
+
+	Entity Scene::CreateEntity(UUID uuid, const std::string& name)
+	{
+		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
@@ -215,6 +227,13 @@ namespace phx {
 	{
 		static_assert(false);
 	}
+
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+	{
+
+	}
+
 
 	template<>
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)

@@ -1,17 +1,24 @@
 #pragma once
 
+#include "Phoenix/Scene/SceneCamera.h" 
+#include "Phoenix/Application/UUID.h"
+#include "Phoenix/Renderer/Texture.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "Phoenix/Scene/SceneCamera.h"
-#include "Phoenix/Scene/ScriptableEntity.h"
-
-#include "Phoenix/Renderer/Texture.h"
-
 namespace phx {
+	struct IDComponent
+	{
+		UUID ID;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+
+	};
 	struct TagComponent
 	{
 		std::string Tag;
@@ -66,6 +73,8 @@ namespace phx {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 	};
+
+	class ScriptableEntity;
 
 	struct NativeScriptComponent
 	{

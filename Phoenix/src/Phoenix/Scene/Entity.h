@@ -1,7 +1,11 @@
 #pragma once
-#include "entt.hpp"
-#include "Scene.h"
+
+#include "Phoenix/Scene/Scene.h"
+#include "Phoenix/Scene/Components.h"
 #include "Phoenix/Logging/Log.h"
+#include "Phoenix/Application/UUID.h"
+
+#include "entt.hpp"
 
 namespace phx {
 	class Entity
@@ -43,6 +47,8 @@ namespace phx {
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator entt::entity() const { return m_EntityHandle; }
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
+
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		bool operator==(const Entity& other) const
 		{

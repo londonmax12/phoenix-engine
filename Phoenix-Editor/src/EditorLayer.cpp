@@ -451,38 +451,46 @@ namespace phx
 		{
 			if (!ImGuizmo::IsUsing())
 			{
-				m_GizmoType = -1;
-				break;
+				m_GizmoType = -1;				
 			}
+			break;
 		}
 			
 		case (int)PHX_KEY_W:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
-				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-				break;
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;				
 			}
+			break;
 		}
 			
 		case (int)PHX_KEY_E:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
-				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-				break;
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;			
 			}
+			break;
 		}
 			
 		case (int)PHX_KEY_R:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-				break;
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;	
 			}
+			break;
 		}
-		
+		case (int)PHX_KEY_DELETE:
+		{
+			if (m_SceneHierarchyPanel.GetSelectedEntity())
+			{
+				m_ActiveScene->DestroyEntity(m_SceneHierarchyPanel.GetSelectedEntity());
+				m_SceneHierarchyPanel.SetSelectedEntity();
+			}
+			break;
+		}
 		}
 	}
 
@@ -573,6 +581,5 @@ namespace phx
 		m_SceneState = SceneState::Edit;
 		m_ActiveScene->OnRuntimeStop();
 	}
-
 }
 

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Phoenix/Time/DeltaTime.h"
+#include "Phoenix/Application/UUID.h"
 #include "Phoenix/Renderer/EditorCamera.h"
+#include "Phoenix/Time/DeltaTime.h"
 
 #include "entt.hpp"
 
@@ -17,6 +18,7 @@ namespace phx {
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		Entity CreateEntity(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
 		entt::registry& Reg() { return m_Registry; }

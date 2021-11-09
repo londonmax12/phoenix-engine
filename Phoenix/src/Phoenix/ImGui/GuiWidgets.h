@@ -287,7 +287,6 @@ namespace phx {
 	}
 	static bool DrawDragFloat(const std::string& label, float* value, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.2f", float columnWidth = 100.0f)
 	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 		ImGui::PushID(label.c_str());
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, columnWidth);
@@ -298,7 +297,6 @@ namespace phx {
 
 		ImGui::Columns(1);
 		ImGui::PopID();
-		ImGui::PopStyleVar();
 
 		return result;
 	}

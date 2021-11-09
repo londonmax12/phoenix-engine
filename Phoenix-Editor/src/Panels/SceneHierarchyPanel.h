@@ -19,6 +19,7 @@ namespace phx {
 
 		Entity GetSelectedEntity() const { return m_SelectionContext; }
 		void SetSelectedEntity(Entity entity);
+		void SetSelectedEntity() { m_SelectionContext = {}; };
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);
