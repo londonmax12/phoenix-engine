@@ -31,65 +31,67 @@ namespace phx {
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Scene Hierarchy");
-
-		static ImGuiTextFilter filter;
-		ImGui::Columns(2, 0, false);
-		ImGui::SetColumnWidth(0, ImGui::GetFontSize() * 5);
-		ImGui::Text("Search:");
-		ImGui::NextColumn();
-		filter.Draw("##filter", ImGui::GetContentRegionAvail().x);
-		ImGui::Columns(1);
-		ImGui::Separator();
-
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-
-		if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y)))
+		if (m_Context)
 		{
-			if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered())
+			static ImGuiTextFilter filter;
+			ImGui::Columns(2, 0, false);
+			ImGui::SetColumnWidth(0, ImGui::GetFontSize() * 5);
+			ImGui::Text("Search:");
+			ImGui::NextColumn();
+			filter.Draw("##filter", ImGui::GetContentRegionAvail().x);
+			ImGui::Columns(1);
+			ImGui::Separator();
+
+			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+			if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y)))
 			{
-				m_SelectionContext = {};
-			}
-			
-			ItemRowsBackground(ImGui::GetFontSize());
-			m_Context->m_Registry.each([&](auto entityID)
+				if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered())
 				{
-					Entity entity{ entityID , m_Context.get() };
-					if (filter.PassFilter(entity.GetComponent<TagComponent>().Tag.c_str()))
+					m_SelectionContext = {};
+				}
+
+				ItemRowsBackground(ImGui::GetFontSize());
+				m_Context->m_Registry.each([&](auto entityID)
 					{
-						DrawEntityNode(entity);
-					}					
-				});
-			
-				
-			if (ImGui::BeginPopupContextWindow(0, 1, false))
-			{
-				if (ImGui::BeginMenu("Create"))
-				{
-					if (ImGui::MenuItem("Empty Object"))
-					{
-						m_Context->CreateEntity("Empty Object");
-					}
-					if (ImGui::MenuItem("Camera Object"))
-					{
-						Entity& newEntity = m_Context->CreateEntity("Camera Object");
-						newEntity.AddComponent<CameraComponent>();
-					}
-					if (ImGui::BeginMenu("2D Objects"))
-					{					
-						if (ImGui::MenuItem("Square Object"))
+						Entity entity{ entityID , m_Context.get() };
+						if (filter.PassFilter(entity.GetComponent<TagComponent>().Tag.c_str()))
 						{
-							Entity& newEntity = m_Context->CreateEntity("Square Object");
-							newEntity.AddComponent<SpriteRendererComponent>();
+							DrawEntityNode(entity);
+						}
+					});
+
+
+				if (ImGui::BeginPopupContextWindow(0, 1, false))
+				{
+					if (ImGui::BeginMenu("Create"))
+					{
+						if (ImGui::MenuItem("Empty Object"))
+						{
+							m_Context->CreateEntity("Empty Object");
+						}
+						if (ImGui::MenuItem("Camera Object"))
+						{
+							Entity& newEntity = m_Context->CreateEntity("Camera Object");
+							newEntity.AddComponent<CameraComponent>();
+						}
+						if (ImGui::BeginMenu("2D Objects"))
+						{
+							if (ImGui::MenuItem("Square Object"))
+							{
+								Entity& newEntity = m_Context->CreateEntity("Square Object");
+								newEntity.AddComponent<SpriteRendererComponent>();
+							}
+							ImGui::EndMenu();
 						}
 						ImGui::EndMenu();
 					}
-					ImGui::EndMenu();
+					ImGui::EndPopup();
 				}
-				ImGui::EndPopup();
+				ImGui::ListBoxFooter();
 			}
-			ImGui::ListBoxFooter();
+			ImGui::PopStyleColor();
 		}
-		ImGui::PopStyleColor();
 
 		ImGui::End();
 

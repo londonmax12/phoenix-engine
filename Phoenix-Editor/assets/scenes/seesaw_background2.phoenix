@@ -1,15 +1,16 @@
 Scene: Untitled
 Entities:
-  - Entity: 5055567175022071826
+  - Entity: 4807095414104420227
     TagComponent:
       Tag: Square Object
     TransformComponent:
-      Translation: [4.96729612, 4.66573381, 0]
-      Rotation: [0, 0, 1.57003963]
-      Scale: [2.70014954, 2.70014954, 1]
+      Translation: [-6.2239356, -4.80749464, 0.018131258]
+      Rotation: [0, 0, 0.195524022]
+      Scale: [0.833180666, 0.999923646, 1]
     SpriteRendererComponent:
       Color: [1, 0.999899983, 0.999899983, 1]
-      Textured: false
+      Textured: true
+      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
       TextureTiling: 1
     Rigidbody2DComponent:
       BodyType: Dynamic
@@ -17,23 +18,58 @@ Entities:
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.469999999
+      Density: 0.200000003
+      Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
-  - Entity: 33471305675372571
+  - Entity: 1859780847659228245
     TagComponent:
       Tag: Square Object
     TransformComponent:
-      Translation: [-5.34478617, -4.61998129, 0.018131258]
-      Rotation: [0, 0, -2.97538257]
-      Scale: [0.999924362, 0.999924362, 1]
+      Translation: [-5.3422327, -4.63286924, 0.018131258]
+      Rotation: [0, 0, 0.195524022]
+      Scale: [0.833180666, 0.999923646, 1]
     SpriteRendererComponent:
-      Color: [1, 0, 0, 1]
-      Textured: false
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: true
+      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
       TextureTiling: 1
     Rigidbody2DComponent:
       BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 0.200000003
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 10598854289210995762
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0, 0, -0.200000003]
+      Rotation: [0, 0, 0]
+      Scale: [36.1486397, 19.8627262, 0.761023939]
+    SpriteRendererComponent:
+      Color: [0.0120417988, 0.601531208, 0.301773518, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12321398807450116770
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0.00460290909, -5.0386529, 9.31322575e-10]
+      Rotation: [0, 0, 0.000157367569]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: true
+      TexturePath: assets\textures\download.jfif
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Static
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -42,19 +78,20 @@ Entities:
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
-  - Entity: 12853153167024848294
+  - Entity: 13961540224533804600
     TagComponent:
-      Tag: Square Object
+      Tag: Platform
     TransformComponent:
-      Translation: [-0.318918973, -4.39396906, 0]
-      Rotation: [0, 0, -2.97538257]
-      Scale: [12.7205858, 0.187299043, 1]
+      Translation: [0, -6.05853367, 0]
+      Rotation: [0, 0, 0]
+      Scale: [41.4510612, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 0.999899983, 0.999899983, 1]
-      Textured: false
-      TextureTiling: 1
+      Color: [0.306589067, 0.306574851, 0.3065584, 1]
+      Textured: true
+      TexturePath: assets\textures\rock.jfif
+      TextureTiling: 40.7000008
     Rigidbody2DComponent:
-      BodyType: Dynamic
+      BodyType: Static
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -81,40 +118,20 @@ Entities:
         OrthographicFar: 488
       Primary: true
       FixedAspectRatio: false
-  - Entity: 13961540224533804600
-    TagComponent:
-      Tag: Platform
-    TransformComponent:
-      Translation: [0, -6.05853367, 0]
-      Rotation: [0, 0, 0]
-      Scale: [41.4510612, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 0.535714209, 0, 1]
-      Textured: false
-      TextureTiling: 1
-    Rigidbody2DComponent:
-      BodyType: Static
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.5
-      Restitution: 0
-      RestitutionThreshold: 0.5
-  - Entity: 12321398807450116770
+  - Entity: 12853153167024848294
     TagComponent:
       Tag: Square Object
     TransformComponent:
-      Translation: [0.00460291747, -5.0386529, 9.31322575e-10]
-      Rotation: [0, 0, 0.000157367569]
-      Scale: [1, 1, 1]
+      Translation: [-0.318918973, -4.39396906, 0]
+      Rotation: [0, 0, -2.97538257]
+      Scale: [12.7205858, 0.187299043, 1]
     SpriteRendererComponent:
       Color: [1, 0.999899983, 0.999899983, 1]
-      Textured: false
+      Textured: true
+      TexturePath: assets\textures\download.jfif
       TextureTiling: 1
     Rigidbody2DComponent:
-      BodyType: Static
+      BodyType: Dynamic
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -123,15 +140,47 @@ Entities:
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
-  - Entity: 10598854289210995762
+  - Entity: 33471305675372571
     TagComponent:
       Tag: Square Object
     TransformComponent:
-      Translation: [0, 0, -0.200000003]
-      Rotation: [0, 0, 0]
-      Scale: [36.1486397, 19.8627262, 0.761023939]
+      Translation: [-6.00880098, -3.7605319, 0.0181312561]
+      Rotation: [0, 0, 0.195524022]
+      Scale: [0.833180666, 0.999923646, 1]
     SpriteRendererComponent:
-      Color: [0.0120417988, 0.601531208, 0.301773518, 1]
+      Color: [1, 0.999899983, 0.999899983, 1]
       Textured: true
-      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
       TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 0.200000003
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 5055567175022071826
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [4.96729612, 4.66573381, 0]
+      Rotation: [0, 0, 1.57003963]
+      Scale: [2.70014954, 2.70014954, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: true
+      TexturePath: assets\textures\101-1013193_boulder-png-clipart.png
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.469999999
+      Restitution: 0
+      RestitutionThreshold: 0.5
