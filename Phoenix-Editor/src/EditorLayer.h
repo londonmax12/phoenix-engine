@@ -21,7 +21,7 @@ namespace phx {
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
-		void NewScene();
+		void NewScene(Scene::SceneType type);
 		void SaveSceneAs();
 		void SaveScene();
 		void OpenScene();

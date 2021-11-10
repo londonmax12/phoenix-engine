@@ -17,11 +17,19 @@ namespace phx {
 		Scene();
 		~Scene();
 
+		enum class SceneType {
+			Scene2D, Scene3D
+		};
+
+
 		static Ref<Scene> Copy(Ref<Scene> other);
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntity(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
+
+		SceneType GetSceneType() { return m_SceneType; }
+		void SetSceneType(SceneType type) { m_SceneType = type; }
 
 		void OnRuntimeStart();
 		void OnRuntimeStop();
@@ -43,6 +51,8 @@ namespace phx {
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		b2World* m_PhysicsWorld = nullptr;
+
+		SceneType m_SceneType = SceneType::Scene3D;
 
 		friend class Entity;
 		friend class SceneSerializer;

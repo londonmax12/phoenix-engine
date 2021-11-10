@@ -9,6 +9,8 @@
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/ImGui/GuiWidgets.h"
 
+#include "Phoenix/Scene/Scene.h"
+
 namespace phx {
 
 	extern const std::filesystem::path s_AssetPath;
@@ -75,24 +77,34 @@ namespace phx {
 							Entity& newEntity = m_Context->CreateEntity("Camera Object");
 							newEntity.AddComponent<CameraComponent>();
 						}
-						if (ImGui::BeginMenu("2D Objects"))
+						switch (m_Context->GetSceneType())
 						{
-							if (ImGui::MenuItem("Square Object"))
+						case Scene::SceneType::Scene2D:
+						{
+							if (ImGui::BeginMenu("2D Objects"))
 							{
-								Entity& newEntity = m_Context->CreateEntity("Square Object");
-								newEntity.AddComponent<SpriteRendererComponent>();
+								if (ImGui::MenuItem("Square Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Square Object");
+									newEntity.AddComponent<SpriteRendererComponent>();
+								}
+								ImGui::EndMenu();
 							}
-							ImGui::EndMenu();
+							break;
 						}
-
-						if (ImGui::BeginMenu("3D Objects"))
+						case Scene::SceneType::Scene3D:
 						{
-							if (ImGui::MenuItem("Cube Object"))
+							if (ImGui::BeginMenu("3D Objects"))
 							{
-								Entity& newEntity = m_Context->CreateEntity("Square Object");
-								newEntity.AddComponent<CubeRendererComponent>();
+								if (ImGui::MenuItem("Cube Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Cube Object");
+									newEntity.AddComponent<CubeRendererComponent>();
+								}
+								ImGui::EndMenu();
 							}
-							ImGui::EndMenu();
+							break;
+						}
 						}
 						ImGui::EndMenu();
 					}
@@ -228,39 +240,51 @@ namespace phx {
 				}
 			}
 			
-			if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
+			switch (m_Context->GetSceneType())
 			{
-				if (ImGui::MenuItem("Sprite Renderer"))
-				{
-					m_SelectionContext.AddComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-			if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
+			case Scene::SceneType::Scene2D:
 			{
-				if (ImGui::MenuItem("Rigidbody 2D"))
+				if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
 				{
-					m_SelectionContext.AddComponent<Rigidbody2DComponent>();
-					ImGui::CloseCurrentPopup();
+					if (ImGui::MenuItem("Sprite Renderer"))
+					{
+						m_SelectionContext.AddComponent<SpriteRendererComponent>();
+						ImGui::CloseCurrentPopup();
+					}
 				}
-			}
+				if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
+				{
+					if (ImGui::MenuItem("Rigidbody 2D"))
+					{
+						m_SelectionContext.AddComponent<Rigidbody2DComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				}
 
-			if (!m_SelectionContext.HasComponent<BoxCollider2DComponent>())
-			{
-				if (ImGui::MenuItem("Box Collider 2D"))
+				if (!m_SelectionContext.HasComponent<BoxCollider2DComponent>())
 				{
-					m_SelectionContext.AddComponent<BoxCollider2DComponent>();
-					ImGui::CloseCurrentPopup();
+					if (ImGui::MenuItem("Box Collider 2D"))
+					{
+						m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+						ImGui::CloseCurrentPopup();
+					}
 				}
-			}
 
-			if (!m_SelectionContext.HasComponent<CubeRendererComponent>())
+				break;
+			}
+			case Scene::SceneType::Scene3D:
 			{
-				if (ImGui::MenuItem("Cube Renderer"))
+
+				if (!m_SelectionContext.HasComponent<CubeRendererComponent>())
 				{
-					m_SelectionContext.AddComponent<CubeRendererComponent>();
-					ImGui::CloseCurrentPopup();
+					if (ImGui::MenuItem("Cube Renderer"))
+					{
+						m_SelectionContext.AddComponent<CubeRendererComponent>();
+						ImGui::CloseCurrentPopup();
+					}
 				}
+				break;
+			}
 			}
 
 			ImGui::EndPopup();

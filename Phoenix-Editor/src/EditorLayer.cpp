@@ -179,9 +179,17 @@ namespace phx
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New", "Ctrl+N"))
+				if (ImGui::BeginMenu("New"))
 				{
-					NewScene();
+					if (ImGui::MenuItem("2D Scene"))
+					{
+						NewScene(Scene::SceneType::Scene2D);
+					}
+					if (ImGui::MenuItem("3D Scene", "Ctrl+N"))
+					{
+						NewScene(Scene::SceneType::Scene3D);
+					}	
+					ImGui::EndMenu();
 				}
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
 				{
@@ -325,12 +333,6 @@ namespace phx
 
 				ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
-				// Camera
-				//auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-				//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-				//const glm::mat4& cameraProjection = camera.GetProjection();
-				//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
-
 				const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
 				glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
@@ -362,7 +364,6 @@ namespace phx
 					tc.Scale = scale;
 				}
 			}
-
 		}
 		
 		ImGui::End();
@@ -448,7 +449,7 @@ namespace phx
 		{
 			if (control)
 			{
-				NewScene();
+				NewScene(Scene::SceneType::Scene3D);
 			}
 			break;
 		}
@@ -516,10 +517,11 @@ namespace phx
 		return false;
 	}
 
-	void EditorLayer::NewScene()
+	void EditorLayer::NewScene(Scene::SceneType type)
 	{
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_ActiveScene->SetSceneType(type);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 		m_EditorScenePath = std::filesystem::path();

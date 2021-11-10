@@ -89,13 +89,28 @@ namespace phx {
 		}
 
 		// Copy components (except IDComponent and TagComponent)
-		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CubeRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		newScene->m_SceneType = other->m_SceneType;
+
+		switch (other->m_SceneType)
+		{
+		case phx::Scene::SceneType::Scene2D:
+		{
+			CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			break;
+		}		
+		case phx::Scene::SceneType::Scene3D:
+		{
+			CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<CubeRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			break;
+		}
+		}
 
 		return newScene;
 	}
@@ -116,47 +131,62 @@ namespace phx {
 
 	void Scene::OnRuntimeStart()
 	{
-		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
-
-		auto view = m_Registry.view<Rigidbody2DComponent>();
-		for (auto e : view)
+		switch (m_SceneType)
 		{
-			Entity entity = { e, this };
-			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		case phx::Scene::SceneType::Scene2D:
+		{
+			m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
 
-			b2BodyDef bodyDef;
-			bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.Type);
-			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
-			bodyDef.angle = transform.Rotation.z;
-
-			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
-			body->SetFixedRotation(rb2d.FixedRotation);
-			rb2d.RuntimeBody = body;
-
-			if (entity.HasComponent<BoxCollider2DComponent>())
+			auto view = m_Registry.view<Rigidbody2DComponent>();
+			for (auto e : view)
 			{
-				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+				Entity entity = { e, this };
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
-				b2PolygonShape boxShape;
-				boxShape.SetAsBox(bc2d.Size.x * transform.Scale.x, bc2d.Size.y * transform.Scale.y);
+				b2BodyDef bodyDef;
+				bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.Type);
+				bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
+				bodyDef.angle = transform.Rotation.z;
 
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &boxShape;
-				fixtureDef.density = bc2d.Density;
-				fixtureDef.friction = bc2d.Friction;
-				fixtureDef.restitution = bc2d.Restitution;
-				fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
-				fixtureDef.isSensor = bc2d.IsSensor;
-				body->CreateFixture(&fixtureDef);
+				b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+				body->SetFixedRotation(rb2d.FixedRotation);
+				rb2d.RuntimeBody = body;
+
+				if (entity.HasComponent<BoxCollider2DComponent>())
+				{
+					auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+
+					b2PolygonShape boxShape;
+					boxShape.SetAsBox(bc2d.Size.x * transform.Scale.x, bc2d.Size.y * transform.Scale.y);
+
+					b2FixtureDef fixtureDef;
+					fixtureDef.shape = &boxShape;
+					fixtureDef.density = bc2d.Density;
+					fixtureDef.friction = bc2d.Friction;
+					fixtureDef.restitution = bc2d.Restitution;
+					fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
+					fixtureDef.isSensor = bc2d.IsSensor;
+					body->CreateFixture(&fixtureDef);
+				}
 			}
+			break;
 		}
+		}		
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-		delete m_PhysicsWorld;
-		m_PhysicsWorld = nullptr;
+		switch (m_SceneType)
+		{
+		case phx::Scene::SceneType::Scene2D:
+		{
+			delete m_PhysicsWorld;
+			m_PhysicsWorld = nullptr;
+			break;
+		}
+		}
+		
 	}
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
@@ -177,7 +207,9 @@ namespace phx {
 				});
 			}
 		
-		// Physics
+		switch (m_SceneType)
+		{
+		case phx::Scene::SceneType::Scene2D:
 		{
 			const int32_t velocityIterations = 6;
 			const int32_t positionIterations = 2;
@@ -197,61 +229,109 @@ namespace phx {
 				transform.Translation.y = position.y;
 				transform.Rotation.z = body->GetAngle();
 			}
-		}
 
-		// Render 2D
-		Camera* mainCamera = nullptr;
-		glm::mat4 cameraTransform;
-		{
-			auto view = m_Registry.view<TransformComponent, CameraComponent>();
-			for (auto entity : view)
+			Camera* mainCamera = nullptr;
+			glm::mat4 cameraTransform;
 			{
-				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-				if (camera.Primary)
+				auto view = m_Registry.view<TransformComponent, CameraComponent>();
+				for (auto entity : view)
 				{
-					mainCamera = &camera.Camera;
-					cameraTransform = transform.GetTransform();
-					break;
-				}
-			}
-		}
+					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
-		if (mainCamera)
-		{
-			Renderer2D::BeginScene(*mainCamera, cameraTransform);
-
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					if (camera.Primary)
+					{
+						mainCamera = &camera.Camera;
+						cameraTransform = transform.GetTransform();
+						break;
+					}
 				}
 			}
 
-			Renderer2D::EndScene();
+			if (mainCamera)
+			{
+				Renderer2D::BeginScene(*mainCamera, cameraTransform);
+
+				{
+					auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+					for (auto entity : group)
+					{
+						auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+						Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					}
+				}
+
+				Renderer2D::EndScene();
+			}
+
+			break;
+		}			
+		case phx::Scene::SceneType::Scene3D:
+		{
+			Camera* mainCamera = nullptr;
+			glm::mat4 cameraTransform;
+			{
+				auto view = m_Registry.view<TransformComponent, CameraComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+					if (camera.Primary)
+					{
+						mainCamera = &camera.Camera;
+						cameraTransform = transform.GetTransform();
+						break;
+					}
+				}
+			}
+
+			if (mainCamera)
+			{
+				Renderer3D::BeginScene(*mainCamera, cameraTransform);
+
+				{
+					auto group = m_Registry.group<TransformComponent>(entt::get<CubeRendererComponent>);
+					for (auto entity : group)
+					{
+						auto [transform, crc] = group.get<TransformComponent, CubeRendererComponent>(entity);
+
+						Renderer3D::DrawCube(transform.GetTransform(), crc.Color, (int)entity);
+					}
+				}
+
+				Renderer3D::EndScene();
+			}
+
+			break;
+		}			
 		}
+
 
 	}
 
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
 	{
-		Renderer2D::BeginScene(camera);
-		Renderer3D::BeginScene(camera);
-
+		switch (m_SceneType)
 		{
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
+		case phx::Scene::SceneType::Scene2D:
+		{
+			Renderer2D::BeginScene(camera);
+
+			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+			for (auto entity : view)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto [transform, sprite] = view.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
+
+			Renderer2D::EndScene();
+			break;
 		}
-		
+		case phx::Scene::SceneType::Scene3D:
 		{
+			Renderer3D::BeginScene(camera);
+
 			auto view = m_Registry.view<TransformComponent, CubeRendererComponent>();
 			for (auto entity : view)
 			{
@@ -259,10 +339,12 @@ namespace phx {
 
 				Renderer3D::DrawCube(transform.GetTransform(), cube.Color, (int)entity);
 			}
-		}
 
-		Renderer3D::EndScene();
-		Renderer2D::EndScene();
+			Renderer3D::EndScene();
+			break;
+		}
+		}		
+		
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
