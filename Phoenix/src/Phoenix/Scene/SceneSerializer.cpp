@@ -131,6 +131,28 @@ namespace phx {
 	}
 
 
+	static std::string SceneTypeToString(Scene::SceneType type)
+	{
+		switch (type)
+		{
+		case Scene::SceneType::Scene2D:    return "2D";
+		case Scene::SceneType::Scene3D:    return "3D";
+		}
+
+		PHX_CORE_ASSERT(false, "Unknown scene type");
+		return {};
+	}
+
+	static Scene::SceneType SceneTypeFromString(const std::string& type)
+	{
+		if (type == "2D")    return Scene::SceneType::Scene2D;
+		if (type == "3D")    return Scene::SceneType::Scene3D;
+
+		PHX_CORE_ASSERT(false, "Unknown scene type");
+		return Scene::SceneType::Scene3D;
+	}
+
+
 	SceneSerializer::SceneSerializer(const Ref<Scene>& scene)
 		: m_Scene(scene)
 	{
@@ -253,6 +275,7 @@ namespace phx {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
+		out << YAML::Key << "SceneType" << YAML::Value << SceneTypeToString(m_Scene->GetSceneType());
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->m_Registry.each([&](auto entityID)
 			{
@@ -291,6 +314,8 @@ namespace phx {
 			return false;
 
 		std::string sceneName = data["Scene"].as<std::string>();
+		Scene::SceneType sceneType = SceneTypeFromString(data["SceneType"].as<std::string>());
+		m_Scene->SetSceneType(sceneType);
 		PHX_CORE_TRACE("Deserializing scene '{0}'", sceneName);
 
 		auto entities = data["Entities"];

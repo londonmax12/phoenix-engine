@@ -519,6 +519,19 @@ namespace phx
 
 	void EditorLayer::NewScene(Scene::SceneType type)
 	{
+		switch (type)
+		{
+		case phx::Scene::SceneType::Scene2D:
+		{
+			Renderer2D::Init();
+			break;
+		}
+		case phx::Scene::SceneType::Scene3D:
+		{
+			Renderer3D::Init();
+			break;
+		}
+		}
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_ActiveScene->SetSceneType(type);
@@ -577,6 +590,19 @@ namespace phx
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
+			switch (newScene->GetSceneType())
+			{
+			case phx::Scene::SceneType::Scene2D:
+			{
+				Renderer2D::Init();
+				break;
+			}
+			case phx::Scene::SceneType::Scene3D:
+			{
+				Renderer3D::Init();
+				break;
+			}
+			}
 			m_EditorScene = newScene;
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);

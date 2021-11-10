@@ -21,7 +21,6 @@ namespace phx {
 			Scene2D, Scene3D
 		};
 
-
 		static Ref<Scene> Copy(Ref<Scene> other);
 
 		Entity CreateEntity(const std::string& name = std::string());
@@ -52,7 +51,7 @@ namespace phx {
 
 		b2World* m_PhysicsWorld = nullptr;
 
-		SceneType m_SceneType = SceneType::Scene3D;
+		SceneType m_SceneType;
 
 		friend class Entity;
 		friend class SceneSerializer;

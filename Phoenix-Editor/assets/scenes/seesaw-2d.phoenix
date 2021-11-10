@@ -1,4 +1,5 @@
 Scene: Untitled
+SceneType: 2D
 Entities:
   - Entity: 5055567175022071826
     TagComponent:
