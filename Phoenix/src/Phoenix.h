@@ -43,6 +43,7 @@
 //---------------Renderer-----------------
 #include "Phoenix/Renderer/Renderer.h"
 #include "Phoenix/Renderer/Renderer2D.h"
+#include "Phoenix/Renderer/Renderer3D.h"
 #include "Phoenix/Renderer/RenderCommand.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Shader.h"

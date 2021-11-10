@@ -30,4 +30,13 @@ namespace phx {
 
 		virtual bool operator==(const Texture& other) const = 0;
 	};
+
+	class Texture3D : public Texture
+	{
+	public:
+		static Ref<Texture3D> Create(const std::string& path);
+		static Ref<Texture3D> Create(uint32_t width, uint32_t height);
+
+		virtual bool operator==(const Texture& other) const = 0;
+	};
 }

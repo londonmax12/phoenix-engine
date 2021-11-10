@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 
 #include "Phoenix/Renderer/Renderer2D.h"
+#include "Phoenix/Renderer/Renderer3D.h"
 
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
@@ -94,6 +95,7 @@ namespace phx {
 		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CubeRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
 	}
@@ -145,6 +147,7 @@ namespace phx {
 				fixtureDef.friction = bc2d.Friction;
 				fixtureDef.restitution = bc2d.Restitution;
 				fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
+				fixtureDef.isSensor = bc2d.IsSensor;
 				body->CreateFixture(&fixtureDef);
 			}
 		}
@@ -218,12 +221,14 @@ namespace phx {
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				}
 			}
 
 			Renderer2D::EndScene();
@@ -234,15 +239,29 @@ namespace phx {
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
 	{
 		Renderer2D::BeginScene(camera);
+		Renderer3D::BeginScene(camera);
 
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
 		{
-			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+		}
+		
+		{
+			auto view = m_Registry.view<TransformComponent, CubeRendererComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, cube] = view.get<TransformComponent, CubeRendererComponent>(entity);
+
+				Renderer3D::DrawCube(transform.GetTransform(), cube.Color, (int)entity);
+			}
 		}
 
+		Renderer3D::EndScene();
 		Renderer2D::EndScene();
 	}
 
@@ -341,4 +360,8 @@ namespace phx {
 	{
 	}
 
+	template<>
+	void Scene::OnComponentAdded<CubeRendererComponent>(Entity entity, CubeRendererComponent& component)
+	{
+	}
 }

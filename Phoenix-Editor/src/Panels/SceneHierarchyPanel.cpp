@@ -84,6 +84,16 @@ namespace phx {
 							}
 							ImGui::EndMenu();
 						}
+
+						if (ImGui::BeginMenu("3D Objects"))
+						{
+							if (ImGui::MenuItem("Cube Object"))
+							{
+								Entity& newEntity = m_Context->CreateEntity("Square Object");
+								newEntity.AddComponent<CubeRendererComponent>();
+							}
+							ImGui::EndMenu();
+						}
 						ImGui::EndMenu();
 					}
 					ImGui::EndPopup();
@@ -243,6 +253,16 @@ namespace phx {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+
+			if (!m_SelectionContext.HasComponent<CubeRendererComponent>())
+			{
+				if (ImGui::MenuItem("Cube Renderer"))
+				{
+					m_SelectionContext.AddComponent<CubeRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
 			ImGui::EndPopup();
 		}
 		ImGui::PopItemWidth();
@@ -398,6 +418,37 @@ namespace phx {
 					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+					DrawCheckbox("Is Sensor", &component.IsSensor);
+				});
+		}
+
+		if (entity.HasComponent<CubeRendererComponent>())
+		{
+			DrawComponent<CubeRendererComponent>("Cube Renderer", entity, [](auto& component)
+				{
+					DrawVec4ColorControls("Color", component.Color);
+					DrawGap();
+					DrawButton("Texture");
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							std::filesystem::path texturePath = std::filesystem::path(s_AssetPath) / path;
+							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
+							if (texture->IsLoaded())
+							{
+								component.Texture = texture;
+								component.Path = texturePath.string();
+							}
+							else
+								PHX_CORE_WARN("Could not load texture {0}", texturePath.filename().string());
+						}
+
+						ImGui::EndDragDropTarget();
+					}
+
+					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 				});
 		}
 	}

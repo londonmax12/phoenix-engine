@@ -114,6 +114,7 @@ namespace phx {
 		float Friction = 0.5f;
 		float Restitution = 0.0f;
 		float RestitutionThreshold = 0.5f;
+		bool IsSensor = false;
 
 		// Storage for runtime
 		void* RuntimeFixture = nullptr;
@@ -122,5 +123,17 @@ namespace phx {
 		BoxCollider2DComponent(const BoxCollider2DComponent&) = default;
 	};
 
+	struct CubeRendererComponent
+	{
+		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		Ref<Texture2D> Texture;
+		float TilingFactor = 1.0f;
 
+		std::string Path = std::string();
+
+		CubeRendererComponent() = default;
+		CubeRendererComponent(const CubeRendererComponent&) = default;
+		CubeRendererComponent(const glm::vec4& color)
+			: Color(color) {}
+	};
 }

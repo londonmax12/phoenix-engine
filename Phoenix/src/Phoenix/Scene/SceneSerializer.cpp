@@ -240,6 +240,7 @@ namespace phx {
 			out << YAML::Key << "Friction" << YAML::Value << bc2dComponent.Friction;
 			out << YAML::Key << "Restitution" << YAML::Value << bc2dComponent.Restitution;
 			out << YAML::Key << "RestitutionThreshold" << YAML::Value << bc2dComponent.RestitutionThreshold;
+			out << YAML::Key << "IsSensor" << YAML::Value << bc2dComponent.IsSensor;
 
 			out << YAML::EndMap; // BoxCollider2DComponent
 		}
@@ -369,6 +370,7 @@ namespace phx {
 					bc2d.Friction = boxCollider2DComponent["Friction"].as<float>();
 					bc2d.Restitution = boxCollider2DComponent["Restitution"].as<float>();
 					bc2d.RestitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
+					bc2d.IsSensor = boxCollider2DComponent["IsSensor"].as<bool>();
 				}
 			}
 		}

@@ -76,6 +76,8 @@ namespace phx
 
 
 		Renderer2D::ResetStats();
+		Renderer3D::ResetStats();
+
 		m_Framebuffer->Bind();
 		RenderCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
@@ -87,8 +89,6 @@ namespace phx
 		{
 		case phx::EditorLayer::SceneState::Edit:
 		{
-			if (m_ViewportFocused)
-				m_CameraController.OnUpdate(dt);
 
 			m_EditorCamera.OnUpdate(dt);
 
@@ -230,6 +230,8 @@ namespace phx
 				highfps = fps;
 
 			auto stats = Renderer2D::GetStats();
+			auto stats3d = Renderer3D::GetStats();
+
 			ImGui::Text("FPS: %.0f", fps);
 			ImGui::SameLine();
 			ImGui::Text("High: %.0f", highfps);
@@ -243,6 +245,12 @@ namespace phx
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 			ImGui::Separator();
+
+			ImGui::Text("Renderer3D Stats");
+			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+			ImGui::Text("Cubes: %d", stats.QuadCount);
+			ImGui::Separator();
+
 			ImGui::Text("Scene Stats");
 			ImGui::Text("Registry Size: %d", m_ActiveScene->GetRegistrySize());
 			std::string name = "None";
