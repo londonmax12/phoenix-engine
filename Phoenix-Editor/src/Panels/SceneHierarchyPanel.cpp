@@ -252,6 +252,14 @@ namespace phx {
 						ImGui::CloseCurrentPopup();
 					}
 				}
+				if (!m_SelectionContext.HasComponent<CircleRendererComponent>())
+				{
+					if (ImGui::MenuItem("Circle Renderer"))
+					{
+						m_SelectionContext.AddComponent<CircleRendererComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				}
 				if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
 				{
 					if (ImGui::MenuItem("Rigidbody 2D"))
@@ -376,7 +384,15 @@ namespace phx {
 			{
 					DrawVec4ColorControls("Color", component.Color);
 					DrawGap();
-					DrawButton("Texture");
+
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, 100.0f);
+					ImGui::Text("Texture");
+
+					ImGui::NextColumn();
+					ImGui::Button("Texture", ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
+
 					if (ImGui::BeginDragDropTarget())
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -388,7 +404,7 @@ namespace phx {
 							{
 								component.Texture = texture;
 								component.Path = texturePath.string();
-							}							
+							}
 							else
 								PHX_CORE_WARN("Could not load texture {0}", texturePath.filename().string());
 						}
@@ -396,8 +412,37 @@ namespace phx {
 						ImGui::EndDragDropTarget();
 					}
 
+					ImGui::Columns(1);
+					ImGui::PopStyleVar();
+
+					ImGui::SameLine();
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.2f, 0.25f, 1.0f });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.3f, 0.3f, 1.0f });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.2f, 0.25f, 1.0f });
+					ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+					if (ImGui::Button("X", ImVec2(25, 25)))
+					{
+						component.Texture = nullptr;
+						component.Path = std::string();
+					}
+					ImGui::PopFont();
+					ImGui::PopStyleColor(3);
+					
 					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
+		}
+		if (entity.HasComponent<CircleRendererComponent>())
+		{
+			DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
+				{
+					DrawVec4ColorControls("Color", component.Color);
+					DrawGap();
+					DrawDragFloat("Thickness", &component.Thickness, 0.025f, 0.0f, 1.0f);
+					float fade = component.Fade * 1000;
+					DrawDragFloat("Fade", &fade, 2.0f, 0.0f, 100.0f);
+					component.Fade = fade / 1000;
+				});
 		}
 		if (entity.HasComponent<Rigidbody2DComponent>())
 		{

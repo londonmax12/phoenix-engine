@@ -238,6 +238,19 @@ namespace phx {
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
 
+		if (entity.HasComponent<CircleRendererComponent>())
+		{
+			out << YAML::Key << "CircleRendererComponent";
+			out << YAML::BeginMap; // CircleRendererComponent
+
+			auto& circleRendererComponent = entity.GetComponent<CircleRendererComponent>();
+			out << YAML::Key << "Color" << YAML::Value << circleRendererComponent.Color;
+			out << YAML::Key << "Thickness" << YAML::Value << circleRendererComponent.Thickness;
+			out << YAML::Key << "Fade" << YAML::Value << circleRendererComponent.Fade;
+
+			out << YAML::EndMap; // CircleRendererComponent
+		}
+
 		if (entity.HasComponent<Rigidbody2DComponent>())
 		{
 			out << YAML::Key << "Rigidbody2DComponent";
@@ -265,6 +278,33 @@ namespace phx {
 			out << YAML::Key << "IsSensor" << YAML::Value << bc2dComponent.IsSensor;
 
 			out << YAML::EndMap; // BoxCollider2DComponent
+		}
+
+
+		// 3D
+
+		if (entity.HasComponent<CubeRendererComponent>())
+		{
+			out << YAML::Key << "CubeRendererComponent";
+			out << YAML::BeginMap; // CubeRendererComponent
+
+			auto& cubeRendererComponent = entity.GetComponent<CubeRendererComponent>();
+
+
+
+			out << YAML::Key << "Color" << YAML::Value << cubeRendererComponent.Color;
+			if (!cubeRendererComponent.Path.empty())
+			{
+				out << YAML::Key << "Textured" << YAML::Value << true;
+				out << YAML::Key << "TexturePath" << YAML::Value << cubeRendererComponent.Path;
+			}
+			else
+			{
+				out << YAML::Key << "Textured" << YAML::Value << false;
+			}
+			out << YAML::Key << "TextureTiling" << YAML::Value << cubeRendererComponent.TilingFactor;
+
+			out << YAML::EndMap; // CubeRendererComponent
 		}
 
 		out << YAML::EndMap; // Entity
@@ -377,6 +417,15 @@ namespace phx {
 					src.TilingFactor = spriteRendererComponent["TextureTiling"].as<float>();
 				}
 
+				auto circleRendererComponent = entity["CircleRendererComponent"];
+				if (circleRendererComponent)
+				{
+					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
+					crc.Color = circleRendererComponent["Color"].as<glm::vec4>();
+					crc.Thickness = circleRendererComponent["Thickness"].as<float>();
+					crc.Fade = circleRendererComponent["Fade"].as<float>();
+				}
+
 				auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
 				if (rigidbody2DComponent)
 				{
@@ -396,6 +445,19 @@ namespace phx {
 					bc2d.Restitution = boxCollider2DComponent["Restitution"].as<float>();
 					bc2d.RestitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
 					bc2d.IsSensor = boxCollider2DComponent["IsSensor"].as<bool>();
+				}
+
+				auto cubeRendererComponent = entity["CubeRendererComponent"];
+				if (cubeRendererComponent)
+				{
+					auto& src = deserializedEntity.AddComponent<CubeRendererComponent>();
+					src.Color = cubeRendererComponent["Color"].as<glm::vec4>();
+					if (cubeRendererComponent["Textured"].as<bool>())
+					{
+						src.Texture = Texture2D::Create(cubeRendererComponent["TexturePath"].as<std::string>());
+						src.Path = cubeRendererComponent["TexturePath"].as<std::string>();
+					}
+					src.TilingFactor = cubeRendererComponent["TextureTiling"].as<float>();
 				}
 			}
 		}

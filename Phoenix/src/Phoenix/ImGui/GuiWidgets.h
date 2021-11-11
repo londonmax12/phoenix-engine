@@ -319,7 +319,7 @@ namespace phx {
 		return result;
 	}
 
-	static bool DrawButton(const std::string& label, float columnWidth = 100.0f)
+	static bool DrawButton(const std::string& label, ImVec2 size = ImVec2(0,0), float columnWidth = 100.0f)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 		ImGui::PushID(label.c_str());
@@ -328,7 +328,6 @@ namespace phx {
 		ImGui::Text(label.c_str());
 
 		ImGui::NextColumn();
-		ImVec2 size = ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetFontSize() * 1.5);
 		bool result = ImGui::Button(label.c_str(), size);
 
 		ImGui::Columns(1);

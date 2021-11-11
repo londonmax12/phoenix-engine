@@ -97,6 +97,7 @@ namespace phx {
 		{
 			CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
@@ -232,6 +233,7 @@ namespace phx {
 
 			Camera* mainCamera = nullptr;
 			glm::mat4 cameraTransform;
+
 			{
 				auto view = m_Registry.view<TransformComponent, CameraComponent>();
 				for (auto entity : view)
@@ -251,6 +253,7 @@ namespace phx {
 			{
 				Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
+				// Draw sprites
 				{
 					auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 					for (auto entity : group)
@@ -258,6 +261,17 @@ namespace phx {
 						auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 						Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					}
+				}
+
+				// Draw circles
+				{
+					auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+					for (auto entity : view)
+					{
+						auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+						Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 					}
 				}
 
@@ -317,14 +331,28 @@ namespace phx {
 		{
 			Renderer2D::BeginScene(camera);
 
-			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
-			for (auto entity : view)
+			// Draw sprites
 			{
-				auto [transform, sprite] = view.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				}
 			}
 
+			// Draw circles
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				}
+			}
+			
 			Renderer2D::EndScene();
 			break;
 		}
@@ -370,10 +398,14 @@ namespace phx {
 
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+
+
+		CopyComponentIfExists<CubeRendererComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
@@ -419,6 +451,13 @@ namespace phx {
 	{
 
 	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
+	{
+
+	}
+
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)

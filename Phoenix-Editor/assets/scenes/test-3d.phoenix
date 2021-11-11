@@ -1,0 +1,25 @@
+Scene: Untitled
+SceneType: 3D
+Entities:
+  - Entity: 4868835320653573780
+    TagComponent:
+      Tag: Cube Object
+    TransformComponent:
+      Translation: [0, 0.760944128, -0.557398796]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CubeRendererComponent:
+      Color: [1, 0, 0, 1]
+      Textured: false
+      TextureTiling: 1
+  - Entity: 921466492395681722
+    TagComponent:
+      Tag: Cube Object
+    TransformComponent:
+      Translation: [-2.70486593, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CubeRendererComponent:
+      Color: [1, 0, 0.863096237, 1]
+      Textured: false
+      TextureTiling: 1
