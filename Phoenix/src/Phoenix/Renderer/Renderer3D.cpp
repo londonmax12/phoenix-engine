@@ -109,18 +109,18 @@ namespace phx
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
 		s_Data.CubeVertexPositions[0] = { -0.5f, -0.5f, -0.5f, 1.0f };
-		s_Data.CubeVertexPositions[1] = { 0.5f, -0.5f, -0.5f, 1.0f };
-		s_Data.CubeVertexPositions[2] = { 0.5f,  0.5f, -0.5f, 1.0f };
+		s_Data.CubeVertexPositions[1] = { 0.5f, -0.5f, -0.5f, 1.0f  };
+		s_Data.CubeVertexPositions[2] = { 0.5f,  0.5f, -0.5f, 1.0f  };
 		s_Data.CubeVertexPositions[3] = { -0.5f,  0.5f, -0.5f, 1.0f };
 
-		s_Data.CubeVertexPositions[4] = { -0.5f, -0.5f, 0.5f, 1.0f };
-		s_Data.CubeVertexPositions[5] = { 0.5f, -0.5f, 0.5f, 1.0f };
-		s_Data.CubeVertexPositions[6] = { 0.5f,  0.5f, 0.5f, 1.0f };
-		s_Data.CubeVertexPositions[7] = { -0.5f, 0.5f, 0.5f, 1.0f };
+		s_Data.CubeVertexPositions[4] = { -0.5f, -0.5f, 0.5f, 1.0f  };
+		s_Data.CubeVertexPositions[5] = { 0.5f, -0.5f, 0.5f, 1.0f   };
+		s_Data.CubeVertexPositions[6] = { 0.5f,  0.5f, 0.5f, 1.0f   };
+		s_Data.CubeVertexPositions[7] = { -0.5f, 0.5f, 0.5f, 1.0f   };
 
 		s_Data.CubeVertexPositions[8] = { -0.5f, -0.5f, -0.5f, 1.0f };
-		s_Data.CubeVertexPositions[9] = { -0.5f, -0.5f, 0.5f, 1.0f };
-		s_Data.CubeVertexPositions[10] = { -0.5f, 0.5f, 0.5f, 1.0f };
+		s_Data.CubeVertexPositions[9] = { -0.5f, -0.5f, 0.5f, 1.0f  };
+		s_Data.CubeVertexPositions[10] = { -0.5f, 0.5f, 0.5f, 1.0f  };
 		s_Data.CubeVertexPositions[11] = { -0.5f, 0.5f, -0.5f, 1.0f };
 
 		s_Data.CubeVertexPositions[12] = { 0.5f, -0.5f, -0.5f, 1.0f };

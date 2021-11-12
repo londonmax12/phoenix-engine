@@ -277,6 +277,14 @@ namespace phx {
 						ImGui::CloseCurrentPopup();
 					}
 				}
+				if (!m_SelectionContext.HasComponent<CircleCollider2DComponent>())
+				{
+					if (ImGui::MenuItem("Circle Collider 2D"))
+					{
+						m_SelectionContext.AddComponent<CircleCollider2DComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				}
 
 				break;
 			}
@@ -490,6 +498,23 @@ namespace phx {
 					DrawCheckbox("Is Sensor", &component.IsSensor);
 				});
 		}
+
+		if (entity.HasComponent<CircleCollider2DComponent>())
+		{
+			DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
+				{
+					DrawVec2Controls("Offset", component.Offset);
+					DrawGap();
+					DrawDragFloat("Radius", &component.Radius);
+					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 10.0f);
+					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+					DrawCheckbox("Is Sensor", &component.IsSensor);
+				});
+		}
+
+
 
 		if (entity.HasComponent<CubeRendererComponent>())
 		{

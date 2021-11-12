@@ -13,6 +13,7 @@
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 #include "box2d/b2_polygon_shape.h"
+#include "box2d/b2_circle_shape.h"
 
 namespace phx {
 	static b2BodyType Rigidbody2DTypeToBox2DBody(Rigidbody2DComponent::BodyType bodyType)
@@ -102,6 +103,7 @@ namespace phx {
 			CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+			CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 			break;
 		}		
 		case phx::Scene::SceneType::Scene3D:
@@ -136,8 +138,10 @@ namespace phx {
 		{
 		case phx::Scene::SceneType::Scene2D:
 		{
+			// Create physics world
 			m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
 
+			// Create physic bodies
 			auto view = m_Registry.view<Rigidbody2DComponent>();
 			for (auto e : view)
 			{
@@ -168,6 +172,24 @@ namespace phx {
 					fixtureDef.restitution = bc2d.Restitution;
 					fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
 					fixtureDef.isSensor = bc2d.IsSensor;
+					body->CreateFixture(&fixtureDef);
+				}
+
+				if (entity.HasComponent<CircleCollider2DComponent>())
+				{
+					auto& cc2d = entity.GetComponent<CircleCollider2DComponent>();
+
+					b2CircleShape circleShape;
+					circleShape.m_p.Set(cc2d.Offset.x, cc2d.Offset.y);
+					circleShape.m_radius = cc2d.Radius;
+
+					b2FixtureDef fixtureDef;
+					fixtureDef.shape = &circleShape;
+					fixtureDef.density = cc2d.Density;
+					fixtureDef.friction = cc2d.Friction;
+					fixtureDef.restitution = cc2d.Restitution;
+					fixtureDef.restitutionThreshold = cc2d.RestitutionThreshold;
+					fixtureDef.isSensor = cc2d.IsSensor;
 					body->CreateFixture(&fixtureDef);
 				}
 			}
@@ -352,7 +374,7 @@ namespace phx {
 					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 				}
 			}
-			
+
 			Renderer2D::EndScene();
 			break;
 		}
@@ -403,7 +425,7 @@ namespace phx {
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
-
+		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 
 		CopyComponentIfExists<CubeRendererComponent>(newEntity, entity);
 	}
@@ -478,6 +500,11 @@ namespace phx {
 
 	template<>
 	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
 	{
 	}
 

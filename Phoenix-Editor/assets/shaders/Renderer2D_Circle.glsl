@@ -1,4 +1,4 @@
-// Renderer2D Circle Shader
+// Renderer 2D Circle Shader
 
 
 #type vertex
