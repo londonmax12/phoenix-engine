@@ -1,4 +1,4 @@
-// Basic Texture Shader
+// Renderer3D Cube Shader
 
 #type vertex
 #version 450 core
@@ -99,3 +99,10 @@ void main()
 
 	color2 = v_EntityID;
 }
+
+
+
+
+
+
+

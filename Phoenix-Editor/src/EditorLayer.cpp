@@ -229,6 +229,11 @@ namespace phx
 		m_SceneHierarchyPanel.OnImGuiRender();
 		m_ContentBrowserPanel.OnImGuiRender();
 
+		if (m_ShowShaderEditor)
+		{
+			m_ShaderEditorPanel.OnImGuiRender();
+		}
+
 		if (m_ShowMetrics)
 		{
 			ImGui::Begin("Metrics");

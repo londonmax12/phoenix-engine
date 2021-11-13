@@ -491,7 +491,7 @@ namespace phx {
 					DrawVec2Controls("Offset", component.Offset);
 					DrawVec2Controls("Size", component.Size, 0.5f); \
 					DrawGap();
-					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
+					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
 					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
@@ -506,7 +506,7 @@ namespace phx {
 					DrawVec2Controls("Offset", component.Offset);
 					DrawGap();
 					DrawDragFloat("Radius", &component.Radius);
-					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 10.0f);
+					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
 					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);

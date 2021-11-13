@@ -1,6 +1,5 @@
 // Renderer 2D Circle Shader
 
-
 #type vertex
 #version 450 core
 

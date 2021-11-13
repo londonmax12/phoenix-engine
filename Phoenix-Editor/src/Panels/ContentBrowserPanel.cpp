@@ -1,5 +1,6 @@
 #include "phxpch.h"
 #include "ContentBrowserPanel.h"
+#include "ShaderEditorPanel.h"
 
 #include <imgui.h>
 
@@ -36,15 +37,15 @@ namespace phx {
 				std::string extension = itr.path().extension().string();
 				if (extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".jfif")
 				{
-					newFileIcon.FileType = FileType::Image;
+					newFileIcon.FileType = FileType::ImageFile;
 				}
 				else if (extension == ".phoenix")
 				{
-					newFileIcon.FileType = FileType::Phoenix;
+					newFileIcon.FileType = FileType::PhoenixFile;
 				}
 				else
 				{
-					newFileIcon.FileType = FileType::Other;
+					newFileIcon.FileType = FileType::OtherFile;
 				}
 
 			}
@@ -119,12 +120,12 @@ namespace phx {
 				icon = m_DirectoryEmptyIcon;
 				break;
 			}
-			case FileType::Image:
+			case FileType::ImageFile:
 			{
 				icon = m_ImageIcon;
 				break;
 			}
-			case FileType::Phoenix:
+			case FileType::PhoenixFile:
 			{
 				icon = m_PhoenixIcon;
 				break;

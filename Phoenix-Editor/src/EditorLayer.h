@@ -4,6 +4,7 @@
 
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
+#include "Panels/ShaderEditorPanel.h"
 
 namespace phx {
 	class EditorLayer : public Layer
@@ -61,6 +62,7 @@ namespace phx {
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 
+		bool m_ShowShaderEditor = true;
 		bool m_ShowMetrics = true;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
@@ -70,6 +72,7 @@ namespace phx {
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
+		ShaderEditorPanel m_ShaderEditorPanel;
 
 		enum class SceneState
 		{

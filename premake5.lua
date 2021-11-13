@@ -474,10 +474,11 @@ project "Phoenix-Editor"
 
 	includedirs
 	{
+		"Phoenix/src",
+		"Phoenix/vendor",
 		"Phoenix/vendor/spdlog/include",
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
-		"Phoenix/src",
 		"Phoenix/vendor/entt/include",
 		"Phoenix/vendor/ImGuizmo"
 	}

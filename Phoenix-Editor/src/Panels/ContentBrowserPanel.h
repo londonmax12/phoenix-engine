@@ -7,8 +7,8 @@
 namespace phx {
 	enum FileType {
 		Dir, DirEmpty,
-		Phoenix, Image,
-		Other
+		PhoenixFile, ImageFile, ShaderFile,
+		OtherFile
 	};
 	struct FileIcon
 	{

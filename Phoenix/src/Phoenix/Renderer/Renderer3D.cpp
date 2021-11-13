@@ -103,7 +103,7 @@ namespace phx
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/Renderer3D_Cube.glsl");
+		s_Data.TextureShader = Shader::Create("assets/shaders/Renderer3D_Lighting.glsl");
 
 		// Set all texture slots to 0
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
@@ -154,6 +154,8 @@ namespace phx
 
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		s_Data.TextureShader->SetVec3("u_LightPos", glm::vec3(5.0f));
+		s_Data.TextureShader->SetVec3("u_LightColor", glm::vec3(0.8,0.2,0.3));
 
 		StartBatch();
 	}

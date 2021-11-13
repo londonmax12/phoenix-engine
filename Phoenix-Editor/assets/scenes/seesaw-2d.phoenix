@@ -1,13 +1,13 @@
 Scene: Untitled
 SceneType: 2D
 Entities:
-  - Entity: 4807095414104420227
+  - Entity: 6166559438793906391
     TagComponent:
       Tag: Barrel
     TransformComponent:
-      Translation: [-6.2239356, -4.80749464, 0.018131258]
-      Rotation: [0, 0, 0.195524022]
-      Scale: [0.833180666, 0.999923646, 1]
+      Translation: [-4.64026785, -4.29958057, 0.018131258]
+      Rotation: [0, 0, 0.137825817]
+      Scale: [0.833185136, 0.999926329, 1]
     SpriteRendererComponent:
       Color: [1, 0.999899983, 0.999899983, 1]
       Textured: true
@@ -24,77 +24,19 @@ Entities:
       Restitution: 0
       RestitutionThreshold: 0.5
       IsSensor: false
-  - Entity: 1859780847659228245
+  - Entity: 12853153167024848294
     TagComponent:
-      Tag: Barrel
+      Tag: Platform
     TransformComponent:
-      Translation: [-5.3422327, -4.63286924, 0.018131258]
-      Rotation: [0, 0, 0.195524022]
-      Scale: [0.833180666, 0.999923646, 1]
+      Translation: [-0.384199977, -4.47853899, 0]
+      Rotation: [0, 0, -3.0228765]
+      Scale: [12.7205915, 0.187299058, 1]
     SpriteRendererComponent:
-      Color: [1, 0.999899983, 0.999899983, 1]
-      Textured: true
-      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
+      Color: [0.999923348, 1, 0.999899983, 1]
+      Textured: false
       TextureTiling: 1
     Rigidbody2DComponent:
       BodyType: Dynamic
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 0.200000003
-      Friction: 0.5
-      Restitution: 0
-      RestitutionThreshold: 0.5
-      IsSensor: false
-  - Entity: 10598854289210995762
-    TagComponent:
-      Tag: BG
-    TransformComponent:
-      Translation: [-0.0771719217, -0.154350042, -4.35743904]
-      Rotation: [0, 0, 0]
-      Scale: [53.6500015, 27.9599991, 1]
-    SpriteRendererComponent:
-      Color: [0.0120417988, 0.601531208, 0.301773518, 1]
-      Textured: true
-      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
-      TextureTiling: 1
-  - Entity: 12321398807450116770
-    TagComponent:
-      Tag: Base
-    TransformComponent:
-      Translation: [0.00460290909, -5.0386529, 9.31322575e-10]
-      Rotation: [0, 0, 0.000157367569]
-      Scale: [1, 1, 1]
-    CircleRendererComponent:
-      Color: [0.309523344, 1, 0, 1]
-      Thickness: 0.230000004
-      Fade: 0.0850000009
-    Rigidbody2DComponent:
-      BodyType: Static
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.5
-      Restitution: 0
-      RestitutionThreshold: 0.5
-      IsSensor: false
-  - Entity: 13961540224533804600
-    TagComponent:
-      Tag: Floor
-    TransformComponent:
-      Translation: [0, -6.05853367, 0]
-      Rotation: [0, 0, 0]
-      Scale: [41.4510612, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.306589067, 0.306574851, 0.3065584, 1]
-      Textured: true
-      TexturePath: assets\textures\rock.jfif
-      TextureTiling: 40.7000008
-    Rigidbody2DComponent:
-      BodyType: Static
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -122,20 +64,19 @@ Entities:
         OrthographicFar: 488
       Primary: true
       FixedAspectRatio: false
-  - Entity: 12853153167024848294
+  - Entity: 13961540224533804600
     TagComponent:
-      Tag: Platform
+      Tag: Floor
     TransformComponent:
-      Translation: [-0.318918973, -4.39396906, 0]
-      Rotation: [0, 0, -2.97538257]
-      Scale: [12.7205858, 0.187299043, 1]
+      Translation: [0, -6.05853367, 0]
+      Rotation: [0, 0, 0]
+      Scale: [41.4510612, 1, 1]
     SpriteRendererComponent:
-      Color: [0.234243512, 1, 0, 1]
-      Textured: true
-      TexturePath: assets\textures\download.jfif
-      TextureTiling: 1
+      Color: [1, 0.442750812, 0, 1]
+      Textured: false
+      TextureTiling: 40.7000008
     Rigidbody2DComponent:
-      BodyType: Dynamic
+      BodyType: Static
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -145,13 +86,57 @@ Entities:
       Restitution: 0
       RestitutionThreshold: 0.5
       IsSensor: false
-  - Entity: 33471305675372571
+  - Entity: 12321398807450116770
+    TagComponent:
+      Tag: Base
+    TransformComponent:
+      Translation: [0.00460290909, -5.0386529, 0]
+      Rotation: [0, 0, 0.000157367569]
+      Scale: [1, 1, 1]
+    CircleRendererComponent:
+      Color: [0.999930978, 1, 0.999899983, 1]
+      Thickness: 1
+      Fade: 0.0260000005
+    Rigidbody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    CircleCollider2DComponent:
+      Offset: [0, 0]
+      Radius: 0.5
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+      IsSensor: false
+  - Entity: 5055567175022071826
+    TagComponent:
+      Tag: Rock
+    TransformComponent:
+      Translation: [5.19181442, 8.04590225, 0]
+      Rotation: [0, 0, -0.00172434561]
+      Scale: [2.70014954, 2.70014954, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 3
+      Friction: 0.469999999
+      Restitution: 0
+      RestitutionThreshold: 0.5
+      IsSensor: false
+  - Entity: 1859780847659228245
     TagComponent:
       Tag: Barrel
     TransformComponent:
-      Translation: [-6.00880098, -3.7605319, 0.0181312561]
-      Rotation: [0, 0, 0.195524022]
-      Scale: [0.833180666, 0.999923646, 1]
+      Translation: [-5.29303265, -3.30304885, 0.018131258]
+      Rotation: [0, 0, 0.137825817]
+      Scale: [0.833185136, 0.999926329, 1]
     SpriteRendererComponent:
       Color: [1, 0.999899983, 0.999899983, 1]
       Textured: true
@@ -168,25 +153,26 @@ Entities:
       Restitution: 0
       RestitutionThreshold: 0.5
       IsSensor: false
-  - Entity: 5055567175022071826
+  - Entity: 659021898823976067
     TagComponent:
-      Tag: Rock
+      Tag: Barrel
     TransformComponent:
-      Translation: [4.96729612, 4.66573381, 0]
-      Rotation: [0, 0, 1.57003963]
-      Scale: [2.70014954, 2.70014954, 1]
-    CircleRendererComponent:
-      Color: [0.381249428, 0, 1, 1]
-      Thickness: 0.150000006
-      Fade: 0.0439999998
+      Translation: [-5.49772596, -4.41851616, 0.018131258]
+      Rotation: [0, 0, 0.137825817]
+      Scale: [0.833185136, 0.999926329, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: true
+      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
+      TextureTiling: 1
     Rigidbody2DComponent:
       BodyType: Dynamic
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.469999999
+      Density: 0.200000003
+      Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
       IsSensor: false
