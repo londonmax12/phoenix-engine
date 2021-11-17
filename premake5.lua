@@ -98,6 +98,38 @@ group "Dependencies"
 			runtime "Release"
 			optimize "on"
 			buildoptions "/MD"
+
+	project "OpenAL"
+		location "vendor/OpenAL"
+		kind "StaticLib"
+		language "C"
+		staticruntime "on"
+	
+		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+		files
+		{
+			"Phoenix/vendor/OpenAL/include/*.h"
+		}
+	
+		filter "system:windows"
+			systemversion "latest"
+
+		filter "configurations:Debug"
+			defines "PHX_DEBUG_MODE"
+			buildoptions "/MDd"
+			symbols "on"
+
+		filter "configurations:Release"
+			defines "PHX_RELEASE_MODE"
+			buildoptions "/MD"
+			optimize "on"
+		filter "configurations:Dist"
+			defines "PHX_DIST_MODE"
+			buildoptions "/MD"
+			optimize "on"
+
 	project "ImGui"
 		location "vendor/imgui"
 		kind "StaticLib"
@@ -339,6 +371,7 @@ project "Phoenix"
 		"%{prj.name}/vendor/entt/include",
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
+		"%{prj.name}/vendor/OpenAL/include",
 		"%{prj.name}/vendor/ImGuizmo",
 		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
@@ -351,7 +384,8 @@ project "Phoenix"
 		"imgui",
 		"Discord",
 		"yaml-cpp",
-		"opengl32.lib"
+		"opengl32.lib",
+		"OpenAL"
 	}
 
 	filter "files:vendor/ImGuizmo/ImGuizmo.cpp"
