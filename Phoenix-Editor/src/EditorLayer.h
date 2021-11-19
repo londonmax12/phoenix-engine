@@ -2,6 +2,7 @@
 #include <Phoenix.h>
 #include <Phoenix/Renderer/EditorCamera.h>
 #include <Phoenix/Audio/SoundSource.h>
+#include <Phoenix/Time/Timer.h>
 
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
@@ -33,6 +34,7 @@ namespace phx {
 
 		void OnScenePlay();
 		void OnSceneStop();
+		void OnScenePlayTest();
 
 		void OnDuplicateEntity();
 
@@ -83,6 +85,6 @@ namespace phx {
 		SceneState m_SceneState = SceneState::Edit;
 
 		// Resources
-		Ref<Texture2D> m_PlayIcon, m_StopIcon;
+		Ref<Texture2D> m_PlayIcon, m_StopIcon, m_PlayTestIcon;
 	};
 }

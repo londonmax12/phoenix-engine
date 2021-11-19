@@ -11,6 +11,8 @@
 #include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Panels/ThemeEditor.h"
+
 float highfps = 0;
 
 namespace phx
@@ -25,9 +27,10 @@ namespace phx
 	void EditorLayer::OnAttach()
 	{
 		PHX_PROFILE_FUNCTION();
-
+		
 		m_PlayIcon = Texture2D::Create("resources/icons/editor-layer/play-icon.png");
 		m_StopIcon = Texture2D::Create("resources/icons/editor-layer/stop-icon.png");
+		m_PlayTestIcon = Texture2D::Create("resources/icons/editor-layer/playtest-icon.png");
 		
 		FramebufferSpecification framebufferSpec;
 		framebufferSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -45,11 +48,7 @@ namespace phx
 			serializer.Deserialize(sceneFilePath);
 		}
 
-
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-
-		ImGuiStyle& style = ImGui::GetStyle();
-		style.WindowMenuButtonPosition = ImGuiDir_None;
 	}
 
 	void EditorLayer::OnDetach()
@@ -418,26 +417,44 @@ namespace phx
 
 
 		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-		if (m_ActiveScene)
-		{
-			float size = ImGui::GetWindowHeight() - 4.0f;
-			Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
-			ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-			{
-				if (m_SceneState == SceneState::Edit)
-				{
-					OnScenePlay();
-				}
-				else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
-				{
-					OnSceneStop();
-				}
 
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
+
+		float xPos1 = (ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5);
+		float xPos2 = (ImGui::GetContentRegionMax().x * 0.5f) + (size * 0.5);
+
+		ImGui::SetCursorPosX(xPos1);
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		{
+			if (m_SceneState == SceneState::Edit)
+			{
+				OnScenePlay();
 			}
-			ImGui::PopStyleVar(2);
-			ImGui::PopStyleColor(3);
+			else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
+			{
+				OnSceneStop();
+			}
+
 		}
+		
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(xPos2);
+		if (ImGui::ImageButton((ImTextureID)m_PlayTestIcon->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		{
+			if (m_SceneState == SceneState::Edit)
+			{
+				OnScenePlayTest();
+			}
+			else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
+			{
+				OnSceneStop();
+			}
+		}
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		
 		ImGui::End();
 	}
 
@@ -643,14 +660,22 @@ namespace phx
 
 	void EditorLayer::OnScenePlay()
 	{
-		m_SceneState = SceneState::PhysicTest;
+		m_SceneState = SceneState::Play;
 
 		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
+	void EditorLayer::OnScenePlayTest()
+	{
+		m_SceneState = SceneState::PhysicTest;
 
+		m_ActiveScene->OnRuntimeStart();
+		m_ActiveScene = m_EditorScene;
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
 	void EditorLayer::OnSceneStop()
 	{
 		m_SceneState = SceneState::Edit;
