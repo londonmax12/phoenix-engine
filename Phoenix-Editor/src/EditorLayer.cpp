@@ -234,7 +234,7 @@ namespace phx
 			m_ShaderEditorPanel.OnImGuiRender();
 		}
 
-		ImGui::Begin("test");
+		/*ImGui::Begin("test");
 		if (ImGui::Button("Play"))
 		{
 			SoundDevice* mysounddevice = SoundDevice::New();
@@ -245,7 +245,7 @@ namespace phx
 
 			mySpeaker.Play(sound1);
 		}
-		ImGui::End();
+		ImGui::End();*/
 
 		if (m_ShowMetrics)
 		{

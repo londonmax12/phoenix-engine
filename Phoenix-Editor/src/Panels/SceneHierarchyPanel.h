@@ -26,6 +26,8 @@ namespace phx {
 
 		Ref<Scene> m_Context;
 
+		Ref<Texture2D> m_Alstolfo;
+
 		Entity m_SelectionContext;
 	};
 }

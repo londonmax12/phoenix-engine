@@ -17,6 +17,7 @@ namespace phx {
 
 	SceneHierarchyPanel::SceneHierarchyPanel()
 	{
+		m_Alstolfo = Texture2D::Create("resources/icons/alstolfo.png");
 	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
@@ -46,14 +47,13 @@ namespace phx {
 
 			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 
-			if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y)))
+			if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 2)))
 			{
 				if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered())
 				{
 					m_SelectionContext = {};
 				}
 
-				ItemRowsBackground(ImGui::GetFontSize());
 				m_Context->m_Registry.each([&](auto entityID)
 					{
 						Entity entity{ entityID , m_Context.get() };
@@ -113,6 +113,14 @@ namespace phx {
 				ImGui::ListBoxFooter();
 			}
 			ImGui::PopStyleColor();
+
+			int sizeX = 200;
+			int sizeY = 300;
+
+			ImGui::SameLine(0.1f);
+			ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowSize().y + ImGui::GetScrollY() - sizeY));
+
+			ImGui::Image((void*)m_Alstolfo->GetRendererID(), ImVec2(200, 300), ImVec2{ 0, 1 }, ImVec2{ 1, 0 }, ImVec4(1.0f, 1.0f, 1.0f, 0.3f));
 		}
 
 		ImGui::End();
