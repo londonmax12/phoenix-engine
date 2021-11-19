@@ -28,7 +28,7 @@ namespace phx
 
 		m_PlayIcon = Texture2D::Create("resources/icons/editor-layer/play-icon.png");
 		m_StopIcon = Texture2D::Create("resources/icons/editor-layer/stop-icon.png");
-
+		
 		FramebufferSpecification framebufferSpec;
 		framebufferSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		framebufferSpec.Width = 1280;
@@ -233,6 +233,19 @@ namespace phx
 		{
 			m_ShaderEditorPanel.OnImGuiRender();
 		}
+
+		ImGui::Begin("test");
+		if (ImGui::Button("Play"))
+		{
+			SoundDevice* mysounddevice = SoundDevice::New();
+
+			uint32_t sound1 = SoundBuffer::New()->AddSoundEffect("C:/Users/London/Desktop/Phoenixx/Phoenix-Editor/assets/audio/laser1.wav");
+
+			SoundSource mySpeaker;
+
+			mySpeaker.Play(sound1);
+		}
+		ImGui::End();
 
 		if (m_ShowMetrics)
 		{

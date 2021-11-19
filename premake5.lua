@@ -67,6 +67,7 @@ group "Dependencies"
 			defines "PHX_DIST_MODE"
 			buildoptions "/MD"
 			optimize "on"
+
 	project "Glad"
 		location "vendor/Glad"
 		kind "StaticLib"
@@ -98,37 +99,6 @@ group "Dependencies"
 			runtime "Release"
 			optimize "on"
 			buildoptions "/MD"
-
-	project "OpenAL"
-		location "vendor/OpenAL"
-		kind "StaticLib"
-		language "C"
-		staticruntime "on"
-	
-		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-		files
-		{
-			"Phoenix/vendor/OpenAL/include/*.h"
-		}
-	
-		filter "system:windows"
-			systemversion "latest"
-
-		filter "configurations:Debug"
-			defines "PHX_DEBUG_MODE"
-			buildoptions "/MDd"
-			symbols "on"
-
-		filter "configurations:Release"
-			defines "PHX_RELEASE_MODE"
-			buildoptions "/MD"
-			optimize "on"
-		filter "configurations:Dist"
-			defines "PHX_DIST_MODE"
-			buildoptions "/MD"
-			optimize "on"
 
 	project "ImGui"
 		location "vendor/imgui"
@@ -230,6 +200,7 @@ group "Dependencies"
 			runtime "Release"
 			optimize "on"
 			buildoptions "/MDd"
+
 	project "yaml-cpp"
 		location "vendor/yaml-cpp"
 		kind "StaticLib"
@@ -355,7 +326,9 @@ project "Phoenix"
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.h",
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.cpp",
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.h",
-		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp"
+		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp",
+		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.cpp",
+		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.h"
 	}
 
 	includedirs
@@ -366,14 +339,20 @@ project "Phoenix"
 		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/ImGui",
 		"%{prj.name}/vendor/Discord/include",
+		"%{prj.name}/vendor/OpenAL/include",
+		"%{prj.name}/vendor/libsndfile/",
 		"%{prj.name}/vendor/glm",
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/entt/include",
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
-		"%{prj.name}/vendor/OpenAL/include",
 		"%{prj.name}/vendor/ImGuizmo",
 		"VulkanSDK/{%{VULKAN_SDK}/include"
+	}
+
+	libdirs
+	{
+		"Phoenix/libs"
 	}
 
 	links 
@@ -384,8 +363,11 @@ project "Phoenix"
 		"imgui",
 		"Discord",
 		"yaml-cpp",
-		"opengl32.lib",
-		"OpenAL"
+
+		"sndfile.lib",
+		"OpenAL32.lib",
+
+		"opengl32.lib"
 	}
 
 	filter "files:vendor/ImGuizmo/ImGuizmo.cpp"
@@ -543,4 +525,3 @@ project "Phoenix-Editor"
 		defines "PHX_DIST_MODE"
 		buildoptions "/MD"
 		optimize "on"
-

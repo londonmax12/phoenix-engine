@@ -1,6 +1,7 @@
 #pragma once
 #include <Phoenix.h>
 #include <Phoenix/Renderer/EditorCamera.h>
+#include <Phoenix/Audio/SoundSource.h>
 
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
@@ -43,7 +44,7 @@ namespace phx {
 
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_SquareVA;
-		Ref<Framebuffer> m_Framebuffer;	
+		Ref<Framebuffer> m_Framebuffer;
 
 		Ref<Scene> m_ActiveScene;
 		Ref<Scene> m_EditorScene;

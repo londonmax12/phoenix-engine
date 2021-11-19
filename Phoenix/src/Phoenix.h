@@ -54,6 +54,10 @@
 #include "Phoenix/Renderer/Framebuffer.h"
 //----------------------------------------
 
+//-----------------Audio------------------
+#include "Phoenix/Audio/Audio.h"
+//----------------------------------------
+
 //--------------Entry-Point---------------
 //#include "Phoenix/Application/EntryPoint.h"
 //----------------------------------------

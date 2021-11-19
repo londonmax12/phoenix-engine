@@ -1,18 +1,20 @@
 #pragma once
 
-#include "alc.h"
+#include "SoundBuffer.h"
+#include "SoundDevice.h"
+
+#include <filesystem>
+
+#include <../vendor/OpenAL/include/AL/al.h>
 
 namespace phx {
 	class Audio {
 	public:
+		Audio();
 		~Audio();
 
-		static void Init();
-
+		uint32_t CreateSound(std::filesystem::path filepath);
 	private:
-		bool CheckAlErrors();
-
-		static ALCdevice* m_Device;
-		static ALCcontext* m_Context;
+		SoundDevice* m_Device;
 	};
 }
