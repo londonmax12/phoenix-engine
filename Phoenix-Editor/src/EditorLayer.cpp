@@ -99,7 +99,14 @@ namespace phx
 		{
 			m_ActiveScene->OnUpdateRuntime(dt);
 			break;
-		}			
+		}
+		case phx::EditorLayer::SceneState::PhysicTest:
+		{
+			m_EditorCamera.OnUpdate(dt);
+
+			m_ActiveScene->OnUpdatePhysics(dt, m_EditorCamera);
+			break;
+		}
 		}
 
 		auto [mx, my] = ImGui::GetMousePos();
@@ -422,7 +429,7 @@ namespace phx
 				{
 					OnScenePlay();
 				}
-				else if (m_SceneState == SceneState::Play)
+				else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
 				{
 					OnSceneStop();
 				}
@@ -636,7 +643,7 @@ namespace phx
 
 	void EditorLayer::OnScenePlay()
 	{
-		m_SceneState = SceneState::Play;
+		m_SceneState = SceneState::PhysicTest;
 
 		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();

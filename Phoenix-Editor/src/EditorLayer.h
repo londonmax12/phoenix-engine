@@ -77,7 +77,7 @@ namespace phx {
 
 		enum class SceneState
 		{
-			Edit = 0, Play = 1
+			Edit = 0, Play = 1, PhysicTest = 2
 		};
 
 		SceneState m_SceneState = SceneState::Edit;

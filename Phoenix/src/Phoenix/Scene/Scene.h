@@ -35,6 +35,7 @@ namespace phx {
 
 		void OnUpdateRuntime(DeltaTime dt);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
+		void OnUpdatePhysics(DeltaTime dt, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		void DuplicateEntity(Entity entity);

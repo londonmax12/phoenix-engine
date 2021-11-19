@@ -397,6 +397,93 @@ namespace phx {
 		
 	}
 
+	void Scene::OnUpdatePhysics(DeltaTime dt, EditorCamera& camera)
+	{
+		// Update scripts
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+				{
+					// TODO: Move to Scene::OnScenePlay
+					if (!nsc.Instance)
+					{
+						nsc.Instance = nsc.InstantiateScript();
+						nsc.Instance->m_Entity = Entity{ entity, this };
+						nsc.Instance->OnCreate();
+					}
+
+					nsc.Instance->OnUpdate(dt);
+				});
+		}
+
+		switch (m_SceneType)
+		{
+		case phx::Scene::SceneType::Scene2D:
+		{
+			const int32_t velocityIterations = 6;
+			const int32_t positionIterations = 2;
+			m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
+
+			// Retrieve transform from Box2D
+			auto view = m_Registry.view<Rigidbody2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+				b2Body* body = (b2Body*)rb2d.RuntimeBody;
+				const auto& position = body->GetPosition();
+				transform.Translation.x = position.x;
+				transform.Translation.y = position.y;
+				transform.Rotation.z = body->GetAngle();
+			}
+
+			Renderer2D::BeginScene(camera);
+
+			// Draw sprites
+			{
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				}
+			}
+
+			// Draw circles
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				}
+			}
+
+			Renderer2D::EndScene();
+
+			break;
+		}
+		case phx::Scene::SceneType::Scene3D:
+		{
+			Renderer3D::BeginScene(camera);
+
+			auto view = m_Registry.view<TransformComponent, CubeRendererComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, cube] = view.get<TransformComponent, CubeRendererComponent>(entity);
+
+				Renderer3D::DrawCube(transform.GetTransform(), cube.Color, (int)entity);
+			}
+
+			Renderer3D::EndScene();
+			break;
+		}
+		}
+	}
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;

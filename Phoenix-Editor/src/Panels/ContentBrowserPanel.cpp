@@ -63,6 +63,7 @@ namespace phx {
 		m_ImageIcon = Texture2D::Create("resources/icons/content-browser/image-icon.png");
 		m_PhoenixIcon = Texture2D::Create("resources/icons/content-browser/phoenix.png");
 
+
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		Refresh();
@@ -141,6 +142,7 @@ namespace phx {
 
 			ImGui::PushID(itr.Path.c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 
 			if (ImGui::BeginDragDropSource())
@@ -176,6 +178,7 @@ namespace phx {
 			Refresh();
 			refresh = false;
 		}
+
 
 		ImGui::End();
 	}
