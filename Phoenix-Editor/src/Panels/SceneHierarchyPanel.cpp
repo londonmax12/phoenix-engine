@@ -33,7 +33,7 @@ namespace phx {
 
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Scene Hierarchy");
+		ImGui::Begin("Scene Hierarchy", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		if (m_Context)
 		{
 			static ImGuiTextFilter filter;
@@ -81,12 +81,46 @@ namespace phx {
 						{
 						case Scene::SceneType::Scene2D:
 						{
-							if (ImGui::BeginMenu("2D Objects"))
+							if (ImGui::BeginMenu("Objects 2D"))
 							{
 								if (ImGui::MenuItem("Square Object"))
 								{
 									Entity& newEntity = m_Context->CreateEntity("Square Object");
 									newEntity.AddComponent<SpriteRendererComponent>();
+								}
+								if (ImGui::MenuItem("Circle Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Circle Object");
+									newEntity.AddComponent<CircleRendererComponent>();
+								}
+								
+								ImGui::EndMenu();
+							}
+							if (ImGui::BeginMenu("Physics 2D"))
+							{
+								if (ImGui::MenuItem("Static Collider"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Static Collider");
+									newEntity.AddComponent<SpriteRendererComponent>();
+									newEntity.AddComponent<Rigidbody2DComponent>();
+									newEntity.GetComponent<Rigidbody2DComponent>().Type = Rigidbody2DComponent::BodyType::Static;
+									newEntity.AddComponent<BoxCollider2DComponent>();
+								}
+								if (ImGui::MenuItem("Square Physics Body"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Square Physics Body");
+									newEntity.AddComponent<SpriteRendererComponent>();
+									newEntity.AddComponent<Rigidbody2DComponent>();
+									newEntity.GetComponent<Rigidbody2DComponent>().Type = Rigidbody2DComponent::BodyType::Dynamic;
+									newEntity.AddComponent<BoxCollider2DComponent>();
+								}
+								if (ImGui::MenuItem("Circle Physics Body"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Circle Physics Body");
+									newEntity.AddComponent<CircleRendererComponent>();
+									newEntity.AddComponent<Rigidbody2DComponent>();
+									newEntity.GetComponent<Rigidbody2DComponent>().Type = Rigidbody2DComponent::BodyType::Dynamic;
+									newEntity.AddComponent<CircleCollider2DComponent>();
 								}
 								ImGui::EndMenu();
 							}
@@ -118,9 +152,9 @@ namespace phx {
 			int sizeY = 300;
 
 			ImGui::SameLine(0.1f);
-			ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowSize().y + ImGui::GetScrollY() - sizeY));
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x - sizeX, ImGui::GetWindowSize().y + ImGui::GetScrollY() - sizeY));
 
-			ImGui::Image((void*)m_Alstolfo->GetRendererID(), ImVec2(200, 300), ImVec2{ 0, 1 }, ImVec2{ 1, 0 }, ImVec4(1.0f, 1.0f, 1.0f, 0.3f));
+			ImGui::Image((void*)m_Alstolfo->GetRendererID(), ImVec2(200, 300), ImVec2{ 1, 1 }, ImVec2{ 0, 0 }, ImVec4(1.0f, 1.0f, 1.0f, 0.2f));
 		}
 
 		ImGui::End();
@@ -153,6 +187,10 @@ namespace phx {
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
+			if (ImGui::MenuItem("Duplicate"))
+				m_Context->DuplicateEntity(entity);
+
+			ImGui::Separator();
 			if (ImGui::MenuItem(std::string("Delete " + entity.GetComponent<TagComponent>().Tag).c_str()))
 				entityDeleted = true;
 			ImGui::EndPopup();
@@ -188,6 +226,10 @@ namespace phx {
 		ImGui::Separator();
 
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
+		if (ImGui::IsItemClicked(1))
+		{
+			ImGui::OpenPopup("ComponentSettings");
+		}
 		ImGui::PopStyleVar();
 
 		ImGui::SameLine(cr.x - lineHeight * 0.5f);
@@ -200,8 +242,14 @@ namespace phx {
 		if (ImGui::BeginPopup("ComponentSettings"))
 		{
 			if (canDelete)
+			{
 				if (ImGui::MenuItem("Remove Component"))
 					removeComponent = true;
+			}
+			else
+			{
+				ImGui::MenuItem("Can't Remove", 0, false, false);
+			}
 
 			ImGui::EndPopup();
 		}
@@ -252,48 +300,55 @@ namespace phx {
 			{
 			case Scene::SceneType::Scene2D:
 			{
-				if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
+				if (ImGui::BeginMenu("Rendering"))
 				{
-					if (ImGui::MenuItem("Sprite Renderer"))
+					if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
 					{
-						m_SelectionContext.AddComponent<SpriteRendererComponent>();
-						ImGui::CloseCurrentPopup();
+						if (ImGui::MenuItem("Sprite Renderer"))
+						{
+							m_SelectionContext.AddComponent<SpriteRendererComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
+					if (!m_SelectionContext.HasComponent<CircleRendererComponent>())
+					{
+						if (ImGui::MenuItem("Circle Renderer"))
+						{
+							m_SelectionContext.AddComponent<CircleRendererComponent>();
+							ImGui::CloseCurrentPopup();
+						}
+					}
+					ImGui::EndMenu();
 				}
-				if (!m_SelectionContext.HasComponent<CircleRendererComponent>())
+				if (ImGui::BeginMenu("Physics"))
 				{
-					if (ImGui::MenuItem("Circle Renderer"))
+					if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
 					{
-						m_SelectionContext.AddComponent<CircleRendererComponent>();
-						ImGui::CloseCurrentPopup();
+						if (ImGui::MenuItem("Rigidbody 2D"))
+						{
+							m_SelectionContext.AddComponent<Rigidbody2DComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
-				}
-				if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
-				{
-					if (ImGui::MenuItem("Rigidbody 2D"))
-					{
-						m_SelectionContext.AddComponent<Rigidbody2DComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
 
-				if (!m_SelectionContext.HasComponent<BoxCollider2DComponent>())
-				{
-					if (ImGui::MenuItem("Box Collider 2D"))
+					if (!m_SelectionContext.HasComponent<BoxCollider2DComponent>())
 					{
-						m_SelectionContext.AddComponent<BoxCollider2DComponent>();
-						ImGui::CloseCurrentPopup();
+						if (ImGui::MenuItem("Box Collider 2D"))
+						{
+							m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
-				}
-				if (!m_SelectionContext.HasComponent<CircleCollider2DComponent>())
-				{
-					if (ImGui::MenuItem("Circle Collider 2D"))
+					if (!m_SelectionContext.HasComponent<CircleCollider2DComponent>())
 					{
-						m_SelectionContext.AddComponent<CircleCollider2DComponent>();
-						ImGui::CloseCurrentPopup();
+						if (ImGui::MenuItem("Circle Collider 2D"))
+						{
+							m_SelectionContext.AddComponent<CircleCollider2DComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
+					ImGui::EndMenu();
 				}
-
 				break;
 			}
 			case Scene::SceneType::Scene3D:

@@ -411,23 +411,26 @@ namespace phx
 
 
 		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-		float size = ImGui::GetWindowHeight() - 4.0f;
-		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
-		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size,size), ImVec2(0,0), ImVec2(1,1), 0))
-		{	
-			if (m_SceneState == SceneState::Edit)
+		if (m_ActiveScene)
+		{
+			float size = ImGui::GetWindowHeight() - 4.0f;
+			Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
+			ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
+			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 			{
-				OnScenePlay();
-			}		
-			else if (m_SceneState == SceneState::Play)
-			{
-				OnSceneStop();
+				if (m_SceneState == SceneState::Edit)
+				{
+					OnScenePlay();
+				}
+				else if (m_SceneState == SceneState::Play)
+				{
+					OnSceneStop();
+				}
+
 			}
-				
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(3);
 		}
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor(3);
 		ImGui::End();
 	}
 
@@ -518,6 +521,7 @@ namespace phx
 		}
 		case (int)PHX_KEY_D:
 		{
+			PHX_CORE_INFO("1");
 			if (control)
 				OnDuplicateEntity();
 			break;

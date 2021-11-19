@@ -14,7 +14,5 @@ namespace phx {
 		~Audio();
 
 		uint32_t CreateSound(std::filesystem::path filepath);
-	private:
-		SoundDevice* m_Device;
 	};
 }

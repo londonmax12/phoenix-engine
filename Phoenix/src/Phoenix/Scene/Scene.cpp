@@ -89,9 +89,9 @@ namespace phx {
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
 
-		// Copy components (except IDComponent and TagComponent)
 		newScene->m_SceneType = other->m_SceneType;
 
+		// Copy components (except IDComponent and TagComponent)
 		switch (other->m_SceneType)
 		{
 		case phx::Scene::SceneType::Scene2D:
