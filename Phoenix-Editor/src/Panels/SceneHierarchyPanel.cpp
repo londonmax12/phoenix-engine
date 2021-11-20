@@ -154,7 +154,7 @@ namespace phx {
 			ImGui::SameLine(0.1f);
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x - sizeX, ImGui::GetWindowSize().y + ImGui::GetScrollY() - sizeY));
 
-			ImGui::Image((void*)m_Alstolfo->GetRendererID(), ImVec2(200, 300), ImVec2{ 1, 1 }, ImVec2{ 0, 0 }, ImVec4(1.0f, 1.0f, 1.0f, 0.2f));
+			ImGui::Image((void*)m_Alstolfo->GetRendererID(), ImVec2(200, 300), ImVec2{ 1, 1 }, ImVec2{ 0, 0 }, ImVec4(1.0f, 1.0f, 1.0f, 0.4f));
 		}
 
 		ImGui::End();

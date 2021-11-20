@@ -62,8 +62,6 @@ namespace phx {
 		m_FileIcon = Texture2D::Create("resources/icons/content-browser/file-icon.png");
 		m_ImageIcon = Texture2D::Create("resources/icons/content-browser/image-icon.png");
 		m_PhoenixIcon = Texture2D::Create("resources/icons/content-browser/phoenix.png");
-
-
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		Refresh();

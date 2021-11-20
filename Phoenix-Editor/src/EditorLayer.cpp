@@ -78,7 +78,7 @@ namespace phx
 		Renderer3D::ResetStats();
 
 		m_Framebuffer->Bind();
-		RenderCommand::ClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::ClearColor({ 0.12, 0.12, 0.12, 1 });
 		RenderCommand::Clear();
 
 		m_Framebuffer->ClearAttachment(1, -1);
@@ -224,6 +224,10 @@ namespace phx
 			{
 				if (ImGui::BeginMenu("Windows"))
 				{
+					ImGui::MenuItem("Console", NULL, &m_ShowConsole);
+					ImGui::MenuItem("Content Browser", NULL, &m_ShowContentBrowser);
+					ImGui::MenuItem("Shader Editor", NULL, &m_ShowShaderEditor);
+					ImGui::Separator();
 					ImGui::MenuItem("Metrics", NULL, &m_ShowMetrics);
 					ImGui::EndMenu();
 				}		
@@ -232,13 +236,6 @@ namespace phx
 			ImGui::EndMenuBar();
 		}
 
-		m_SceneHierarchyPanel.OnImGuiRender();
-		m_ContentBrowserPanel.OnImGuiRender();
-
-		if (m_ShowShaderEditor)
-		{
-			m_ShaderEditorPanel.OnImGuiRender();
-		}
 
 		/*ImGui::Begin("test");
 		if (ImGui::Button("Play"))
@@ -252,6 +249,17 @@ namespace phx
 			mySpeaker.Play(sound1);
 		}
 		ImGui::End();*/
+
+		m_SceneHierarchyPanel.OnImGuiRender();
+
+		if (m_ShowContentBrowser)
+			m_ContentBrowserPanel.OnImGuiRender();
+
+		if (m_ShowShaderEditor)
+			m_ShaderEditorPanel.OnImGuiRender();
+
+		if (m_ShowConsole)
+			m_ConsolePanel.OnImGuiRender();
 
 		if (m_ShowMetrics)
 		{
@@ -293,6 +301,7 @@ namespace phx
 		}
 
 		//renderThemeEditor();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
 		ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_CentralNode | ImGuiDockNodeFlags_AutoHideTabBar | ImGuiWindowFlags_NoDecoration);
