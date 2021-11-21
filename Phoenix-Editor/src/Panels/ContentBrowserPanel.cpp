@@ -1,8 +1,12 @@
 #include "phxpch.h"
+
 #include "ContentBrowserPanel.h"
 #include "ShaderEditorPanel.h"
 
 #include <imgui.h>
+
+#include <atlbase.h>
+#include <atlconv.h>
 
 namespace phx {
 	extern const std::filesystem::path s_AssetPath = "assets";
@@ -10,6 +14,30 @@ namespace phx {
 	static float padding = 16.0f;
 	static float thumbnailSize = 100.0f;
 	float cellSize = thumbnailSize + padding;
+
+	std::vector<std::filesystem::path> GetParents(std::filesystem::path root, std::filesystem::path current)
+	{
+		std::vector<std::filesystem::path> parents;
+
+		std::string path = std::string();
+		for (auto x : current.string())
+		{
+			if (x == '\\')
+			{
+				parents.push_back(std::filesystem::path(path));
+			}
+			path += x;
+		}
+		if (path.empty())
+		{
+			parents.push_back(root);
+		}
+		else
+		{
+			parents.push_back(std::filesystem::path(path));
+		}
+		return parents;
+	}
 
 	void ContentBrowserPanel::Refresh()
 	{
@@ -64,6 +92,8 @@ namespace phx {
 		m_PhoenixIcon = Texture2D::Create("resources/icons/content-browser/phoenix.png");
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
+		m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+
 		Refresh();
 	}
 
@@ -71,16 +101,61 @@ namespace phx {
 	{
 		ImGui::Begin("Content Browser");
 
+		static ImGuiTextFilter filter;
+		filter.Draw("Search");
+
+		ImGui::Separator();
+
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		int size = ImGui::GetFontSize();
+		bool getparents = false;
 		if (ImGui::Button("<", ImVec2(size, size)))
 		{
 			if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 				refresh = true;
+				getparents = true;
 			}		
 		}
+		
+		ImGui::PopStyleColor();
+		int index = 0;
+		for (auto& itr : m_ParentDirs)
+		{
+			if (index != 0)
+			{
+				ImGui::SameLine();
+				ImGui::Text("/");
+				ImGui::SameLine();
+				if (ImGui::Button(itr.filename().string().c_str()))
+				{
+					m_CurrentDirectory = itr;
+					refresh = true;
+					getparents = true;
+				}
+			}
+			else
+			{
+				ImGui::SameLine();
+				if (ImGui::Button(itr.filename().string().c_str()))
+				{
+					m_CurrentDirectory = itr;
+					refresh = true;
+					getparents = true;
+				}
+				index++;
+			}
+		}
+		if (getparents)
+		{
+			m_ParentDirs.clear();
+			m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+			getparents = false;
+		}
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
 		ImGui::SameLine();
 		if (ImGui::Button("+", ImVec2(size, size)))
 		{
@@ -95,81 +170,121 @@ namespace phx {
 			refresh = true;
 		}
 		ImGui::PopStyleColor();
+
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
 		ImGui::Separator();
 
-		float panelWidth = ImGui::GetContentRegionAvail().x;
-		int columnCount = (int)(panelWidth / cellSize);
-		if (columnCount < 1)
-			columnCount = 1;
+		if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 2)))
+		{
 
-		ImGui::Columns(columnCount, 0, false);
+			float panelWidth = ImGui::GetContentRegionAvail().x;
+			int columnCount = (int)(panelWidth / cellSize);
+			if (columnCount < 1)
+				columnCount = 1;
 
-		for (auto& itr : m_Files)
-		{	
-			Ref<Texture2D> icon;
-			switch (itr.FileType)
-			{
-			case FileType::Dir:
-			{
-				icon = m_DirectoryIcon;
-				break;
-			}
-			case FileType::DirEmpty:
-			{
-				icon = m_DirectoryEmptyIcon;
-				break;
-			}
-			case FileType::ImageFile:
-			{
-				icon = m_ImageIcon;
-				break;
-			}
-			case FileType::PhoenixFile:
-			{
-				icon = m_PhoenixIcon;
-				break;
-			}
-			default:
-			{
-				icon = m_FileIcon;
-				break;
-			}
-			}
-			
-			auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);
+			ImGui::Columns(columnCount, 0, false);
 
-			ImGui::PushID(itr.Path.c_str());
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 
-			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
-
-			if (ImGui::BeginDragDropSource())
+			for (auto& itr : m_Files)
 			{
-				const wchar_t* itemPath = relativePath.c_str();
-				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
-				ImGui::EndDragDropSource();
-			}
-			ImGui::PopStyleColor();
-
-			if (ImGui::IsItemHovered())
-			{
-				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				if (filter.PassFilter(itr.Path.filename().string().c_str()))
 				{
-					if (std::filesystem::is_directory(itr.Path))
+
+					ImGui::PushID(itr.Path.c_str());
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+					switch (itr.FileType)
 					{
-						m_CurrentDirectory /= itr.Path.filename();
-						refresh = true;
+					case FileType::Dir:
+					{
+						ImGui::ImageButton((ImTextureID)m_DirectoryIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
 					}
+					case FileType::DirEmpty:
+					{
+						ImGui::ImageButton((ImTextureID)m_DirectoryEmptyIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					case FileType::ImageFile:
+					{
+						ImGui::ImageButton((ImTextureID)m_ImageIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					case FileType::PhoenixFile:
+					{
+						ImGui::ImageButton((ImTextureID)m_PhoenixIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					default:
+					{
+						ImGui::ImageButton((ImTextureID)m_FileIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					}
+
+					if (ImGui::IsItemHovered())
+					{
+						if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+						{
+							if (std::filesystem::is_directory(itr.Path))
+							{
+								m_CurrentDirectory /= itr.Path.filename();
+								refresh = true;
+								m_ParentDirs.clear();
+								m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+							}
+						}
+						auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);
+						if (ImGui::BeginDragDropSource())
+						{
+							const wchar_t* itemPath = relativePath.c_str();
+							ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+							ImGui::EndDragDropSource();
+						}
+					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						if (ImGui::MenuItem("Duplicate"))
+						{
+							CA2W copyFile(itr.Path.string().c_str());
+
+							std::string newFileStr = itr.Path.string() + " - Copy" + itr.Path.extension().string();
+							CA2W newFile(newFileStr.c_str());
+
+							CopyFile(copyFile, newFile, false);
+						}
+						/*if (ImGui::MenuItem("Rename"))
+						{
+							ImGui::OpenPopup("RenamePopup");
+							std::string name = "Test";
+							std::string newPath = std::string(std::filesystem::absolute(itr.Path.parent_path()).string() + "\\" + "Test" + itr.Path.extension().string());
+							PHX_CORE_INFO(newPath);
+							rename(itr.Path.string().c_str(), newPath.c_str());
+						}*/
+						ImGui::Separator();
+						if (ImGui::MenuItem("Delete"))
+						{
+							remove(itr.Path.string().c_str());
+							refresh = true;
+						}
+						ImGui::EndPopup();
+					}
+
+					ImGui::PopStyleColor();
+					ImGui::TextWrapped(itr.Path.filename().string().c_str());
+
+					ImGui::NextColumn();
+					ImGui::PopID();
 				}
 			}
-			ImGui::TextWrapped(itr.Path.filename().string().c_str());
+			ImGui::Columns(1);
 
-			ImGui::NextColumn();
-			ImGui::PopID();
+			ImGui::ListBoxFooter();
 		}
 
-
-		ImGui::Columns(1);
+		ImGui::PopStyleColor();
 
 		if (refresh)
 		{

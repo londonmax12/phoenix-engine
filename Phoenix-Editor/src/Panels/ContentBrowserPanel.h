@@ -39,6 +39,8 @@ namespace phx {
 
 		Ref<Texture2D> m_RefreshIcon;
 
+		std::vector<std::filesystem::path> m_ParentDirs;
+
 		std::vector<FileIcon> m_Files;
 	};
 }
