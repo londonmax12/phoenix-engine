@@ -49,6 +49,8 @@ namespace phx
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
+		NewScene(Scene::SceneType::Scene2D);
 	}
 
 	void EditorLayer::OnDetach()
@@ -671,6 +673,7 @@ namespace phx
 	{
 		m_SceneState = SceneState::Play;
 
+		m_EditorScene = m_ActiveScene;
 		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 
@@ -680,8 +683,9 @@ namespace phx
 	{
 		m_SceneState = SceneState::PhysicTest;
 
+		m_EditorScene = m_ActiveScene;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
-		m_ActiveScene = m_EditorScene;
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
