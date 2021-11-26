@@ -263,6 +263,8 @@ namespace phx
 		if (m_ShowConsole)
 			m_ConsolePanel.OnImGuiRender();
 
+		ImGui::ShowDemoWindow();
+
 		if (m_ShowMetrics)
 		{
 			ImGui::Begin("Metrics");

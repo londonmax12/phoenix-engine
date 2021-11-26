@@ -8,6 +8,7 @@
 
 namespace phx {
 	static float GapHeight = 1;
+	static bool saved_palette_init = true;
 
 	static void ItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64))
 	{
@@ -169,6 +170,92 @@ namespace phx {
 		
 		ImGui::PopStyleVar();
 		ImGui::PopID();
+	}
+	static void DrawColorControls(const std::string& label, glm::vec4& values, float resetValue = 1.0f, float columnWidth = 100.0f)
+	{
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+		static ImVec4 saved_palette[32] = {};
+		if (saved_palette_init)
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+			{
+				ImGui::ColorConvertHSVtoRGB(n / 31.0f, 1.0f, 1.0f,
+					saved_palette[n].x, saved_palette[n].y, saved_palette[n].z);
+				saved_palette[n].w = 1.0f; // Alpha
+			}
+			saved_palette_init = false;
+		}
+
+		static ImVec4 backup_color;
+		bool open_popup = ImGui::ColorButton("MyColor##3b", ImVec4{ values.x, values.y, values.z, values.w });
+		ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+		open_popup |= ImGui::Button("Palette");
+		float col[4] = { values.x,values.y,values.z,values.w };
+		if (open_popup)
+		{
+			ImGui::OpenPopup("mypicker");
+			backup_color = ImVec4{ col[0], col[1], col[2], col[3]};
+		}
+		if (ImGui::BeginPopup("mypicker"))
+		{
+			ImGui::ColorPicker4("##picker", col, ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoSmallPreview | ImGuiColorEditFlags_AlphaBar);
+			ImGui::SameLine();
+
+			ImGui::BeginGroup(); // Lock X position
+			ImGui::Text("Current");
+			ImGui::ColorButton("##current", ImVec4{ col[0], col[1], col[2], col[3] }, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_NoTooltip, ImVec2(60, 40));
+			ImGui::Text("Previous");
+			if (ImGui::ColorButton("##previous", backup_color, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_NoTooltip, ImVec2(60, 40)))
+			{
+				col[0] = backup_color.x; // Preserve alpha!
+				col[1] = backup_color.y;
+				col[2] = backup_color.z;
+				col[3] = backup_color.w;
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Palette");
+			for (int n = 0; n < IM_ARRAYSIZE(saved_palette); n++)
+			{
+				ImGui::PushID(n);
+				if ((n % 8) != 0)
+					ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.y);
+
+				ImGuiColorEditFlags palette_button_flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoTooltip;
+				if (ImGui::ColorButton("##palette", saved_palette[n], palette_button_flags, ImVec2(20, 20)))
+				{
+					col[0] = saved_palette[n].x;
+					col[1] = saved_palette[n].y;
+					col[2] = saved_palette[n].z;
+					col[3] = saved_palette[n].w;
+				}
+					
+				// Allow user to drop colors into each palette entry. Note that ColorButton() is already a
+				// drag source by default, unless specifying the ImGuiColorEditFlags_NoDragDrop flag.
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_3F))
+						memcpy((float*)&saved_palette[n], payload->Data, sizeof(float) * 3);
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_COLOR_4F))
+						memcpy((float*)&saved_palette[n], payload->Data, sizeof(float) * 4);
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::PopID();
+			}
+
+			values.x = col[0];
+			values.y = col[1];
+			values.z = col[2];
+			values.w = col[3];
+
+			ImGui::EndGroup();
+			ImGui::EndPopup();
+		}
+		ImGui::Columns(1);
 	}
 	static void DrawVec4ColorControls(const std::string& label, glm::vec4& values, float resetValue = 1.0f, float columnWidth = 100.0f)
 	{

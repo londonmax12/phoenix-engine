@@ -453,8 +453,7 @@ namespace phx {
 		{
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
-					DrawVec4ColorControls("Color", component.Color);
-					DrawGap();
+					DrawColorControls("Color", component.Color);
 
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 					ImGui::Columns(2);
