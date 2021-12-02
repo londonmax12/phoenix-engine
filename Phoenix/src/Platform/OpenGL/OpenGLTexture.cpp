@@ -4,33 +4,10 @@
 #include "stb_image.h"
 
 namespace phx {
-	struct Textures
-	{
-		struct TextureFile
-		{
-			std::string path;
-
-			int id;
-		};
-
-		std::vector<TextureFile> m_Textures;
-	};
-
-	Textures TEXTURES;
-
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
 	{
 		PHX_PROFILE_FUNCTION();
-
-		for (auto& itr : TEXTURES.m_Textures)
-		{
-			if (itr.path == path)
-			{
-				m_IsLoaded = true;
-				return;
-			}
-		}
 
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
@@ -77,13 +54,8 @@ namespace phx {
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-			
-			stbi_image_free(data);
 
-			Textures::TextureFile newTex;
-			newTex.id = m_RendererID;
-			newTex.path = path;
-			TEXTURES.m_Textures.push_back(newTex);
+			stbi_image_free(data);
 		}
 	}
 
@@ -97,7 +69,7 @@ namespace phx {
 
 		PHX_CORE_ASSERT(internalFormat & dataFormatm, "Data not supported")
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -131,4 +103,3 @@ namespace phx {
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }
-

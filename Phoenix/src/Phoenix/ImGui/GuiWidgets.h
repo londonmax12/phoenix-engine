@@ -10,7 +10,7 @@ namespace phx {
 	static float GapHeight = 1;
 	static bool saved_palette_init = true;
 
-	static void ItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64))
+	static void DrawItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64))
 	{
 		auto* drawList = ImGui::GetWindowDrawList();
 		const auto& style = ImGui::GetStyle();

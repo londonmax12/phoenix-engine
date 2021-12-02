@@ -2,7 +2,6 @@
 #include "Phoenix/Renderer/Texture.h"
 
 #include "glad/glad.h"
-#include <vector>
 
 namespace phx {
 	class OpenGLTexture2D : public Texture2D
@@ -24,8 +23,8 @@ namespace phx {
 
 		virtual std::string GetPath() const override { return m_Path; }
 
-		virtual bool operator==(const Texture& other) const override 
-		{ 
+		virtual bool operator==(const Texture& other) const override
+		{
 			return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
 		}
 	private:

@@ -25,6 +25,8 @@ namespace phx {
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+		void OnOverlayRender();
+
 		void NewScene(Scene::SceneType type);
 		void SaveSceneAs();
 		void SaveScene();
@@ -75,6 +77,8 @@ namespace phx {
 		glm::vec2 m_ViewportBounds[2];
 
 		int m_GizmoType = -1;
+
+		bool m_ShowPhysicsColliders = false;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;

@@ -101,57 +101,34 @@ namespace phx {
 	}
 	void ImGuiLayer::SetDarkThemeColors()
 	{
-		auto& style = ImGui::GetStyle();
-		style.WindowMenuButtonPosition = ImGuiDir_None;
-		style.Colors[ImGuiCol_Text] = ImVec4(1.000000f, 1.000000f, 1.000000f, 1.000000);
-		style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.500000f, 0.500000f, 0.500000f, 1.000000);
-		style.Colors[ImGuiCol_WindowBg] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_ChildBg] = ImVec4(0.000000f, 0.000000f, 0.000000f, 0.000000);
-		style.Colors[ImGuiCol_PopupBg] = ImVec4(0.080000f, 0.080000f, 0.080000f, 0.940000);
-		style.Colors[ImGuiCol_Border] = ImVec4(0.431373f, 0.431373f, 0.501961f, 0.127450);
-		style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.000000f, 0.000000f, 0.000000f, 0.000000);
-		style.Colors[ImGuiCol_FrameBg] = ImVec4(0.170588f, 0.170588f, 0.170588f, 1.000000);
-		style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.300000f, 0.305000f, 0.310000f, 1.000000);
-		style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.150000f, 0.150500f, 0.151000f, 1.000000);
-		style.Colors[ImGuiCol_TitleBg] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.09f, 0.09f, 0.09f, 1.000000);
-		style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.019608f, 0.019608f, 0.019608f, 0.000000);
-		style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.284360f, 0.284357f, 0.284357f, 0.345972);
-		style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.284360f, 0.284357f, 0.284357f, 0.345972);
-		style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.286275f, 0.286275f, 0.286275f, 0.113725);
-		style.Colors[ImGuiCol_CheckMark] = ImVec4(0.419608f, 0.000000f, 1.000000f, 1.000000);
-		style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.350710f, 0.000000f, 1.000000f, 1.000000);
-		style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.350710f, 0.000000f, 1.000000f, 1.000000);
-		style.Colors[ImGuiCol_Button] = ImVec4(0.213268f, 0.213269f, 0.213270f, 0.582938);
-		style.Colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.300000f, 0.305000f, 0.310000f, 1.000000f };
-		style.Colors[ImGuiCol_ButtonActive] = ImVec4{ 0.150000f, 0.150500f, 0.151000f, 1.000000f };
-		style.Colors[ImGuiCol_Header] = ImVec4(0.213268f, 0.213269f, 0.213270f, 0.582938);
-		style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.213268f, 0.213269f, 0.213270f, 0.582938);
-		style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.150000f, 0.150500f, 0.151000f, 1.000000);
-		style.Colors[ImGuiCol_Separator] = ImVec4(0.2f, 0.2f, 0.2f, 0.517536f);
-		style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.275908f, 0.000000f, 0.786730f, 1.000000);
-		style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.275908f, 0.000000f, 0.786730f, 1.000000);
-		style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.349020f, 0.000000f, 1.000000f, 0.580392);
-		style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.350710f, 0.000000f, 1.000000f, 1.000000);
-		style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.300000f, 0.305000f, 0.310000f, 1.000000);
-		style.Colors[ImGuiCol_Tab] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_TabHovered] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_TabActive] = ImVec4(0.109804f, 0.109804f, 0.109804f, 1.000000);
-		style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.100000f, 0.100000f, 0.100000f, 1.000000);
-		style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.109804f, 0.109804f, 0.109804f, 1.000000);
-		style.Colors[ImGuiCol_DockingPreview] = ImVec4(0.260000f, 0.590000f, 0.980000f, 0.700000);
-		style.Colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.200000f, 0.200000f, 0.200000f, 1.000000);
-		style.Colors[ImGuiCol_PlotLines] = ImVec4(0.610000f, 0.610000f, 0.610000f, 1.000000);
-		style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.000000f, 0.430000f, 0.350000f, 1.000000);
-		style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.900000f, 0.700000f, 0.000000f, 1.000000);
-		style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.000000f, 0.600000f, 0.000000f, 1.000000);
-		style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.260000f, 0.590000f, 0.980000f, 0.350000);
-		style.Colors[ImGuiCol_DragDropTarget] = ImVec4(1.000000f, 1.000000f, 0.000000f, 0.905213);
-		style.Colors[ImGuiCol_NavHighlight] = ImVec4(0.260000f, 0.590000f, 0.980000f, 1.000000);
-		style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.000000f, 1.000000f, 1.000000f, 0.700000);
-		style.Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.800000f, 0.800000f, 0.800000f, 0.200000);
-		style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.800000f, 0.800000f, 0.800000f, 0.350000);
+		auto& colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
+
+		// Headers
+		colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		// Buttons
+		colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		// Tabs
+		colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabHovered] = ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
+		colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
+		colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+
+		// Title
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 	}
 }
