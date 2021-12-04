@@ -27,7 +27,7 @@ namespace phx {
 
 		void OnOverlayRender();
 
-		void NewScene(Scene::SceneType type);
+		void NewScene(Scene::SceneType type, bool AddCamera = false);
 		void SaveSceneAs();
 		void SaveScene();
 		void OpenScene();

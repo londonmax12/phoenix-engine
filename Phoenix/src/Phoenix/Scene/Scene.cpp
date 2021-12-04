@@ -155,6 +155,7 @@ namespace phx {
 				bodyDef.angle = transform.Rotation.z;
 
 				b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+				body->SetAwake(rb2d.Awake);
 				body->SetFixedRotation(rb2d.FixedRotation);
 				rb2d.RuntimeBody = body;
 
@@ -249,6 +250,15 @@ namespace phx {
 					auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
 					b2Body* body = (b2Body*)rb2d.RuntimeBody;
+
+					if (rb2d.ForceToApply.x != 0 || rb2d.ForceToApply.y != 0)
+					{
+						body->ApplyForce({ rb2d.ForceToApply.x * 1000, rb2d.ForceToApply.y * 1000 }, { transform.Translation.x, transform.Translation.y }, rb2d.Awake);
+						rb2d.ForceToApply = { 0,0 };
+					}
+					b2Vec2 force = body->GetLinearVelocity();
+					rb2d.Force = { force.x, force.y };
+
 					const auto& position = body->GetPosition();
 					transform.Translation.x = position.x;
 					transform.Translation.y = position.y;
@@ -435,6 +445,15 @@ namespace phx {
 				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
 				b2Body* body = (b2Body*)rb2d.RuntimeBody;
+
+				if (rb2d.ForceToApply.x != 0 || rb2d.ForceToApply.y != 0)
+				{
+					body->ApplyForce({ rb2d.ForceToApply.x * 1000, rb2d.ForceToApply.y * 1000 }, { transform.Translation.x, transform.Translation.y }, rb2d.Awake);
+					rb2d.ForceToApply = { 0,0 };
+				}
+				b2Vec2 force = body->GetLinearVelocity();
+				rb2d.Force = { force.x, force.y };
+
 				const auto& position = body->GetPosition();
 				transform.Translation.x = position.x;
 				transform.Translation.y = position.y;

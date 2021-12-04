@@ -50,7 +50,42 @@ namespace phx
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		NewScene(Scene::SceneType::Scene2D);
+		NewScene(Scene::SceneType::Scene2D, true);
+
+		/*Entity entity = m_ActiveScene->CreateEntity("Red Square");
+		entity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+
+		class Controller : public ScriptableEntity
+		{
+		public:
+			virtual void OnCreate() override
+			{
+			}
+
+			virtual void OnDestroy() override
+			{
+			}
+
+			virtual void OnUpdate(DeltaTime dt) override
+			{
+				auto& rb2d = GetComponent<Rigidbody2DComponent>();
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(Key::A))
+					if (rb2d.Force.x > -5)
+						rb2d.ApplyForce({ -(speed * dt), 0 });
+				if (Input::IsKeyPressed(Key::D))
+					if (rb2d.Force.x < 5)
+						rb2d.ApplyForce({ (speed * dt), 0 });				
+				if (Input::IsKeyPressed(Key::W))
+						rb2d.ApplyForce({ 0, (speed * dt) });
+				if (Input::IsKeyPressed(Key::S))
+					rb2d.ApplyForce({ 0, -(speed * dt) });
+			}
+		};
+		entity.AddComponent<NativeScriptComponent>().Bind<Controller>();*/
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -192,7 +227,7 @@ namespace phx
 				{
 					if (ImGui::MenuItem("2D Scene"))
 					{
-						NewScene(Scene::SceneType::Scene2D);
+						NewScene(Scene::SceneType::Scene2D, true);
 					}
 					if (ImGui::MenuItem("3D Scene", "Ctrl+N"))
 					{
@@ -453,8 +488,14 @@ namespace phx
 			{
 				OnSceneStop();
 			}
-
 		}
+		if (m_SceneState == SceneState::Edit)
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::BeginTooltip();
+				ImGui::Text("Play");
+				ImGui::EndTooltip();
+			}
 		
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(xPos2);
@@ -469,7 +510,13 @@ namespace phx
 				OnSceneStop();
 			}
 		}
-
+		if (m_SceneState == SceneState::Edit)
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::BeginTooltip();
+				ImGui::Text("Playtest");
+				ImGui::EndTooltip();
+			}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
 		
@@ -633,7 +680,7 @@ namespace phx
 		Renderer2D::EndScene();
 	}
 
-	void EditorLayer::NewScene(Scene::SceneType type)
+	void EditorLayer::NewScene(Scene::SceneType type, bool AddCamera)
 	{
 		switch (type)
 		{
@@ -651,6 +698,11 @@ namespace phx
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_ActiveScene->SetSceneType(type);
+		if (AddCamera)
+		{
+			Entity cam = m_ActiveScene->CreateEntity("Main Camera");
+			cam.AddComponent<CameraComponent>();
+		}
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 		m_EditorScenePath = std::filesystem::path();

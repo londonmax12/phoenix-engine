@@ -107,9 +107,18 @@ namespace phx {
 		enum class BodyType { Static = 0, Dynamic, Kinematic };
 		BodyType Type = BodyType::Static;
 		bool FixedRotation = false;
+		bool Awake = true;
 
 		// Storage for runtime
 		void* RuntimeBody = nullptr;
+
+		glm::vec2 Force = { 0, 0 };
+		glm::vec2 ForceToApply = { 0, 0 };
+
+		void ApplyForce(glm::vec2 force)
+		{
+			ForceToApply = {force.x, force.y} ;
+		}
 
 		Rigidbody2DComponent() = default;
 		Rigidbody2DComponent(const Rigidbody2DComponent&) = default;
