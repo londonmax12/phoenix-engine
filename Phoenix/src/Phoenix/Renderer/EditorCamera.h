@@ -36,6 +36,10 @@ namespace phx {
 		float GetYaw() const { return m_Yaw; }
 
 		void Reset();
+
+		void SetPosition(glm::vec3 position = {0,0,0});
+		void SetRotation(glm::vec2 Rotation = {0,0});
+		void SetScale(float scale = 10.0f);
 	private:
 		void UpdateProjection();
 		void UpdateView();

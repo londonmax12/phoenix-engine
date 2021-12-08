@@ -15,8 +15,8 @@
 
 //----------------Input-------------------
 #include "Phoenix/Input/Input.h"
-#include "Phoenix/Input/Keycodes.h"
-#include "Phoenix/Input/Mousecodes.h"
+#include "Phoenix/Input/KeyCodes.h"
+#include "Phoenix/Input/MouseCodes.h"
 //----------------------------------------
 
 //-----------------Time-------------------

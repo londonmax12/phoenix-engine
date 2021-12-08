@@ -529,12 +529,12 @@ namespace phx
 		if (e.GetRepeatCount() > 0)
 			return false;
 
-		bool control = Input::IsKeyPressed(PHX_KEY_LEFT_CONTROL) || Input::IsKeyPressed(PHX_KEY_RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(PHX_KEY_LEFT_SHIFT) || Input::IsKeyPressed(PHX_KEY_RIGHT_SHIFT);
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 
 		switch (e.GetKeyCode())
 		{
-		case (int)PHX_KEY_S:
+		case (int)Key::S:
 		{
 			if (control && shift)
 			{
@@ -547,7 +547,7 @@ namespace phx
 			break;
 		}
 
-		case (int)PHX_KEY_O:
+		case (int)Key::O:
 		{
 			if (control)
 			{
@@ -555,7 +555,7 @@ namespace phx
 			}
 			break;
 		}
-		case (int)PHX_KEY_N:
+		case (int)Key::N:
 		{
 			if (control)
 			{
@@ -563,8 +563,12 @@ namespace phx
 			}
 			break;
 		}
+		case (int)Key::GraveAccent:
+		{
+			break;
+		}
 
-		case (int)PHX_KEY_1:
+		case (int)Key::D1:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -573,7 +577,7 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_2:
+		case (int)Key::D2:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -582,7 +586,7 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_3:
+		case (int)Key::D3:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -591,7 +595,7 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_4:
+		case (int)Key::D4:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -599,12 +603,12 @@ namespace phx
 			}
 			break;
 		}
-		case (int)PHX_KEY_R:
+		case (int)Key::R:
 		{
 			m_EditorCamera.Reset();
 			break;
 		}
-		case (int)PHX_KEY_DELETE:
+		case (int)Key::Delete:
 		{
 			if (m_SceneHierarchyPanel.GetSelectedEntity())
 			{
@@ -613,7 +617,7 @@ namespace phx
 			}
 			break;
 		}
-		case (int)PHX_KEY_D:
+		case (int)Key::D:
 		{
 			if (control)
 				OnDuplicateEntity();

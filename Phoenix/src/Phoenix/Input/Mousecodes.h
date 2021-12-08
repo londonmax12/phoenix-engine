@@ -26,16 +26,3 @@ namespace phx
 		return os;
 	}
 }
-
-#define PHX_MOUSE_BUTTON_0      ::phx::Mouse::Button0
-#define PHX_MOUSE_BUTTON_1      ::phx::Mouse::Button1
-#define PHX_MOUSE_BUTTON_2      ::phx::Mouse::Button2
-#define PHX_MOUSE_BUTTON_3      ::phx::Mouse::Button3
-#define PHX_MOUSE_BUTTON_4      ::phx::Mouse::Button4
-#define PHX_MOUSE_BUTTON_5      ::phx::Mouse::Button5
-#define PHX_MOUSE_BUTTON_6      ::phx::Mouse::Button6
-#define PHX_MOUSE_BUTTON_7      ::phx::Mouse::Button7
-#define PHX_MOUSE_BUTTON_LAST   ::phx::Mouse::ButtonLast
-#define PHX_MOUSE_BUTTON_LEFT   ::phx::Mouse::ButtonLeft
-#define PHX_MOUSE_BUTTON_RIGHT  ::phx::Mouse::ButtonRight
-#define PHX_MOUSE_BUTTON_MIDDLE ::phx::Mouse::ButtonMiddle

@@ -20,12 +20,25 @@ namespace phx {
 
 	void EditorCamera::Reset()
 	{
-		m_FocalPoint = glm::vec3{ 0, 0, 0 };
+		SetPosition();
+		SetRotation();
+		SetScale();
+	}
 
-		m_Yaw = 0;
-		m_Pitch = 0;
+	void EditorCamera::SetPosition(glm::vec3 position)
+	{
+		m_FocalPoint = position;
+	}
 
-		m_Distance = 10.0f;
+	void EditorCamera::SetRotation(glm::vec2 Rotation)
+	{
+		m_Pitch = Rotation.x;
+		m_Yaw = Rotation.y;
+	}
+
+	void EditorCamera::SetScale(float scale)
+	{
+		m_Distance = scale;
 	}
 
 	void EditorCamera::UpdateProjection()
