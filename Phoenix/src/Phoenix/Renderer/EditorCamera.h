@@ -19,7 +19,6 @@ namespace phx {
 		void OnEvent(Event& e);
 
 		inline float GetDistance() const { return m_Distance; }
-		inline void SetDistance(float distance) { m_Distance = distance; }
 
 		inline void SetViewportSize(float width, float height) { m_ViewportWidth = width; m_ViewportHeight = height; UpdateProjection(); }
 
@@ -39,7 +38,7 @@ namespace phx {
 
 		void SetPosition(glm::vec3 position = {0,0,0});
 		void SetRotation(glm::vec2 Rotation = {0,0});
-		void SetScale(float scale = 10.0f);
+		void SetDistance(float scale = 10.0f);
 	private:
 		void UpdateProjection();
 		void UpdateView();

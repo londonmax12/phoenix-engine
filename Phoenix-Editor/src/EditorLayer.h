@@ -78,7 +78,7 @@ namespace phx {
 
 		int m_GizmoType = -1;
 
-		bool m_ShowPhysicsColliders = false;
+		bool m_ShowPhysicsColliders = true;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;

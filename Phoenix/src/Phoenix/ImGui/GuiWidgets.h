@@ -190,9 +190,9 @@ namespace phx {
 		}
 
 		static ImVec4 backup_color;
-		bool open_popup = ImGui::ColorButton("MyColor##3b", ImVec4{ values.x, values.y, values.z, values.w });
+		bool open_popup = ImGui::ColorButton("MyColor##3b", ImVec4{ values.x, values.y, values.z, values.w }, 0, ImVec2{25,25});
 		ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-		open_popup |= ImGui::Button("Palette");
+		open_popup |= ImGui::Button("Palette", ImVec2{0, 25});
 		float col[4] = { values.x,values.y,values.z,values.w };
 		if (open_popup)
 		{

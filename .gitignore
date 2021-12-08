@@ -10,6 +10,7 @@ Phoenix/vendor/VulkanSDK
 *.vcxproj
 *.filters
 *.log
+*.claudiaideconfig
 Sandbox/PhoenixSesson-Shutdown.json
 Sandbox/PhoenixSesson-Runtime.json
 Sandbox/PhoenixSesson-Startup.json

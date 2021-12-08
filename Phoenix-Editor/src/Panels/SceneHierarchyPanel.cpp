@@ -188,11 +188,13 @@ namespace phx {
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
+			ImGui::Text(entity.GetComponent<TagComponent>().Tag.c_str());
+			ImGui::Separator();
+
 			if (ImGui::MenuItem("Duplicate"))
 				m_Context->DuplicateEntity(entity);
 
-			ImGui::Separator();
-			if (ImGui::MenuItem(std::string("Delete " + entity.GetComponent<TagComponent>().Tag).c_str()))
+			if (ImGui::MenuItem("Delete"))
 				entityDeleted = true;
 			ImGui::EndPopup();
 		}
@@ -456,13 +458,17 @@ namespace phx {
 			{
 					DrawColorControls("Color", component.Color);
 
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 					ImGui::Columns(2);
 					ImGui::SetColumnWidth(0, 100.0f);
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 					ImGui::Text("Texture");
 
 					ImGui::NextColumn();
-					ImGui::Button("Texture", ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
+					
+					if(!component.Path.empty())
+						ImGui::Button(component.Path.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
+					else
+						ImGui::Button("Drag Image", ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
 
 					if (ImGui::BeginDragDropTarget())
 					{
@@ -484,8 +490,8 @@ namespace phx {
 					}
 
 					ImGui::Columns(1);
-					ImGui::PopStyleVar();
 
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
 					ImGui::SameLine();
 
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.2f, 0.25f, 1.0f });
@@ -499,7 +505,10 @@ namespace phx {
 					}
 					ImGui::PopFont();
 					ImGui::PopStyleColor(3);
+					ImGui::PopStyleVar(2);
 					
+					DrawGap();
+
 					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
 		}
@@ -559,6 +568,7 @@ namespace phx {
 					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 					DrawCheckbox("Is Sensor", &component.IsSensor);
+					DrawCheckbox("Show Collider", &component.ShowCollider);
 				});
 		}
 
@@ -574,6 +584,7 @@ namespace phx {
 					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
 					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 					DrawCheckbox("Is Sensor", &component.IsSensor);
+					DrawCheckbox("Show Collider", &component.ShowCollider);
 				});
 		}
 

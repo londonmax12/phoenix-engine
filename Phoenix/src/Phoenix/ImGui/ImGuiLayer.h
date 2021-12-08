@@ -21,11 +21,14 @@ namespace phx {
 		void Begin();
 		void End();
 
-		void SetBlockEvents(bool block) { m_BlockEvents = block; }
+		void SetBlockEvents(bool block) { m_BlockMouseEvents = block; m_BlockKeyEvents = block; }
+		void SetBlockKeyEvents(bool block) { m_BlockKeyEvents = block; }
+		void SetBlockMouseEvents(bool block) { m_BlockMouseEvents = block; }
 
 		void SetDarkThemeColors();
 	private:
-		bool m_BlockEvents = true;
+		bool m_BlockKeyEvents = false;
+		bool m_BlockMouseEvents = false;
 		float m_Time = 0.0f;
 	};
 

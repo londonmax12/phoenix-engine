@@ -1,11 +1,34 @@
 Scene: Untitled
 SceneType: 2D
 Entities:
+  - Entity: 14066740132370060996
+    TagComponent:
+      Tag: Barrel
+    TransformComponent:
+      Translation: [-4.55142403, -4.20306492, 0.018131258]
+      Rotation: [0, 0, 0.137825817]
+      Scale: [0.833185136, 0.999926329, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999899983, 0.999899983, 1]
+      Textured: true
+      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 0.200000003
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+      IsSensor: false
   - Entity: 6166559438793906391
     TagComponent:
       Tag: Barrel
     TransformComponent:
-      Translation: [-4.64026785, -4.29958057, 0.018131258]
+      Translation: [-5.24196005, -3.19629931, 0.018131258]
       Rotation: [0, 0, 0.137825817]
       Scale: [0.833185136, 0.999926329, 1]
     SpriteRendererComponent:
@@ -29,7 +52,7 @@ Entities:
       Tag: Platform
     TransformComponent:
       Translation: [-0.384199977, -4.47853899, 0]
-      Rotation: [0, 0, -3.0228765]
+      Rotation: [0, 0, -3.02287674]
       Scale: [12.7205915, 0.187299058, 1]
     SpriteRendererComponent:
       Color: [0.999923348, 1, 0.999899983, 1]
@@ -95,7 +118,7 @@ Entities:
       Scale: [1, 1, 1]
     CircleRendererComponent:
       Color: [0.999930978, 1, 0.999899983, 1]
-      Thickness: 1
+      Thickness: 0.469999999
       Fade: 0.0260000005
     Rigidbody2DComponent:
       BodyType: Static
@@ -127,29 +150,6 @@ Entities:
       Size: [0.5, 0.5]
       Density: 3
       Friction: 0.469999999
-      Restitution: 0
-      RestitutionThreshold: 0.5
-      IsSensor: false
-  - Entity: 1859780847659228245
-    TagComponent:
-      Tag: Barrel
-    TransformComponent:
-      Translation: [-5.29303265, -3.30304885, 0.018131258]
-      Rotation: [0, 0, 0.137825817]
-      Scale: [0.833185136, 0.999926329, 1]
-    SpriteRendererComponent:
-      Color: [1, 0.999899983, 0.999899983, 1]
-      Textured: true
-      TexturePath: assets\textures\5a00d0860e8525eec2752fd5.png
-      TextureTiling: 1
-    Rigidbody2DComponent:
-      BodyType: Dynamic
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 0.200000003
-      Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
       IsSensor: false

@@ -134,6 +134,7 @@ namespace phx {
 		float Restitution = 0.0f;
 		float RestitutionThreshold = 0.5f;
 		bool IsSensor = false;
+		bool ShowCollider = false;
 
 		// Storage for runtime
 		void* RuntimeFixture = nullptr;
@@ -152,6 +153,7 @@ namespace phx {
 		float Restitution = 0.0f;
 		float RestitutionThreshold = 0.5f;
 		bool IsSensor = false;
+		bool ShowCollider = false;
 
 		// Storage for runtime
 		void* RuntimeFixture = nullptr;

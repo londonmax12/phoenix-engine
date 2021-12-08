@@ -352,7 +352,7 @@ namespace phx
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->SetBlockMouseEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
@@ -366,7 +366,6 @@ namespace phx
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
 
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -387,12 +386,13 @@ namespace phx
 				}
 				else if (ext == ".png" || ext == ".jpg" || ext == ".bmp")
 				{
-					if (m_HoveredEntity.HasComponent<SpriteRendererComponent>())
-					{
-						auto& src = m_HoveredEntity.GetComponent<SpriteRendererComponent>();
-						src.Texture = Texture2D::Create(fsPath.string());
-						src.Path = fsPath.string();
-					}
+					if(m_HoveredEntity)
+						if (m_HoveredEntity.HasComponent<SpriteRendererComponent>())
+						{
+							auto& src = m_HoveredEntity.GetComponent<SpriteRendererComponent>();
+							src.Texture = Texture2D::Create(fsPath.string());
+							src.Path = fsPath.string();
+						}
 				}
 			}		
 
@@ -565,6 +565,12 @@ namespace phx
 		}
 		case (int)Key::GraveAccent:
 		{
+			Entity entity = m_SceneHierarchyPanel.GetSelectedEntity();
+			if (entity)
+			{
+				m_EditorCamera.SetPosition(entity.GetComponent<TransformComponent>().Translation);
+				m_EditorCamera.SetDistance(10.0f);
+			}
 			break;
 		}
 
@@ -657,14 +663,17 @@ namespace phx
 				{
 					auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
 
-					glm::vec3 translation = tc.Translation + glm::vec3(bc2d.Offset, 0.001f);
-					glm::vec3 scale = tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f);
+					if (bc2d.ShowCollider)
+					{
+						glm::vec3 translation = tc.Translation + glm::vec3(bc2d.Offset, 0.001f);
+						glm::vec3 scale = tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f);
 
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-						* glm::scale(glm::mat4(1.0f), scale);
+						glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+							* glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+							* glm::scale(glm::mat4(1.0f), scale);
 
-					Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+						Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+					}
 				}
 			}
 
@@ -675,13 +684,16 @@ namespace phx
 				{
 					auto [tc, cc2d] = view.get<TransformComponent, CircleCollider2DComponent>(entity);
 
-					glm::vec3 translation = tc.Translation + glm::vec3(cc2d.Offset, 0.001f);
-					glm::vec3 scale = tc.Scale * glm::vec3(cc2d.Radius * 2.0f);
+					if (cc2d.ShowCollider)
+					{
+						glm::vec3 translation = tc.Translation + glm::vec3(cc2d.Offset, 0.001f);
+						glm::vec3 scale = tc.Scale * glm::vec3(cc2d.Radius * 2.0f);
 
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::scale(glm::mat4(1.0f), scale);
+						glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+							* glm::scale(glm::mat4(1.0f), scale);
 
-					Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
+						Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.03f / (cc2d.Radius / 2));
+					}	
 				}
 			}
 		}
@@ -829,4 +841,3 @@ namespace phx
 			m_EditorScene->DuplicateEntity(selectedEntity);
 	}
 }
-

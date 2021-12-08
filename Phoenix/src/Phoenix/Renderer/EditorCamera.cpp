@@ -22,7 +22,7 @@ namespace phx {
 	{
 		SetPosition();
 		SetRotation();
-		SetScale();
+		SetDistance();
 	}
 
 	void EditorCamera::SetPosition(glm::vec3 position)
@@ -36,7 +36,7 @@ namespace phx {
 		m_Yaw = Rotation.y;
 	}
 
-	void EditorCamera::SetScale(float scale)
+	void EditorCamera::SetDistance(float scale)
 	{
 		m_Distance = scale;
 	}
@@ -84,17 +84,17 @@ namespace phx {
 
 	void EditorCamera::OnUpdate(DeltaTime dt)
 	{
-		if (Input::IsKeyPressed(PHX_KEY_LEFT_ALT))
+		if (Input::IsKeyPressed(Key::LeftAlt))
 		{
 			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 			m_InitialMousePosition = mouse;
 
-			if (Input::IsMouseButtonPressed(PHX_MOUSE_BUTTON_0))
+			if (Input::IsMouseButtonPressed(Mouse::Button0))
 				MouseRotate(delta);
-			else if (Input::IsMouseButtonPressed(PHX_MOUSE_BUTTON_1))
+			else if (Input::IsMouseButtonPressed(Mouse::Button1))
 				MousePan(delta);
-			else if (Input::IsMouseButtonPressed(PHX_MOUSE_BUTTON_2))
+			else if (Input::IsMouseButtonPressed(Mouse::Button2))
 				MouseZoom(delta.y);
 		}
 
