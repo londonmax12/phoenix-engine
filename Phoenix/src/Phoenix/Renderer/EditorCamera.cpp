@@ -18,6 +18,16 @@ namespace phx {
 		UpdateView();
 	}
 
+	void EditorCamera::Reset()
+	{
+		m_FocalPoint = glm::vec3{ 0, 0, 0 };
+
+		m_Yaw = 0;
+		m_Pitch = 0;
+
+		m_Distance = 10.0f;
+	}
+
 	void EditorCamera::UpdateProjection()
 	{
 		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;

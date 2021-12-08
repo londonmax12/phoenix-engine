@@ -453,7 +453,7 @@ namespace phx {
 				}
 				b2Vec2 force = body->GetLinearVelocity();
 				rb2d.Force = { force.x, force.y };
-
+				
 				const auto& position = body->GetPosition();
 				transform.Translation.x = position.x;
 				transform.Translation.y = position.y;

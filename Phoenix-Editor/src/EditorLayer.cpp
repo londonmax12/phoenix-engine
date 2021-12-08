@@ -564,7 +564,7 @@ namespace phx
 			break;
 		}
 
-		case (int)PHX_KEY_Q:
+		case (int)PHX_KEY_1:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -573,7 +573,7 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_W:
+		case (int)PHX_KEY_2:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -582,7 +582,7 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_E:
+		case (int)PHX_KEY_3:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
@@ -591,12 +591,17 @@ namespace phx
 			break;
 		}
 			
-		case (int)PHX_KEY_R:
+		case (int)PHX_KEY_4:
 		{
 			if (!ImGuizmo::IsUsing())
 			{
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;	
 			}
+			break;
+		}
+		case (int)PHX_KEY_R:
+		{
+			m_EditorCamera.Reset();
 			break;
 		}
 		case (int)PHX_KEY_DELETE:
