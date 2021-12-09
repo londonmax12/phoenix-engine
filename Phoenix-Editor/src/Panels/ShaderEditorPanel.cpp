@@ -58,7 +58,7 @@ namespace phx {
 				std::filesystem::path fsPath = std::filesystem::path(path);
 				std::string ext = fsPath.extension().string();
 
-				if (ext == ".glsl")
+				if (ext == ".vert" || ext == ".frag")
 				{
 					SetContext(std::filesystem::path("assets") / fsPath);
 				}
@@ -80,8 +80,10 @@ namespace phx {
 	void ShaderEditorPanel::Apply()
 	{
 		Save(m_Context);
-		DeleteCache(m_Context.filename().string());
-		Shader::Create(m_Context.string());
+		DeleteCache(m_Context.stem().string() + ".vert");
+		DeleteCache(m_Context.stem().string() + ".frag");
+
+		Shader::Create(m_Context.stem().string(), m_Context.stem().string() + ".vert", m_Context.stem().string() + ".frag");
 	}
 	bool ShaderEditorPanel::DoesCacheExist(std::filesystem::path path)
 	{

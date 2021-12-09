@@ -7,7 +7,8 @@
 
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
-#include "Phoenix/Scene/ScriptableEntity.h"
+
+#include "Phoenix/Scripting/ScriptableEntity.h"
 
 #include "box2d/b2_world.h"
 #include "box2d/b2_body.h"

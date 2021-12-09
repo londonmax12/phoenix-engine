@@ -5,6 +5,11 @@ namespace phx {
 	class ScriptableEntity
 	{
 	public:
+		ScriptableEntity() 
+		{
+
+		}
+
 		virtual ~ScriptableEntity() {}
 
 		template<typename T>

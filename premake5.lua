@@ -302,6 +302,7 @@ project "Phoenix"
 	pchsource "Phoenix/src/phxpch.cpp"
 	
 	VULKAN_SDK = os.getenv("VULKAN_SDK")
+	MONO_PROJECT = os.getenv("MONO_PROJECT")
 
 	LibraryDir = {}
 
@@ -347,12 +348,14 @@ project "Phoenix"
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
 		"%{prj.name}/vendor/ImGuizmo",
-		"VulkanSDK/{%{VULKAN_SDK}/include"
+		"VulkanSDK/{%{VULKAN_SDK}/include",
+		"%{MONO_PROJECT}/include/mono-2.0"
 	}
 
 	libdirs
 	{
-		"Phoenix/libs"
+		"Phoenix/libs",
+		"%{MONO_PROJECT}/lib"
 	}
 
 	links 
@@ -363,6 +366,9 @@ project "Phoenix"
 		"imgui",
 		"Discord",
 		"yaml-cpp",
+
+
+		"mono-2.0-sgen.lib",
 
 		"sndfile.lib",
 		"OpenAL32.lib",
@@ -482,6 +488,9 @@ project "Phoenix-Editor"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	MONO_PROJECT = os.getenv("MONO_PROJECT")
+
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -496,7 +505,8 @@ project "Phoenix-Editor"
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
 		"Phoenix/vendor/entt/include",
-		"Phoenix/vendor/ImGuizmo"
+		"Phoenix/vendor/ImGuizmo",
+		"%{MONO_PROJECT}/include/mono-2.0"
 	}
 
 	links

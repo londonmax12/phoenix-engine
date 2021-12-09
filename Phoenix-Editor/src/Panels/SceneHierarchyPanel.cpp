@@ -339,6 +339,8 @@ namespace phx {
 						if (ImGui::MenuItem("Box Collider 2D"))
 						{
 							m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+							if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
+								m_SelectionContext.AddComponent<Rigidbody2DComponent>();
 							ImGui::CloseCurrentPopup();
 						}
 					}
@@ -347,6 +349,8 @@ namespace phx {
 						if (ImGui::MenuItem("Circle Collider 2D"))
 						{
 							m_SelectionContext.AddComponent<CircleCollider2DComponent>();
+							if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
+								m_SelectionContext.AddComponent<Rigidbody2DComponent>();
 							ImGui::CloseCurrentPopup();
 						}
 					}
@@ -402,6 +406,7 @@ namespace phx {
 					ImGui::Text("Projection");
 
 					ImGui::NextColumn();
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth());
 					if (ImGui::BeginCombo("##Projection", currentProjectionTypeString))
 					{
 						for (int i = 0; i < 2; i++)
@@ -417,6 +422,7 @@ namespace phx {
 						}
 						ImGui::EndCombo();
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					ImGui::Columns(1);
 
@@ -535,6 +541,7 @@ namespace phx {
 					ImGui::Text("Body Type");
 
 					ImGui::NextColumn();
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth());
 					if (ImGui::BeginCombo("##Body Type", currentBodyTypeString))
 					{
 						for (int i = 0; i < 3; i++)
@@ -551,7 +558,8 @@ namespace phx {
 						}
 
 						ImGui::EndCombo();
-					}
+					}  
+					ImGui::PopItemWidth();
 					ImGui::Columns(1);
 					DrawCheckbox("Fixed Rotation", &component.FixedRotation);
 				});
@@ -560,13 +568,17 @@ namespace phx {
 		{
 			DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
 				{
+					if (ImGui::TreeNodeEx("Physics Settings", ImGuiTreeNodeFlags_SpanAvailWidth))
+					{
+						DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
+						DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+						DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+						DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+						ImGui::TreePop();
+					}
+					DrawVec2Controls("Size", component.Size, 0.5f);
 					DrawVec2Controls("Offset", component.Offset);
-					DrawVec2Controls("Size", component.Size, 0.5f); \
 					DrawGap();
-					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
-					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
-					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
-					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 					DrawCheckbox("Is Sensor", &component.IsSensor);
 					DrawCheckbox("Show Collider", &component.ShowCollider);
 				});
@@ -576,13 +588,17 @@ namespace phx {
 		{
 			DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
 				{
+					if (ImGui::TreeNodeEx("Physics Settings", ImGuiTreeNodeFlags_SpanAvailWidth))
+					{
+						DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
+						DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+						DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+						DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+						ImGui::TreePop();
+					}
+					DrawDragFloat("Radius", &component.Radius);
 					DrawVec2Controls("Offset", component.Offset);
 					DrawGap();
-					DrawDragFloat("Radius", &component.Radius);
-					DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
-					DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
-					DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
-					DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 					DrawCheckbox("Is Sensor", &component.IsSensor);
 					DrawCheckbox("Show Collider", &component.ShowCollider);
 				});

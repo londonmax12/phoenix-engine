@@ -38,7 +38,7 @@ namespace phx {
 
 		void SetPosition(glm::vec3 position = {0,0,0});
 		void SetRotation(glm::vec2 Rotation = {0,0});
-		void SetDistance(float scale = 10.0f);
+		void SetDistance(float scale = 50.0f);
 	private:
 		void UpdateProjection();
 		void UpdateView();
@@ -63,7 +63,7 @@ namespace phx {
 
 		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
 
-		float m_Distance = 10.0f;
+		float m_Distance = 50.0f;
 		float m_Pitch = 0.0f, m_Yaw = 0.0f;
 
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;

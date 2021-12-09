@@ -173,9 +173,9 @@ namespace phx
 			samplers[i] = i;
 
 		// Shader creation
-		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
-		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
+		s_Data.QuadShader = Shader::Create("Renderer2D_Quad", "assets/shaders/Renderer2D_Quad.vert", "assets/shaders/Renderer2D_Quad.frag");
+		s_Data.CircleShader = Shader::Create("Renderer2D_Circle", "assets/shaders/Renderer2D_Circle.vert", "assets/shaders/Renderer2D_Circle.frag");
+		s_Data.LineShader = Shader::Create("Renderer2D_Line", "assets/shaders/Renderer2D_Line.vert", "assets/shaders/Renderer2D_Line.frag");
 
 		// Set all texture slots to 0
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;

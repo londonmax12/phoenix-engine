@@ -1,12 +1,15 @@
 #pragma once
+//----------------------------------------//
+//				 PHOENIX				  //
+//----------------------------------------//
 
 //--------------Application---------------
 #include "Phoenix/Application/Base.h"
 #include "Phoenix/Application/Application.h"
 //----------------------------------------
 
-//--------------Discord-RPC---------------
-#include "Phoenix/Application/DiscordRPC.h"
+//--------------Scripting-----------------
+#include "Phoenix/Scripting/ScriptableEntity.h"
 //----------------------------------------
 
 //---------------Logging------------------
@@ -32,7 +35,6 @@
 #include "Phoenix/Scene/Scene.h"
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
-#include "Phoenix/Scene/ScriptableEntity.h"
 #include "Phoenix/Scene/SceneSerializer.h"
 //----------------------------------------
 

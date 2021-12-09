@@ -380,7 +380,9 @@ namespace phx {
 		ImGui::Text(label.c_str());
 
 		ImGui::NextColumn();
-		bool result = ImGui::DragFloat("##DragFloat", value, v_speed, v_min, v_max, format);
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		bool result = ImGui::DragFloat("##DragFloat", value, v_speed, v_min, v_max, format, 0, 25);
+		ImGui::PopItemWidth();
 
 		ImGui::Columns(1);
 		ImGui::PopID();

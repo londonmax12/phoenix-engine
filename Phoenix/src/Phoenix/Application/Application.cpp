@@ -5,8 +5,6 @@
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Renderer.h"
 
-#include "Phoenix/Application/DiscordRPC.h"
-
 #include <GLFW/glfw3.h>
 
 namespace phx {
@@ -98,7 +96,6 @@ namespace phx {
 
 			m_Window->OnUpdate();
 		}
-		DiscordRPC::Shutdown();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

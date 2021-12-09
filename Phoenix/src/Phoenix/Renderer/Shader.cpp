@@ -16,12 +16,12 @@ namespace phx {
 		PHX_CORE_ASSERT(false, "No render API")
 			return nullptr;
 	}
-	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	Ref<Shader> Shader::Create(const std::string& name, const std::string& filepathVertex, const std::string& filepathFragment)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: PHX_CORE_ASSERT(false, "Not supported");  return nullptr;
-		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLShader>(name, filepathVertex, filepathFragment);
 		}
 
 		PHX_CORE_ASSERT(false, "No render API")

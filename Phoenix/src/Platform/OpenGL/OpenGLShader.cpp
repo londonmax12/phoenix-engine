@@ -114,7 +114,26 @@ namespace phx {
 		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& filepathVert, const std::string& filepathFrag)
+		: m_Name(name), m_FilePath(filepathFrag)
+	{
+		std::string vertexSrc = ReadFile(filepathVert);
+		std::string fragmentSrc = ReadFile(filepathFrag);
+
+		std::unordered_map<GLenum, std::string> sources;
+		sources[GL_VERTEX_SHADER] = vertexSrc;
+		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+
+		{
+			Timer timer;
+			CompileOrGetVulkanBinaries(sources);
+			CompileOrGetOpenGLBinaries();
+			CreateProgram();
+			PHX_CORE_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
+		}
+	}
+
+	/*OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
 		PHX_PROFILE_FUNCTION();
@@ -126,7 +145,7 @@ namespace phx {
 		CompileOrGetVulkanBinaries(sources);
 		CompileOrGetOpenGLBinaries();
 		CreateProgram();
-	}
+	}*/
 
 	OpenGLShader::~OpenGLShader()
 	{
@@ -209,7 +228,7 @@ namespace phx {
 		for (auto&& [stage, source] : shaderSources)
 		{
 			std::filesystem::path shaderFilePath = m_FilePath;
-			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
+			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.stem().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open())
@@ -266,7 +285,7 @@ namespace phx {
 		for (auto&& [stage, spirv] : m_VulkanSPIRV)
 		{
 			std::filesystem::path shaderFilePath = m_FilePath;
-			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
+			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.stem().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open())

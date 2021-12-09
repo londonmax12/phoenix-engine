@@ -45,8 +45,6 @@ namespace phx {
 
 		OrthographicCameraController m_CameraController;
 
-		Ref<DiscordRPC> m_RPC;
-
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_SquareVA;
 		Ref<Framebuffer> m_Framebuffer;
