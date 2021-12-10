@@ -117,6 +117,8 @@ namespace phx {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& filepathVert, const std::string& filepathFrag)
 		: m_Name(name), m_FilePath(filepathFrag)
 	{
+		Utils::CreateCacheDirectoryIfNeeded();
+
 		std::string vertexSrc = ReadFile(filepathVert);
 		std::string fragmentSrc = ReadFile(filepathFrag);
 

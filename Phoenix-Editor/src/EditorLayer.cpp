@@ -28,6 +28,13 @@ namespace phx
 	{
 		PHX_PROFILE_FUNCTION();
 		
+		m_Script = m_LuaInstance.Create();
+
+		m_Script->LoadFile("assets/scripts/Test.lua");
+		m_Script->Run();
+
+		PHX_CORE_INFO(m_Script->GetGlobalInt("i"));
+
 		m_PlayIcon = Texture2D::Create("resources/icons/editor-layer/play-icon.png");
 		m_StopIcon = Texture2D::Create("resources/icons/editor-layer/stop-icon.png");
 		m_PlayTestIcon = Texture2D::Create("resources/icons/editor-layer/playtest-icon.png");

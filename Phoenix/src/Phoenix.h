@@ -9,6 +9,7 @@
 //----------------------------------------
 
 //--------------Scripting-----------------
+#include "Phoenix/Scripting/LuaInstance.h"
 #include "Phoenix/Scripting/ScriptableEntity.h"
 //----------------------------------------
 

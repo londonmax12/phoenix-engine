@@ -302,7 +302,6 @@ project "Phoenix"
 	pchsource "Phoenix/src/phxpch.cpp"
 	
 	VULKAN_SDK = os.getenv("VULKAN_SDK")
-	MONO_PROJECT = os.getenv("MONO_PROJECT")
 
 	LibraryDir = {}
 
@@ -315,7 +314,7 @@ project "Phoenix"
 	Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
 	Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
 	Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
-	
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -329,12 +328,16 @@ project "Phoenix"
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.h",
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp",
 		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.cpp",
-		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.h"
+		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.h",
+		"%{prj.name}/vendor/Lua/**.h",
+		"%{prj.name}/vendor/Lua/**.hpp",
+		"%{prj.name}/vendor/Lua/**.c"
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",
+		"%{prj.name}/vendor/",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLFW/include",
 		"%{prj.name}/vendor/GLAD/include",
@@ -348,14 +351,12 @@ project "Phoenix"
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
 		"%{prj.name}/vendor/ImGuizmo",
-		"VulkanSDK/{%{VULKAN_SDK}/include",
-		"%{MONO_PROJECT}/include/mono-2.0"
+		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
 
 	libdirs
 	{
 		"Phoenix/libs",
-		"%{MONO_PROJECT}/lib"
 	}
 
 	links 
@@ -367,14 +368,13 @@ project "Phoenix"
 		"Discord",
 		"yaml-cpp",
 
-
-		"mono-2.0-sgen.lib",
-
 		"sndfile.lib",
 		"OpenAL32.lib",
 
 		"opengl32.lib"
 	}
+	filter "files:***.c"
+		flags { "NoPCH" }
 
 	filter "files:vendor/ImGuizmo/ImGuizmo.cpp"
 		flags { "NoPCH" }
@@ -443,10 +443,11 @@ project "Sandbox"
 
 	includedirs
 	{
+		"Phoenix/src",
+		"Phoenix/vendor/",
 		"Phoenix/vendor/spdlog/include",
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
-		"Phoenix/src",
 		"Phoenix/vendor/entt/include"
 	}
 
@@ -505,8 +506,7 @@ project "Phoenix-Editor"
 		"Phoenix/vendor/glm",
 		"Phoenix/vendor/imgui",
 		"Phoenix/vendor/entt/include",
-		"Phoenix/vendor/ImGuizmo",
-		"%{MONO_PROJECT}/include/mono-2.0"
+		"Phoenix/vendor/ImGuizmo"
 	}
 
 	links

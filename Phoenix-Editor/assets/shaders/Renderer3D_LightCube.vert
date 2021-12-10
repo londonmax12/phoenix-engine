@@ -25,7 +25,7 @@ layout (location = 0) out VertexOutput Output;
 layout (location = 3) out flat float v_TexIndex;
 layout (location = 4) out flat int v_EntityID;
 layout (location = 5) out flat vec3 v_Normal;
-layout (locarion = 6) out flat vec3 v_Pos;
+layout (location = 6) out flat vec3 v_Pos;
 
 void main()
 {
@@ -40,3 +40,6 @@ void main()
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 	v_Pos = a_Position;
 }
+
+
+

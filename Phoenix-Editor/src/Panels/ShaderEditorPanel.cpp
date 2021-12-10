@@ -83,7 +83,11 @@ namespace phx {
 		DeleteCache(m_Context.stem().string() + ".vert");
 		DeleteCache(m_Context.stem().string() + ".frag");
 
-		Shader::Create(m_Context.stem().string(), m_Context.stem().string() + ".vert", m_Context.stem().string() + ".frag");
+		std::string fullname = m_Context.string();
+		size_t lastindex = fullname.find_last_of(".");
+		std::string rawname = fullname.substr(0, lastindex);
+
+		Shader::Create(m_Context.stem().string(), rawname + ".vert", rawname + ".frag");
 	}
 	bool ShaderEditorPanel::DoesCacheExist(std::filesystem::path path)
 	{

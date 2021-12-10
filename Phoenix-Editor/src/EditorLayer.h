@@ -9,6 +9,8 @@
 #include "Panels/ShaderEditorPanel.h"
 #include "Panels/ConsolePanel.h"
 
+#include <string>
+
 namespace phx {
 	class EditorLayer : public Layer
 	{
@@ -92,5 +94,8 @@ namespace phx {
 
 		// Resources
 		Ref<Texture2D> m_PlayIcon, m_StopIcon, m_PlayTestIcon;
+
+		LuaInstance m_LuaInstance;
+		Ref<LuaScript> m_Script;
 	};
 }
