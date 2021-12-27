@@ -9,7 +9,6 @@
 //----------------------------------------
 
 //--------------Scripting-----------------
-#include "Phoenix/Scripting/LuaInstance.h"
 #include "Phoenix/Scripting/ScriptableEntity.h"
 //----------------------------------------
 
@@ -37,6 +36,8 @@
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
 #include "Phoenix/Scene/SceneSerializer.h"
+
+#include "Phoenix/Scene/Skybox.h"
 //----------------------------------------
 
 //----------------Utils-------------------
@@ -46,7 +47,6 @@
 //---------------Renderer-----------------
 #include "Phoenix/Renderer/Renderer.h"
 #include "Phoenix/Renderer/Renderer2D.h"
-#include "Phoenix/Renderer/Renderer3D.h"
 #include "Phoenix/Renderer/RenderCommand.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Shader.h"

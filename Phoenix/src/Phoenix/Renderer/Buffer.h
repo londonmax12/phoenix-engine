@@ -2,6 +2,11 @@
 #include "Phoenix/Application/Base.h"
 
 namespace phx {
+	struct Indice
+	{
+		uint32_t v1, v2, v3;
+	};
+
 	enum class ShaderDataType
 	{
 		None = 0, Float, vec2, vec3, vec4, mat3, mat4, Int, int2, int3, int4, Bool
@@ -124,5 +129,6 @@ namespace phx {
 		virtual uint32_t GetCount() const = 0;
 
 		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(Indice* indices, uint32_t count);
 	};
 }

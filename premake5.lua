@@ -351,12 +351,13 @@ project "Phoenix"
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
 		"%{prj.name}/vendor/ImGuizmo",
+		"%{prj.name}/vendor/assimp/include",
 		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
 
 	libdirs
 	{
-		"Phoenix/libs",
+		"Phoenix/lib",
 	}
 
 	links 
@@ -370,6 +371,7 @@ project "Phoenix"
 
 		"sndfile.lib",
 		"OpenAL32.lib",
+		"assimp.lib",
 
 		"opengl32.lib"
 	}

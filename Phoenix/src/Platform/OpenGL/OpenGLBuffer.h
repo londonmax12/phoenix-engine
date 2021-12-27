@@ -26,6 +26,8 @@ namespace phx {
 	{
 	public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+		OpenGLIndexBuffer(Indice* indices, uint32_t count);
+
 		virtual ~OpenGLIndexBuffer();
 
 		virtual void Bind() const;

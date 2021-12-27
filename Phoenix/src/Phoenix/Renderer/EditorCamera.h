@@ -9,6 +9,11 @@
 
 namespace phx {
 
+	enum class CameraMode
+	{
+		NONE, FLYCAM, ARCBALL
+	};
+
 	class EditorCamera : public Camera
 	{
 	public:
@@ -40,6 +45,7 @@ namespace phx {
 		void SetRotation(glm::vec2 Rotation = {0,0});
 		void SetDistance(float scale = 50.0f);
 	private:
+		CameraMode m_CameraMode = CameraMode::FLYCAM;
 		void UpdateProjection();
 		void UpdateView();
 
@@ -55,7 +61,7 @@ namespace phx {
 		float RotationSpeed() const;
 		float ZoomSpeed() const;
 
-		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
+		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 10000.0f;
 
 		glm::mat4 m_ViewMatrix;
 		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
@@ -63,10 +69,11 @@ namespace phx {
 
 		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
 
+		float m_Speed = 10.0f;
+
 		float m_Distance = 50.0f;
 		float m_Pitch = 0.0f, m_Yaw = 0.0f;
 
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 	};
-
 }

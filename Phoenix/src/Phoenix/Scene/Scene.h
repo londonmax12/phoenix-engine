@@ -2,7 +2,10 @@
 
 #include "Phoenix/Application/UUID.h"
 #include "Phoenix/Renderer/EditorCamera.h"
+#include "Phoenix/Scene/Skybox.h"
 #include "Phoenix/Time/DeltaTime.h"
+
+#include <vector>
 
 #include "entt.hpp"
 
@@ -30,8 +33,15 @@ namespace phx {
 		SceneType GetSceneType() { return m_SceneType; }
 		void SetSceneType(SceneType type) { m_SceneType = type; }
 
+		void SetGravity(float x, float y);
+
 		void OnRuntimeStart();
 		void OnRuntimeStop();
+
+		void Render2D();
+		void Render3D();
+
+		void UpdateScripts();
 
 		void OnUpdateRuntime(DeltaTime dt);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
@@ -49,13 +59,18 @@ namespace phx {
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
-	private:
+
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+		
+		float m_GravityX = 0.0f;
+		float m_GravityY = -9.8f;
 
 		b2World* m_PhysicsWorld = nullptr;
 
-		SceneType m_SceneType;
+		SceneType m_SceneType = SceneType::Scene2D;
+
+		SkyBox m_Skybox = SkyBox("assets/skybox/Skybox_Back.bmp");
 
 		friend class Entity;
 		friend class SceneSerializer;

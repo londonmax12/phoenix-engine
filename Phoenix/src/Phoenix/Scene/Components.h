@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Phoenix/Scene/SceneCamera.h" 
+
 #include "Phoenix/Application/UUID.h"
+
 #include "Phoenix/Renderer/Texture.h"
+#include "Phoenix/Renderer/Mesh.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -164,18 +167,13 @@ namespace phx {
 
 
 
-
-	struct CubeRendererComponent
+	struct MeshComponent
 	{
-		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
-		Ref<Texture2D> Texture;
-		float TilingFactor = 1.0f;
-
+		Mesh Mesh;
 		std::string Path = std::string();
 
-		CubeRendererComponent() = default;
-		CubeRendererComponent(const CubeRendererComponent&) = default;
-		CubeRendererComponent(const glm::vec4& color)
-			: Color(color) {}
+		MeshComponent() = default;
+		MeshComponent(const MeshComponent&) = default;
+		MeshComponent(const std::string filepath) : Mesh(phx::Mesh(filepath)), Path(std::filesystem::path(filepath).string()) {}
 	};
 }

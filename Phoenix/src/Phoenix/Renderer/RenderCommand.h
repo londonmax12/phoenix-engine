@@ -21,10 +21,13 @@ namespace phx {
 		{
 			s_RendererAPI->Clear();
 		}
-
 		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
+		}
+		static void DrawIndexed(unsigned int count)
+		{
+			s_RendererAPI->DrawIndexed(count);
 		}
 		static void DrawLines(const std::shared_ptr<VertexArray>& vertexArray, uint32_t vertexCount)
 		{

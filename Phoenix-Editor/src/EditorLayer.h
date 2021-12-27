@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "Phoenix/Renderer/Mesh.h"
+
 namespace phx {
 	class EditorLayer : public Layer
 	{
@@ -85,6 +87,8 @@ namespace phx {
 		ShaderEditorPanel m_ShaderEditorPanel;
 		ConsolePanel m_ConsolePanel;
 
+		float m_GravityX = 0.0f;
+		float m_GravityY = -9.8f;
 		enum class SceneState
 		{
 			Edit = 0, Play = 1, PhysicTest = 2
@@ -94,8 +98,5 @@ namespace phx {
 
 		// Resources
 		Ref<Texture2D> m_PlayIcon, m_StopIcon, m_PlayTestIcon;
-
-		LuaInstance m_LuaInstance;
-		Ref<LuaScript> m_Script;
 	};
 }

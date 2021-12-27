@@ -84,11 +84,13 @@ namespace phx {
 
 	void EditorCamera::OnUpdate(DeltaTime dt)
 	{
+		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
+		glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
+		m_InitialMousePosition = mouse;
+
 		if (Input::IsKeyPressed(Key::LeftAlt))
 		{
-			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
-			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
-			m_InitialMousePosition = mouse;
+			m_CameraMode = CameraMode::ARCBALL;
 
 			if (Input::IsMouseButtonPressed(Mouse::Button0))
 				MouseRotate(delta);
@@ -97,7 +99,33 @@ namespace phx {
 			else if (Input::IsMouseButtonPressed(Mouse::Button2))
 				MouseZoom(delta.y);
 		}
+		else
+		{
+			m_CameraMode = CameraMode::FLYCAM;
+			if (Input::IsMouseButtonPressed(Mouse::Button1))
+			{
+				MouseRotate(delta);
+			}
 
+			float speed = m_CameraMode == CameraMode::ARCBALL ? m_Speed / 2 : Input::IsKeyPressed(Key::LeftShift) ? m_Speed * 2 : m_Speed;
+
+			if (Input::IsKeyPressed(Key::A))
+			{
+				m_FocalPoint -= GetRightDirection() * (speed * dt);
+			}
+			if (Input::IsKeyPressed(Key::D))
+			{
+				m_FocalPoint += GetRightDirection() * (speed * dt);
+			}
+			if (Input::IsKeyPressed(Key::W))
+			{
+				m_FocalPoint += GetForwardDirection() * (speed * dt);
+			}
+			if (Input::IsKeyPressed(Key::S))
+			{
+				m_FocalPoint -= GetForwardDirection() * (speed * dt);
+			}
+		}
 		UpdateView();
 	}
 

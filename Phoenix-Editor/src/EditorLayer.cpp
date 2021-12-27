@@ -2,6 +2,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include "Phoenix/ImGui/GuiWidgets.h"
 #include "Phoenix/Math/Math.h"
 
 #include <chrono>
@@ -27,13 +28,7 @@ namespace phx
 	void EditorLayer::OnAttach()
 	{
 		PHX_PROFILE_FUNCTION();
-		
-		m_Script = m_LuaInstance.Create();
-
-		m_Script->LoadFile("assets/scripts/Test.lua");
-		m_Script->Run();
-
-		PHX_CORE_INFO(m_Script->GetGlobalInt("i"));
+	
 
 		m_PlayIcon = Texture2D::Create("resources/icons/editor-layer/play-icon.png");
 		m_StopIcon = Texture2D::Create("resources/icons/editor-layer/stop-icon.png");
@@ -47,6 +42,13 @@ namespace phx
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		/*m_Script = m_ActiveScene->CreateScript();
+
+		m_Script->LoadFile("assets/scripts/Test.lua");
+		m_Script->Run();
+
+		PHX_CORE_INFO(m_Script->GetGlobalInt("i"));*/
+
 		auto commandLineArgs = Application::Get().GetCommandLineArgs();
 		if (commandLineArgs.Count > 1)
 		{
@@ -57,40 +59,10 @@ namespace phx
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		NewScene(Scene::SceneType::Scene2D, true);
+		NewScene(Scene::SceneType::Scene3D, true);
 
-		/*Entity entity = m_ActiveScene->CreateEntity("Red Square");
-		entity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-		class Controller : public ScriptableEntity
-		{
-		public:
-			virtual void OnCreate() override
-			{
-			}
-
-			virtual void OnDestroy() override
-			{
-			}
-
-			virtual void OnUpdate(DeltaTime dt) override
-			{
-				auto& rb2d = GetComponent<Rigidbody2DComponent>();
-				float speed = 5.0f;
-
-				if (Input::IsKeyPressed(Key::A))
-					if (rb2d.Force.x > -5)
-						rb2d.ApplyForce({ -(speed * dt), 0 });
-				if (Input::IsKeyPressed(Key::D))
-					if (rb2d.Force.x < 5)
-						rb2d.ApplyForce({ (speed * dt), 0 });				
-				if (Input::IsKeyPressed(Key::W))
-						rb2d.ApplyForce({ 0, (speed * dt) });
-				if (Input::IsKeyPressed(Key::S))
-					rb2d.ApplyForce({ 0, -(speed * dt) });
-			}
-		};
-		entity.AddComponent<NativeScriptComponent>().Bind<Controller>();*/
+		Entity entity = m_ActiveScene->CreateEntity("katana");
+		entity.AddComponent<MeshComponent>("assets/meshes/Katana.fbx");
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
@@ -119,7 +91,6 @@ namespace phx
 
 
 		Renderer2D::ResetStats();
-		Renderer3D::ResetStats();
 
 		m_Framebuffer->Bind();
 		RenderCommand::ClearColor({ 0.12, 0.12, 0.12, 1 });
@@ -238,7 +209,7 @@ namespace phx
 					}
 					if (ImGui::MenuItem("3D Scene", "Ctrl+N"))
 					{
-						NewScene(Scene::SceneType::Scene3D);
+						NewScene(Scene::SceneType::Scene3D, true);
 					}	
 					ImGui::EndMenu();
 				}
@@ -308,8 +279,14 @@ namespace phx
 
 		//ImGui::ShowDemoWindow();
 
-		ImGui::Begin("Settings");
-		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+		ImGui::Begin("Scene Settings");
+		ImGui::Text("Physics");
+		ImGui::Separator();
+		DrawCheckbox("Show Hitboxes", &m_ShowPhysicsColliders);
+		if (DrawDragFloat("Scene Gravity X", &m_GravityX))
+			m_ActiveScene->SetGravity(m_GravityX, m_GravityY);
+		if (DrawDragFloat("Scene Gravity Y", &m_GravityY))
+			m_ActiveScene->SetGravity(m_GravityX, m_GravityY);
 		ImGui::End();
 
 		if (m_ShowMetrics)
@@ -321,7 +298,7 @@ namespace phx
 				highfps = fps;
 
 			auto stats = Renderer2D::GetStats();
-			auto stats3d = Renderer3D::GetStats();
+			//auto stats3d = Renderer3D::GetStats();
 
 			ImGui::Text("FPS: %.0f", fps);
 			ImGui::SameLine();
@@ -330,16 +307,19 @@ namespace phx
 			if (ImGui::Button("Reset"))
 				highfps = 0;
 			ImGui::Separator();
+			std::string renderer = RendererAPI::GetCapabilities().Renderer;
+			std::string ven = RendererAPI::GetCapabilities().Vendor;
+			std::string ver = RendererAPI::GetCapabilities().Version;
+			ImGui::Text("Renderer Stats");
+			ImGui::Text(std::string("Renderer: " + renderer).c_str());
+			ImGui::Text(std::string("Vendor: " + ven).c_str());
+			ImGui::Text(std::string("Version: " + ver).c_str());
+			ImGui::Separator();
 			ImGui::Text("Renderer2D Stats");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.QuadCount);
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-			ImGui::Separator();
-
-			ImGui::Text("Renderer3D Stats");
-			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-			ImGui::Text("Cubes: %d", stats.QuadCount);
 			ImGui::Separator();
 
 			ImGui::Text("Scene Stats");
@@ -576,7 +556,7 @@ namespace phx
 			if (entity)
 			{
 				m_EditorCamera.SetPosition(entity.GetComponent<TransformComponent>().Translation);
-				m_EditorCamera.SetDistance(10.0f);
+				m_EditorCamera.SetDistance(40.0f);
 			}
 			break;
 		}
@@ -710,6 +690,7 @@ namespace phx
 
 	void EditorLayer::NewScene(Scene::SceneType type, bool AddCamera)
 	{
+		m_EditorCamera.Reset();
 		switch (type)
 		{
 		case phx::Scene::SceneType::Scene2D:
@@ -719,7 +700,6 @@ namespace phx
 		}
 		case phx::Scene::SceneType::Scene3D:
 		{
-			Renderer3D::Init();
 			break;
 		}
 		}
@@ -795,7 +775,6 @@ namespace phx
 			}
 			case phx::Scene::SceneType::Scene3D:
 			{
-				Renderer3D::Init();
 				break;
 			}
 			}

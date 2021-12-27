@@ -17,7 +17,6 @@ namespace phx {
 
 	SceneHierarchyPanel::SceneHierarchyPanel()
 	{
-		//m_Alstolfo = Texture2D::Create("resources/icons/alstolfo.png");
 	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
@@ -129,12 +128,46 @@ namespace phx {
 						}
 						case Scene::SceneType::Scene3D:
 						{
+							if (ImGui::BeginMenu("2D Objects"))
+							{
+								if (ImGui::MenuItem("Plane Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Plane Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Plane.fbx");
+								}
+								ImGui::EndMenu();
+							}
 							if (ImGui::BeginMenu("3D Objects"))
 							{
 								if (ImGui::MenuItem("Cube Object"))
 								{
 									Entity& newEntity = m_Context->CreateEntity("Cube Object");
-									newEntity.AddComponent<CubeRendererComponent>();
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Cube.fbx");
+								}
+								if (ImGui::MenuItem("Sphere Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Sphere Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Sphere.fbx");
+								}
+								if (ImGui::MenuItem("Cylinder Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Cylinder Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Cylinder.fbx");
+								}
+								if (ImGui::MenuItem("Capsule Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Capsule Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Capsule.fbx");
+								}
+								if (ImGui::MenuItem("Cone Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Cone Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Cone.fbx");
+								}
+								if (ImGui::MenuItem("Torus Object"))
+								{
+									Entity& newEntity = m_Context->CreateEntity("Torus Object");
+									newEntity.AddComponent<MeshComponent>("resources/meshes/Torus.fbx");
 								}
 								ImGui::EndMenu();
 							}
@@ -360,15 +393,14 @@ namespace phx {
 			}
 			case Scene::SceneType::Scene3D:
 			{
-
-				if (!m_SelectionContext.HasComponent<CubeRendererComponent>())
+				/*if (!m_SelectionContext.HasComponent<MeshComponent>())
 				{
-					if (ImGui::MenuItem("Cube Renderer"))
+					if (ImGui::MenuItem("Mesh"))
 					{
-						m_SelectionContext.AddComponent<CubeRendererComponent>();
+						m_SelectionContext.AddComponent<MeshComponent>();
 						ImGui::CloseCurrentPopup();
 					}
-				}
+				}*/ 
 				break;
 			}
 			}
@@ -468,9 +500,7 @@ namespace phx {
 					ImGui::SetColumnWidth(0, 100.0f);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
 					ImGui::Text("Texture");
-
-					ImGui::NextColumn();
-					
+					ImGui::NextColumn();		
 					if(!component.Path.empty())
 						ImGui::Button(component.Path.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
 					else
@@ -494,7 +524,6 @@ namespace phx {
 
 						ImGui::EndDragDropTarget();
 					}
-
 					ImGui::Columns(1);
 
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
@@ -604,37 +633,34 @@ namespace phx {
 				});
 		}
 
-
-
-		if (entity.HasComponent<CubeRendererComponent>())
+		if (entity.HasComponent<MeshComponent>())
 		{
-			DrawComponent<CubeRendererComponent>("Cube Renderer", entity, [](auto& component)
+			DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)
 				{
-					DrawVec4ColorControls("Color", component.Color);
-					DrawGap();
-					DrawButton("Texture");
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, 100.0f);
+					ImGui::Text("3D Object");
+					ImGui::NextColumn();
+					if (!component.Path.empty())
+						ImGui::Button(component.Path.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
+					else
+						ImGui::Button("Drag File", ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
+
 					if (ImGui::BeginDragDropTarget())
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 						{
 							const wchar_t* path = (const wchar_t*)payload->Data;
-							std::filesystem::path texturePath = std::filesystem::path(s_AssetPath) / path;
-							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
-							if (texture->IsLoaded())
-							{
-								component.Texture = texture;
-								component.Path = texturePath.string();
-							}
-							else
-								PHX_CORE_WARN("Could not load texture {0}", texturePath.filename().string());
+							std::filesystem::path filepath = std::filesystem::path(s_AssetPath) / path;
+
+							component.Mesh = Mesh(filepath.string());
+							component.Path = filepath.string();
 						}
 
 						ImGui::EndDragDropTarget();
 					}
-
-					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
+					ImGui::Columns(1);
 				});
 		}
 	}
-
 }

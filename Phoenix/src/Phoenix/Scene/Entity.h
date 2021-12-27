@@ -69,28 +69,7 @@ namespace phx {
 			return !(*this == other);
 		}
 
-		/*void AddChild(Ref<Entity> entity) {
-			m_Children.push_back(entity);
-		}
-		std::vector<Ref<Entity>> GetChildren() {
-			return m_Children;
-		}
-		int ChilrenCount() {
-			return m_Children.size();
-		}
-		bool IsChild() {
-			if (m_Parent != nullptr)
-				return true;
-			else
-				return false;
-		}
-		Ref<Entity> GetParent() {
-			return m_Parent;
-		}*/
 	private:
-		/*std::vector<Ref<Entity>> m_Children;
-		Ref<Entity> m_Parent{};*/
-
 		entt::entity m_EntityHandle{ entt::null };
 		Scene* m_Scene;
 	};

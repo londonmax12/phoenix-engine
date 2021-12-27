@@ -298,33 +298,6 @@ namespace phx {
 			out << YAML::EndMap; // CircleCollider2DComponent
 		}
 
-
-		// 3D
-
-		if (entity.HasComponent<CubeRendererComponent>())
-		{
-			out << YAML::Key << "CubeRendererComponent";
-			out << YAML::BeginMap; // CubeRendererComponent
-
-			auto& cubeRendererComponent = entity.GetComponent<CubeRendererComponent>();
-
-
-
-			out << YAML::Key << "Color" << YAML::Value << cubeRendererComponent.Color;
-			if (!cubeRendererComponent.Path.empty())
-			{
-				out << YAML::Key << "Textured" << YAML::Value << true;
-				out << YAML::Key << "TexturePath" << YAML::Value << cubeRendererComponent.Path;
-			}
-			else
-			{
-				out << YAML::Key << "Textured" << YAML::Value << false;
-			}
-			out << YAML::Key << "TextureTiling" << YAML::Value << cubeRendererComponent.TilingFactor;
-
-			out << YAML::EndMap; // CubeRendererComponent
-		}
-
 		out << YAML::EndMap; // Entity
 	}
 
@@ -476,20 +449,6 @@ namespace phx {
 					cc2d.Restitution = circleCollider2DComponent["Restitution"].as<float>();
 					cc2d.RestitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
 					cc2d.IsSensor = circleCollider2DComponent["IsSensor"].as<bool>();
-				}
-
-
-				auto cubeRendererComponent = entity["CubeRendererComponent"];
-				if (cubeRendererComponent)
-				{
-					auto& src = deserializedEntity.AddComponent<CubeRendererComponent>();
-					src.Color = cubeRendererComponent["Color"].as<glm::vec4>();
-					if (cubeRendererComponent["Textured"].as<bool>())
-					{
-						src.Texture = Texture2D::Create(cubeRendererComponent["TexturePath"].as<std::string>());
-						src.Path = cubeRendererComponent["TexturePath"].as<std::string>();
-					}
-					src.TilingFactor = cubeRendererComponent["TextureTiling"].as<float>();
 				}
 			}
 		}

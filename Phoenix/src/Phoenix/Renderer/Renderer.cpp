@@ -2,7 +2,6 @@
 #include "Renderer.h"
 
 #include "Phoenix/Renderer/Renderer2D.h"
-#include "Phoenix/Renderer/Renderer3D.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 

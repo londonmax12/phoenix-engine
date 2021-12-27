@@ -4,6 +4,16 @@
 #include <../vendor/glm/glm/glm.hpp>
 
 namespace phx {
+	struct RenderAPICapabilities
+	{
+		std::string Vendor;
+		std::string Renderer;
+		std::string Version;
+
+		int MaxSamples;
+		float MaxAnisotropy;
+	};
+
 	class RendererAPI
 	{
 	public:
@@ -19,7 +29,15 @@ namespace phx {
 		virtual void ClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 
+		static RenderAPICapabilities& GetCapabilities()
+		{
+			static RenderAPICapabilities capabilities;
+			return capabilities;
+		}
+
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
+		virtual void DrawIndexed(unsigned int count) = 0;
+
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 
 		virtual void SetLineWidth(float width) = 0;

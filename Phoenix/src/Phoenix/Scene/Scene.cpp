@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 
 #include "Phoenix/Renderer/Renderer2D.h"
-#include "Phoenix/Renderer/Renderer3D.h"
 
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
@@ -36,6 +35,7 @@ namespace phx {
 
 	Scene::~Scene()
 	{
+
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -47,6 +47,7 @@ namespace phx {
 		tag.Tag = name.empty() ? "Entity" : name;
 		return entity;
 	}
+	
 	template<typename Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
@@ -76,6 +77,9 @@ namespace phx {
 		newScene->m_ViewportWidth = other->m_ViewportWidth;
 		newScene->m_ViewportHeight = other->m_ViewportHeight;
 
+		newScene->m_GravityX = other->m_GravityX;
+		newScene->m_GravityY = other->m_GravityY;
+
 		auto& srcSceneRegistry = other->m_Registry;
 		auto& dstSceneRegistry = newScene->m_Registry;
 		std::unordered_map<UUID, entt::entity> enttMap;
@@ -93,28 +97,17 @@ namespace phx {
 		newScene->m_SceneType = other->m_SceneType;
 
 		// Copy components (except IDComponent and TagComponent)
-		switch (other->m_SceneType)
-		{
-		case phx::Scene::SceneType::Scene2D:
-		{
-			CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			break;
-		}		
-		case phx::Scene::SceneType::Scene3D:
-		{
-			CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			CopyComponent<CubeRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-			break;
-		}
-		}
+
+		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+
+		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
 	}
@@ -133,6 +126,12 @@ namespace phx {
 		m_Registry.destroy(entity);
 	}
 
+	void Scene::SetGravity(float x, float y)
+	{
+		m_GravityX = x;
+		m_GravityY = y;
+	}
+
 	void Scene::OnRuntimeStart()
 	{
 		switch (m_SceneType)
@@ -140,7 +139,7 @@ namespace phx {
 		case phx::Scene::SceneType::Scene2D:
 		{
 			// Create physics world
-			m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+			m_PhysicsWorld = new b2World({m_GravityX, m_GravityY});
 
 			// Create physic bodies
 			auto view = m_Registry.view<Rigidbody2DComponent>();
@@ -214,13 +213,50 @@ namespace phx {
 		
 	}
 
-	void Scene::OnUpdateRuntime(DeltaTime dt)
+	void Scene::Render2D()
 	{
-		// Update scripts
+		// Draw sprites
 		{
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+		}
+
+		// Draw circles
+		{
+			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+			}
+		}
+	}
+
+	void Scene::Render3D()
+	{
+		{
+			auto view = m_Registry.view<TransformComponent, MeshComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
+				mesh.Mesh.Render();
+			}
+		}
+	}
+
+	void Scene::UpdateScripts()
+	{
+		// TODO: Rework script system
+		/* {
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 				{
-					// TODO: Move to Scene::OnScenePlay
+
 					if (!nsc.Instance)
 					{
 						nsc.Instance = nsc.InstantiateScript();
@@ -230,7 +266,12 @@ namespace phx {
 
 					nsc.Instance->OnUpdate(dt);
 				});
-			}
+			}*/
+	}
+
+	void Scene::OnUpdateRuntime(DeltaTime dt)
+	{
+		UpdateScripts();
 		
 		switch (m_SceneType)
 		{
@@ -288,29 +329,7 @@ namespace phx {
 			if (mainCamera)
 			{
 				Renderer2D::BeginScene(*mainCamera, cameraTransform);
-
-				// Draw sprites
-				{
-					auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-					for (auto entity : group)
-					{
-						auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-						Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-					}
-				}
-
-				// Draw circles
-				{
-					auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-					for (auto entity : view)
-					{
-						auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-						Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-					}
-				}
-
+				Render2D();
 				Renderer2D::EndScene();
 			}
 
@@ -337,26 +356,15 @@ namespace phx {
 
 			if (mainCamera)
 			{
-				Renderer3D::BeginScene(*mainCamera, cameraTransform);
-
-				{
-					auto group = m_Registry.group<TransformComponent>(entt::get<CubeRendererComponent>);
-					for (auto entity : group)
-					{
-						auto [transform, crc] = group.get<TransformComponent, CubeRendererComponent>(entity);
-
-						Renderer3D::DrawCube(transform.GetTransform(), crc.Color, (int)entity);
-					}
-				}
-
-				Renderer3D::EndScene();
+				Renderer2D::BeginScene(*mainCamera, cameraTransform);
+				m_Skybox.Render();
+				Render3D();
+				Renderer2D::EndScene();
 			}
 
 			break;
 		}			
 		}
-
-
 	}
 
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
@@ -366,45 +374,16 @@ namespace phx {
 		case phx::Scene::SceneType::Scene2D:
 		{
 			Renderer2D::BeginScene(camera);
-
-			// Draw sprites
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-				}
-			}
-
-			// Draw circles
-			{
-				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-				}
-			}
-
+			Render2D();
 			Renderer2D::EndScene();
 			break;
 		}
 		case phx::Scene::SceneType::Scene3D:
 		{
-			Renderer3D::BeginScene(camera);
-
-			auto view = m_Registry.view<TransformComponent, CubeRendererComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, cube] = view.get<TransformComponent, CubeRendererComponent>(entity);
-
-				Renderer3D::DrawCube(transform.GetTransform(), cube.Color, (int)entity);
-			}
-
-			Renderer3D::EndScene();
+			Renderer2D::BeginScene(camera);
+			m_Skybox.Render();
+			Render3D();
+			Renderer2D::EndScene();
 			break;
 		}
 		}		
@@ -413,21 +392,7 @@ namespace phx {
 
 	void Scene::OnUpdatePhysics(DeltaTime dt, EditorCamera& camera)
 	{
-		// Update scripts
-		{
-			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
-				{
-					// TODO: Move to Scene::OnScenePlay
-					if (!nsc.Instance)
-					{
-						nsc.Instance = nsc.InstantiateScript();
-						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.Instance->OnCreate();
-					}
-
-					nsc.Instance->OnUpdate(dt);
-				});
-		}
+		UpdateScripts();
 
 		switch (m_SceneType)
 		{
@@ -462,46 +427,17 @@ namespace phx {
 			}
 
 			Renderer2D::BeginScene(camera);
-
-			// Draw sprites
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-				}
-			}
-
-			// Draw circles
-			{
-				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-				}
-			}
-
+			m_Skybox.Render();
+			Render2D();
 			Renderer2D::EndScene();
 
 			break;
 		}
 		case phx::Scene::SceneType::Scene3D:
 		{
-			Renderer3D::BeginScene(camera);
-
-			auto view = m_Registry.view<TransformComponent, CubeRendererComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, cube] = view.get<TransformComponent, CubeRendererComponent>(entity);
-
-				Renderer3D::DrawCube(transform.GetTransform(), cube.Color, (int)entity);
-			}
-
-			Renderer3D::EndScene();
+			Renderer2D::BeginScene(camera);
+			Render3D();
+			Renderer2D::EndScene();
 			break;
 		}
 		}
@@ -537,7 +473,7 @@ namespace phx {
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 
-		CopyComponentIfExists<CubeRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<MeshComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
@@ -590,7 +526,6 @@ namespace phx {
 
 	}
 
-
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
 	{
@@ -619,7 +554,7 @@ namespace phx {
 	}
 
 	template<>
-	void Scene::OnComponentAdded<CubeRendererComponent>(Entity entity, CubeRendererComponent& component)
+	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
 	}
 }

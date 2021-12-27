@@ -7,15 +7,24 @@ namespace phx {
 	{
 		PHX_PROFILE_FUNCTION();
 
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_CULL_FACE);
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+		glFrontFace(GL_CCW);
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_LINE_SMOOTH);
+		RenderAPICapabilities& caps = RendererAPI::GetCapabilities();
 
-		/*glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);*/
+		caps.Vendor = (const char*)glGetString(GL_VENDOR);
+		caps.Renderer = (const char*)glGetString(GL_RENDERER);
+		caps.Version = (const char*)glGetString(GL_VERSION);
+
+		glGetIntegerv(GL_MAX_SAMPLES, &caps.MaxSamples);
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &caps.MaxAnisotropy);
 	}
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
@@ -35,6 +44,10 @@ namespace phx {
 	{
 		vertexArray->Bind();
 		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+	}
+	void OpenGLRendererAPI::DrawIndexed(unsigned int count)
+	{
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	void OpenGLRendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
