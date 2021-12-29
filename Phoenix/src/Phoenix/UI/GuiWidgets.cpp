@@ -3,6 +3,16 @@
 #include "GuiWidgets.h"
 
 namespace phx {
+	void UI::PushHiddenButton()
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+	}
+	void UI::PopHiddenButton()
+	{
+		ImGui::PopStyleColor(3);
+	}
 	void UI::DrawItemRowsBackground(float lineHeight, const ImColor& color, const ImColor& color2)
 	{
 		{

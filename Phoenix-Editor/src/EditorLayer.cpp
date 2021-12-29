@@ -373,7 +373,7 @@ namespace phx
 				std::filesystem::path fsPath = std::filesystem::path(s_AssetPath) / path;
 				std::string ext = fsPath.extension().string();
 
-				if (ext == ".phoenix")
+				if (ext == ".phxscene")
 				{
 					if (m_SceneState == SceneState::Play)
 					{
@@ -716,7 +716,7 @@ namespace phx
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Phoenix Scene (*.phoenix)\0*.phoenix\0");
+		std::string filepath = FileDialogs::SaveFile("Phoenix Scene (*.phxscene)\0*.phxscene\0");
 		if (!filepath.empty())
 		{
 			SerializeScene(m_ActiveScene, filepath);
@@ -743,7 +743,7 @@ namespace phx
 	void EditorLayer::OpenScene()
 	{
 
-		std::string filepath = FileDialogs::OpenFile("Phoenix Scene (*.phoenix)\0*.phoenix\0");
+		std::string filepath = FileDialogs::OpenFile("Phoenix Scene (*.phxscene)\0*.phxscene\0");
 		if (!filepath.empty())
 		{
 			OpenScene(filepath);
@@ -755,7 +755,7 @@ namespace phx
 		if (m_SceneState != SceneState::Edit)
 			OnSceneStop();
 
-		if (path.extension().string() != ".phoenix")
+		if (path.extension().string() != ".phxscene")
 		{
 			PHX_CORE_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;

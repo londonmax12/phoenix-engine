@@ -15,6 +15,8 @@ namespace phx {
 	class UI {
 	public:
 		//static const float GapHeight = 1;
+		static void PushHiddenButton();
+		static void PopHiddenButton();
 
 		static void DrawItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64));
 		

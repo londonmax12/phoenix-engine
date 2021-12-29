@@ -1,0 +1,97 @@
+Scene: Untitled
+SceneType: 2D
+Entities:
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Blue Square
+    TransformComponent:
+      Translation: [1.49011612e-08, 1.49011612e-08, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.722723663, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Green Square
+    TransformComponent:
+      Translation: [-0.5, 0, -0.5]
+      Rotation: [0, 1.57079637, 0]
+      Scale: [0.999995887, 1, 0.999995887]
+    SpriteRendererComponent:
+      Color: [1, 0.815304101, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Red Square
+    TransformComponent:
+      Translation: [0, 0.5, -0.5]
+      Rotation: [1.57079637, 0, 0]
+      Scale: [1, 0.999973893, 0.999973893]
+    SpriteRendererComponent:
+      Color: [1, 0.722328007, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Main Camera
+    TransformComponent:
+      Translation: [-2.63987303, 1.17528558, 2.53046489]
+      Rotation: [-0.198622003, -0.779283524, -0.0025481882]
+      Scale: [0.999999702, 0.999999166, 0.999999881]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+    SpriteRendererComponent:
+      Color: [1, 0, 0.0654764175, 1]
+      Textured: false
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Pink Square
+    TransformComponent:
+      Translation: [-1.49011612e-08, -0.5, -0.5]
+      Rotation: [1.57079637, 0, 0]
+      Scale: [1, 0.999996424, 0.999996424]
+    SpriteRendererComponent:
+      Color: [1, 0.408795357, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Yellow Square
+    TransformComponent:
+      Translation: [0.49999994, 0, -0.5]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [0.999986053, 1, 0.999986053]
+    SpriteRendererComponent:
+      Color: [1, 0.626143157, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Orange Square
+    TransformComponent:
+      Translation: [0, 0, -1]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.564183533, 0, 1]
+      Textured: true
+      TexturePath: assets\textures\f620a179ca1acfd15a0754701677fb58.jpg
+      TextureTiling: 1

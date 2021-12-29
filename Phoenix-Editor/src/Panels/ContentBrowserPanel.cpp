@@ -67,7 +67,7 @@ namespace phx {
 				{
 					newFileIcon.FileType = FileType::ImageFile;
 				}
-				else if (extension == ".phoenix")
+				else if (extension == ".phxscene")
 				{
 					newFileIcon.FileType = FileType::PhoenixFile;
 				}
