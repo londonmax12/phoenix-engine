@@ -2,7 +2,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
-#include "Phoenix/ImGui/GuiWidgets.h"
+#include "Phoenix/UI/GuiWidgets.h"
 #include "Phoenix/Math/Math.h"
 
 #include <chrono>
@@ -292,10 +292,10 @@ namespace phx
 		ImGui::Begin("Scene Settings");
 		ImGui::Text("Physics");
 		ImGui::Separator();
-		DrawCheckbox("Show Hitboxes", &m_ShowPhysicsColliders);
-		if (DrawDragFloat("Scene Gravity X", &m_GravityX))
+		UI::DrawCheckbox("Show Hitboxes", &m_ShowPhysicsColliders);
+		if (UI::DrawDragFloat("Scene Gravity X", &m_GravityX))
 			m_ActiveScene->SetGravity(m_GravityX, m_GravityY);
-		if (DrawDragFloat("Scene Gravity Y", &m_GravityY))
+		if (UI::DrawDragFloat("Scene Gravity Y", &m_GravityY))
 			m_ActiveScene->SetGravity(m_GravityX, m_GravityY);
 		ImGui::End();
 

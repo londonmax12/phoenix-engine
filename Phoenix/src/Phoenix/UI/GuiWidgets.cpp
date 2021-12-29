@@ -1,67 +1,129 @@
-#pragma once
+#include "phxpch.h"
 
-#include <string>
-
-#include <imgui.h>
-#include <imgui_internal.h>
-#include <../vendor/glm/glm/glm.hpp>
+#include "GuiWidgets.h"
 
 namespace phx {
-	static float GapHeight = 1;
-	static bool saved_palette_init = true;
-
-	static void DrawItemRowsBackground(float lineHeight = -1.0f, const ImColor& color = ImColor(20, 20, 20, 64), const ImColor& color2 = ImColor(30, 30, 30, 64))
+	void UI::DrawItemRowsBackground(float lineHeight, const ImColor& color, const ImColor& color2)
 	{
-		auto* drawList = ImGui::GetWindowDrawList();
-		const auto& style = ImGui::GetStyle();
-
-		if (lineHeight < 0)
 		{
-			lineHeight = ImGui::GetTextLineHeight();
-		}
-		lineHeight += style.ItemSpacing.y;
+			auto* drawList = ImGui::GetWindowDrawList();
+			const auto& style = ImGui::GetStyle();
 
-		float scrollOffsetH = ImGui::GetScrollX();
-		float scrollOffsetV = ImGui::GetScrollY();
-		float scrolledOutLines = floorf(scrollOffsetV / lineHeight);
-		scrollOffsetV -= lineHeight * scrolledOutLines;
-
-		ImVec2 clipRectMin(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-		ImVec2 clipRectMax(clipRectMin.x + ImGui::GetWindowWidth(), clipRectMin.y + ImGui::GetWindowHeight());
-
-		if (ImGui::GetScrollMaxX() > 0)
-		{
-			clipRectMax.y -= style.ScrollbarSize;
-		}
-
-		drawList->PushClipRect(clipRectMin, clipRectMax);
-
-		bool isOdd = (static_cast<int>(scrolledOutLines) % 2) == 0;
-
-		float yMin = clipRectMin.y - scrollOffsetV + ImGui::GetCursorPosY();
-		float yMax = clipRectMax.y - scrollOffsetV + lineHeight;
-		float xMin = clipRectMin.x + scrollOffsetH + ImGui::GetWindowContentRegionMin().x;
-		float xMax = clipRectMin.x + scrollOffsetH + ImGui::GetWindowContentRegionMax().x;
-
-		for (float y = yMin; y < yMax; y += lineHeight, isOdd = !isOdd)
-		{
-			if (isOdd)
+			if (lineHeight < 0)
 			{
-				drawList->AddRectFilled({ xMin, y - style.ItemSpacing.y }, { xMax, y + lineHeight }, color);
+				lineHeight = ImGui::GetTextLineHeight();
 			}
-			else
-			{
-				drawList->AddRectFilled({ xMin, y - style.ItemSpacing.y }, { xMax, y + lineHeight }, color2);
-			}
-		}
+			lineHeight += style.ItemSpacing.y;
 
-		drawList->PopClipRect();
+			float scrollOffsetH = ImGui::GetScrollX();
+			float scrollOffsetV = ImGui::GetScrollY();
+			float scrolledOutLines = floorf(scrollOffsetV / lineHeight);
+			scrollOffsetV -= lineHeight * scrolledOutLines;
+
+			ImVec2 clipRectMin(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+			ImVec2 clipRectMax(clipRectMin.x + ImGui::GetWindowWidth(), clipRectMin.y + ImGui::GetWindowHeight());
+
+			if (ImGui::GetScrollMaxX() > 0)
+			{
+				clipRectMax.y -= style.ScrollbarSize;
+			}
+
+			drawList->PushClipRect(clipRectMin, clipRectMax);
+
+			bool isOdd = (static_cast<int>(scrolledOutLines) % 2) == 0;
+
+			float yMin = clipRectMin.y - scrollOffsetV + ImGui::GetCursorPosY();
+			float yMax = clipRectMax.y - scrollOffsetV + lineHeight;
+			float xMin = clipRectMin.x + scrollOffsetH + ImGui::GetWindowContentRegionMin().x;
+			float xMax = clipRectMin.x + scrollOffsetH + ImGui::GetWindowContentRegionMax().x;
+
+			for (float y = yMin; y < yMax; y += lineHeight, isOdd = !isOdd)
+			{
+				if (isOdd)
+				{
+					drawList->AddRectFilled({ xMin, y - style.ItemSpacing.y }, { xMax, y + lineHeight }, color);
+				}
+				else
+				{
+					drawList->AddRectFilled({ xMin, y - style.ItemSpacing.y }, { xMax, y + lineHeight }, color2);
+				}
+			}
+
+			drawList->PopClipRect();
+		}
 	}
-	static void DrawImage(Ref<Texture2D> image, ImVec2 size)
+	bool UI::DrawButton(const std::string& label, ImVec2 size, float columnWidth)
 	{
-		ImGui::Image((ImTextureID)image->GetRendererID(), size, { 0, 1 }, { 1, 0 });
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+
+		ImGui::NextColumn();
+		bool result = ImGui::Button(label.c_str(), size);
+
+		ImGui::Columns(1);
+		ImGui::PopID();
+		ImGui::PopStyleVar();
+		return result;
 	}
-	static void DrawVec2Controls(const std::string& label, glm::vec2& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	bool UI::DrawDragFloat(const std::string& label, float* value, float v_speed, float v_min, float v_max, const char* format, float columnWidth)
+	{
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+
+		ImGui::NextColumn();
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		bool result = ImGui::DragFloat("##DragFloat", value, v_speed, v_min, v_max, format, 0, 25);
+		ImGui::PopItemWidth();
+
+		ImGui::Columns(1);
+		ImGui::PopID();
+
+		return result;
+		
+	}
+	bool UI::DrawDragFloat2(const std::string& label, float value[2], float v_speed, float v_min, float v_max, const char* format, float columnWidth)
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+
+		ImGui::NextColumn();
+		bool result = ImGui::DragFloat2("##DragFloat", value, v_speed, v_min, v_max, format);
+
+		ImGui::Columns(1);
+		ImGui::PopID();
+		ImGui::PopStyleVar();
+
+		return result;
+	}
+	bool UI::DrawCheckbox(const std::string& label, bool* value, float columnWidth)
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+
+		ImGui::NextColumn();
+		bool result = ImGui::Checkbox("##Checkbox", value);
+
+		ImGui::Columns(1);
+		ImGui::PopID();
+		ImGui::PopStyleVar();
+		return result;
+	}
+	void UI::DrawImage(Ref<Texture2D> image, ImVec2 size)
+	{
+		ImGui::Image((ImTextureID)image->GetRendererID(), size, { 0, 1 }, { 1, 0 });	
+	}
+	void UI::DrawVec2Controls(const std::string& label, glm::vec2& values, float resetValue, float columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -110,7 +172,7 @@ namespace phx {
 		ImGui::PopStyleVar();
 		ImGui::PopID();
 	}
-	static void DrawVec3Controls(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	void UI::DrawVec3Controls(const std::string& label, glm::vec3& values, float resetValue, float columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -168,14 +230,14 @@ namespace phx {
 		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
 		ImGui::PopStyleVar();
 		ImGui::Columns(1);
-		
+
 		ImGui::PopStyleVar();
 		ImGui::PopID();
 	}
-	static void DrawColorControls(const std::string& label, glm::vec4& values, float resetValue = 1.0f, float columnWidth = 100.0f)
+	void UI::DrawColorControls(const std::string& label, glm::vec4& values, float resetValue, float columnWidth)
 	{
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, columnWidth);
@@ -194,14 +256,14 @@ namespace phx {
 		}
 
 		static ImVec4 backup_color;
-		bool open_popup = ImGui::ColorButton("MyColor##3b", ImVec4{ values.x, values.y, values.z, values.w }, 0, ImVec2{25,25});
+		bool open_popup = ImGui::ColorButton("MyColor##3b", ImVec4{ values.x, values.y, values.z, values.w }, 0, ImVec2{ 25,25 });
 		ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-		open_popup |= ImGui::Button("Palette", ImVec2{0, 25});
+		open_popup |= ImGui::Button("Palette", ImVec2{ 0, 25 });
 		float col[4] = { values.x,values.y,values.z,values.w };
 		if (open_popup)
 		{
 			ImGui::OpenPopup("mypicker");
-			backup_color = ImVec4{ col[0], col[1], col[2], col[3]};
+			backup_color = ImVec4{ col[0], col[1], col[2], col[3] };
 		}
 		if (ImGui::BeginPopup("mypicker"))
 		{
@@ -236,7 +298,7 @@ namespace phx {
 					col[2] = saved_palette[n].z;
 					col[3] = saved_palette[n].w;
 				}
-					
+
 				// Allow user to drop colors into each palette entry. Note that ColorButton() is already a
 				// drag source by default, unless specifying the ImGuiColorEditFlags_NoDragDrop flag.
 				if (ImGui::BeginDragDropTarget())
@@ -261,7 +323,7 @@ namespace phx {
 		}
 		ImGui::Columns(1);
 	}
-	static void DrawVec4ColorControls(const std::string& label, glm::vec4& values, float resetValue = 1.0f, float columnWidth = 100.0f)
+	void UI::DrawVec4ColorControls(const std::string& label, glm::vec4& values, float resetValue, float columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -360,81 +422,12 @@ namespace phx {
 		ImGui::Columns(1);
 		ImGui::PopID();
 	}
-	static bool DrawCheckbox(const std::string& label, bool *value, float columnWidth = 100.0f)
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
-
-		ImGui::NextColumn();
-		bool result = ImGui::Checkbox("##Checkbox", value);	
-
-		ImGui::Columns(1);
-		ImGui::PopID();
-		ImGui::PopStyleVar();
-		return result;
-	}
-	static bool DrawDragFloat(const std::string& label, float* value, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.2f", float columnWidth = 100.0f)
-	{
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
-
-		ImGui::NextColumn();
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		bool result = ImGui::DragFloat("##DragFloat", value, v_speed, v_min, v_max, format, 0, 25);
-		ImGui::PopItemWidth();
-
-		ImGui::Columns(1);
-		ImGui::PopID();
-
-		return result;
-	}
-
-	static bool DrawDragFloat2(const std::string& label, float value[2], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.2f", float columnWidth = 100.0f)
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
-
-		ImGui::NextColumn();
-		bool result = ImGui::DragFloat2("##DragFloat", value, v_speed, v_min, v_max, format);
-
-		ImGui::Columns(1);
-		ImGui::PopID();
-		ImGui::PopStyleVar();
-
-		return result;
-	}
-
-	static bool DrawButton(const std::string& label, ImVec2 size = ImVec2(0,0), float columnWidth = 100.0f)
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
-
-		ImGui::NextColumn();
-		bool result = ImGui::Button(label.c_str(), size);
-
-		ImGui::Columns(1);
-		ImGui::PopID();
-		ImGui::PopStyleVar();
-		return result;
-	}
-
-	static void DrawGap()
-	{
+	void UI::DrawGap()
+	{	
 		ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		ImGui::PushStyleColor(ImGuiCol_SeparatorActive, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		ImGui::Separator();
 		ImGui::PopStyleColor();
-		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();		
 	}
 }

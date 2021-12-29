@@ -3,7 +3,7 @@
 #include <GLFW/include/GLFW/glfw3.h>
 
 #include <stdlib.h>
-#include <Phoenix/ImGui/GuiWidgets.h>
+#include <Phoenix/UI/GuiWidgets.h>
 #include <Phoenix/Utils/Environment.h>
 
 #define MAX_PROJECT_NAME_LENGTH 255
@@ -157,7 +157,7 @@ namespace phx
 		float imageSize = 140.0f;
 
 		//ImGui::SetCursorPosY(-40.0f);
-		DrawImage(m_PhoenixLogoTexture, ImVec2(imageSize, imageSize));
+		UI::DrawImage(m_PhoenixLogoTexture, ImVec2(imageSize, imageSize));
 
 		ImGui::Separator();
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + imageSize / 3.0f);

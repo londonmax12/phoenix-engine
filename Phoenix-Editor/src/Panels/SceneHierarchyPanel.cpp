@@ -7,7 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Phoenix/Scene/Components.h"
-#include "Phoenix/ImGui/GuiWidgets.h"
+#include "Phoenix/UI/GuiWidgets.h"
 
 #include "Phoenix/Scene/Scene.h"
 
@@ -48,7 +48,7 @@ namespace phx {
 
 			if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 2)))
 			{
-				DrawItemRowsBackground();
+				UI::DrawItemRowsBackground();
 				if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered())
 				{
 					m_SelectionContext = {};
@@ -414,11 +414,11 @@ namespace phx {
 		{
 			DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 				{
-					DrawVec3Controls("Translation", component.Translation);
+					UI::DrawVec3Controls("Translation", component.Translation);
 					glm::vec3 rotation = glm::degrees(component.Rotation);
-					DrawVec3Controls("Rotation", rotation);
+					UI::DrawVec3Controls("Rotation", rotation);
 					component.Rotation = glm::radians(rotation);
-					DrawVec3Controls("Scale", component.Scale, 1.0f);
+					UI::DrawVec3Controls("Scale", component.Scale, 1.0f);
 				}, false);
 		}
 		if (entity.HasComponent<CameraComponent>())
@@ -430,7 +430,7 @@ namespace phx {
 					const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
 					const char* currentProjectionTypeString = projectionTypeStrings[(int)component.Camera.GetProjectionType()];
 
-					DrawCheckbox("Active", &component.Primary);
+					UI::DrawCheckbox("Active", &component.Primary);
 
 					ImGui::PushID("Projection");
 					ImGui::Columns(2);
@@ -461,32 +461,32 @@ namespace phx {
 					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 					{
 						float perspectiveFOV = glm::degrees(camera.GetPerspectiveVerticalFOV());
-						if (DrawDragFloat("Vertical FOV", &perspectiveFOV))
+						if (UI::DrawDragFloat("Vertical FOV", &perspectiveFOV))
 							camera.SetPerspectiveVerticalFOV(glm::radians(perspectiveFOV));
 
 						float perspectiveNear = camera.GetPerspectiveNearClip();
-						if (DrawDragFloat("Near", &perspectiveNear))
+						if (UI::DrawDragFloat("Near", &perspectiveNear))
 							camera.SetPerspectiveNearClip(perspectiveNear);
 
 						float perspectiveFar = camera.GetPerspectiveFarClip();
-						if (DrawDragFloat("Far", &perspectiveFar))
+						if (UI::DrawDragFloat("Far", &perspectiveFar))
 							camera.SetPerspectiveFarClip(perspectiveFar);
 					}
 					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
 					{
 						float orthoSize = camera.GetOrthographicSize();
-						if (DrawDragFloat("Size", &orthoSize))
+						if (UI::DrawDragFloat("Size", &orthoSize))
 							camera.SetOrthographicSize(orthoSize);
 
 						float orthoNear = camera.GetOrthographicNearClip();
-						if (DrawDragFloat("Near", &orthoNear))
+						if (UI::DrawDragFloat("Near", &orthoNear))
 							camera.SetOrthographicNearClip(orthoNear);
 
 						float orthoFar = camera.GetOrthographicFarClip();
-						if (DrawDragFloat("Far", &orthoFar))
+						if (UI::DrawDragFloat("Far", &orthoFar))
 							camera.SetOrthographicFarClip(orthoFar);
 
-						DrawCheckbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
+						UI::DrawCheckbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
 					}
 				});
 		}
@@ -494,11 +494,11 @@ namespace phx {
 		{
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
-					DrawColorControls("Color", component.Color);
+					UI::DrawColorControls("Color", component.Color);
 
 					ImGui::Columns(2);
 					ImGui::SetColumnWidth(0, 100.0f);
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, GapHeight));
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
 					ImGui::Text("Texture");
 					ImGui::NextColumn();		
 					if(!component.Path.empty())
@@ -542,20 +542,20 @@ namespace phx {
 					ImGui::PopStyleColor(3);
 					ImGui::PopStyleVar(2);
 					
-					DrawGap();
+					UI::DrawGap();
 
-					DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
+					UI::DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
 		}
 		if (entity.HasComponent<CircleRendererComponent>())
 		{
 			DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
 				{
-					DrawVec4ColorControls("Color", component.Color);
-					DrawGap();
-					DrawDragFloat("Thickness", &component.Thickness, 0.025f, 0.0f, 1.0f);
+					UI::DrawVec4ColorControls("Color", component.Color);
+					UI::DrawGap();
+					UI::DrawDragFloat("Thickness", &component.Thickness, 0.025f, 0.0f, 1.0f);
 					float fade = component.Fade * 1000;
-					DrawDragFloat("Fade", &fade, 2.0f, 0.0f, 100.0f);
+					UI::DrawDragFloat("Fade", &fade, 2.0f, 0.0f, 100.0f);
 					component.Fade = fade / 1000;
 				});
 		}
@@ -590,7 +590,7 @@ namespace phx {
 					}  
 					ImGui::PopItemWidth();
 					ImGui::Columns(1);
-					DrawCheckbox("Fixed Rotation", &component.FixedRotation);
+					UI::DrawCheckbox("Fixed Rotation", &component.FixedRotation);
 				});
 		}
 		if (entity.HasComponent<BoxCollider2DComponent>())
@@ -599,17 +599,17 @@ namespace phx {
 				{
 					if (ImGui::TreeNodeEx("Physics Settings", ImGuiTreeNodeFlags_SpanAvailWidth))
 					{
-						DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
-						DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
-						DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
-						DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+						UI::DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
+						UI::DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+						UI::DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+						UI::DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 						ImGui::TreePop();
 					}
-					DrawVec2Controls("Size", component.Size, 0.5f);
-					DrawVec2Controls("Offset", component.Offset);
-					DrawGap();
-					DrawCheckbox("Is Sensor", &component.IsSensor);
-					DrawCheckbox("Show Collider", &component.ShowCollider);
+					UI::DrawVec2Controls("Size", component.Size, 0.5f);
+					UI::DrawVec2Controls("Offset", component.Offset);
+					UI::DrawGap();
+					UI::DrawCheckbox("Is Sensor", &component.IsSensor);
+					UI::DrawCheckbox("Show Collider", &component.ShowCollider);
 				});
 		}
 
@@ -619,17 +619,17 @@ namespace phx {
 				{
 					if (ImGui::TreeNodeEx("Physics Settings", ImGuiTreeNodeFlags_SpanAvailWidth))
 					{
-						DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
-						DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
-						DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
-						DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+						UI::DrawDragFloat("Density", &component.Density, 0.01f, 0.0f, 100.0f);
+						UI::DrawDragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+						UI::DrawDragFloat("Bounce", &component.Restitution, 0.01f, 0.0f, 1.0f);
+						UI::DrawDragFloat("Bounce Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 						ImGui::TreePop();
 					}
-					DrawDragFloat("Radius", &component.Radius);
-					DrawVec2Controls("Offset", component.Offset);
-					DrawGap();
-					DrawCheckbox("Is Sensor", &component.IsSensor);
-					DrawCheckbox("Show Collider", &component.ShowCollider);
+					UI::DrawDragFloat("Radius", &component.Radius);
+					UI::DrawVec2Controls("Offset", component.Offset);
+					UI::DrawGap();
+					UI::DrawCheckbox("Is Sensor", &component.IsSensor);
+					UI::DrawCheckbox("Show Collider", &component.ShowCollider);
 				});
 		}
 
