@@ -56,6 +56,8 @@ namespace phx {
 		Ref<Scene> m_ActiveScene;
 		Ref<Scene> m_EditorScene;
 
+		Ref<Project> m_Project;
+
 		std::filesystem::path m_EditorScenePath;
 
 		Entity m_HoveredEntity;

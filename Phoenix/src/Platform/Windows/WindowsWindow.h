@@ -21,6 +21,11 @@ namespace phx {
 		virtual void SetVSync(bool enabled) override;
 		virtual bool IsVSync() const override;
 
+		virtual void SetWindowPos(int x, int y) override;
+		virtual std::pair<int, int> GetWindowPos() override;
+
+		virtual void MaximizeWindow() override;
+
 		virtual void* GetNativeWindow() const { return m_Window; };
 	private:
 		virtual void Init(const WindowProps& props);
@@ -37,6 +42,9 @@ namespace phx {
 
 			EventCallbackFn EventCallback;
 		};
+
+		int X = 0;
+		int Y = 0;
 
 		WindowData m_Data;
 	};

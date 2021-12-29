@@ -1,8 +1,11 @@
 #pragma once
+
 #include "Phoenix/Application/Base.h"
+
 #include <string>
 #include <unordered_map>
-#include <glm/glm.hpp>
+
+#include "../vendor/glm/glm/glm.hpp"
 
 namespace phx {
 	class Shader

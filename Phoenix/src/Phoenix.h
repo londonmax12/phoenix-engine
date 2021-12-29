@@ -31,13 +31,15 @@
 #include "Phoenix/Layer/Layer.h"
 //----------------------------------------
 
-//----------------Scene-------------------
+//-------------Scene/Project--------------
 #include "Phoenix/Scene/Scene.h"
+#include "Phoenix/Scene/SceneSerializer.h"
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
-#include "Phoenix/Scene/SceneSerializer.h"
-
 #include "Phoenix/Scene/Skybox.h"
+
+#include "Phoenix/Project/Project.h"
+#include "Phoenix/Project/ProjectSerializer.h"
 //----------------------------------------
 
 //----------------Utils-------------------

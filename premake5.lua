@@ -479,8 +479,7 @@ project "Sandbox"
 		defines "PHX_DIST_MODE"
 		buildoptions "/MD"
 		optimize "on"
-
-
+	
 project "Phoenix-Editor" 
 	location "Phoenix-Editor"
 	kind "ConsoleApp"
@@ -490,9 +489,6 @@ project "Phoenix-Editor"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	MONO_PROJECT = os.getenv("MONO_PROJECT")
-
 
 	files
 	{
@@ -509,6 +505,57 @@ project "Phoenix-Editor"
 		"Phoenix/vendor/imgui",
 		"Phoenix/vendor/entt/include",
 		"Phoenix/vendor/ImGuizmo"
+	}
+
+	links
+	{
+		"Phoenix"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		
+	filter "configurations:Debug"
+		defines 
+		{
+			"PHX_DEBUG_MODE",
+			"PHX_ENABLE_ASSERTS"
+		}
+		buildoptions "/MDd"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "PHX_RELEASE_MODE"
+		buildoptions "/MD"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "PHX_DIST_MODE"
+		buildoptions "/MD"
+		optimize "on"
+
+project "Phoenix-Launcher" 
+	location "Phoenix-Launcher"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "off"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Phoenix/src",
+		"Phoenix/vendor",
+		"Phoenix/vendor/spdlog/include",
+		"Phoenix/vendor/imgui",
 	}
 
 	links

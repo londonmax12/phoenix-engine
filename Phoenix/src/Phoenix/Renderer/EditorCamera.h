@@ -5,7 +5,7 @@
 #include "Phoenix/Events/Event.h"
 #include "Phoenix/Events/MouseEvent.h"
 
-#include <glm/glm.hpp>
+#include "../vendor/glm/glm/glm.hpp"
 
 namespace phx {
 

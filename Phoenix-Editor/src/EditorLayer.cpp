@@ -28,7 +28,10 @@ namespace phx
 	void EditorLayer::OnAttach()
 	{
 		PHX_PROFILE_FUNCTION();
-	
+		Application::Get().GetWindow().MaximizeWindow();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Medium.ttf", 16.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Light.ttf", 16.0f);
 
 		m_PlayIcon = Texture2D::Create("resources/icons/editor-layer/play-icon.png");
 		m_StopIcon = Texture2D::Create("resources/icons/editor-layer/stop-icon.png");
@@ -52,17 +55,24 @@ namespace phx
 		auto commandLineArgs = Application::Get().GetCommandLineArgs();
 		if (commandLineArgs.Count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(sceneFilePath);
+			std::string projFilePath = commandLineArgs[1];
+			ProjectSerializer projSerializer(m_Project);
+			m_Project = projSerializer.Deserialize(projFilePath);
+			if (!m_Project->m_CurrentScene.empty())
+			{
+				OpenScene(m_Project->m_CurrentScene);
+			}
+			else
+			{
+
+				NewScene(Scene::SceneType::Scene3D, true);
+			}
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		NewScene(Scene::SceneType::Scene3D, true);
-
-		Entity entity = m_ActiveScene->CreateEntity("katana");
-		entity.AddComponent<MeshComponent>("assets/meshes/Katana.fbx");
+		//Entity entity = m_ActiveScene->CreateEntity("katana");
+		//entity.AddComponent<MeshComponent>("assets/meshes/Katana.fbx");
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
@@ -691,18 +701,6 @@ namespace phx
 	void EditorLayer::NewScene(Scene::SceneType type, bool AddCamera)
 	{
 		m_EditorCamera.Reset();
-		switch (type)
-		{
-		case phx::Scene::SceneType::Scene2D:
-		{
-			Renderer2D::Init();
-			break;
-		}
-		case phx::Scene::SceneType::Scene3D:
-		{
-			break;
-		}
-		}
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_ActiveScene->SetSceneType(type);
@@ -734,11 +732,12 @@ namespace phx
 			SaveSceneAs();
 	}
 
-
 	void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
 	{
 		SceneSerializer serializer(scene);
 		serializer.Serialize(path.string());
+		ProjectSerializer projectSerializer(m_Project);
+		projectSerializer.Serialize(m_Project->m_Path);
 	}
 
 	void EditorLayer::OpenScene()
@@ -766,24 +765,13 @@ namespace phx
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
-			switch (newScene->GetSceneType())
-			{
-			case phx::Scene::SceneType::Scene2D:
-			{
-				Renderer2D::Init();
-				break;
-			}
-			case phx::Scene::SceneType::Scene3D:
-			{
-				break;
-			}
-			}
 			m_EditorScene = newScene;
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 
 			m_ActiveScene = m_EditorScene;
 			m_EditorScenePath = path;
+			m_Project->SetCurrentScene(path.string());
 		}
 	}
 

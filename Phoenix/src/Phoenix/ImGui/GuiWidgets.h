@@ -4,7 +4,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <glm/glm.hpp>
+#include <../vendor/glm/glm/glm.hpp>
 
 namespace phx {
 	static float GapHeight = 1;
@@ -56,6 +56,10 @@ namespace phx {
 		}
 
 		drawList->PopClipRect();
+	}
+	static void DrawImage(Ref<Texture2D> image, ImVec2 size)
+	{
+		ImGui::Image((ImTextureID)image->GetRendererID(), size, { 0, 1 }, { 1, 0 });
 	}
 	static void DrawVec2Controls(const std::string& label, glm::vec2& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 	{

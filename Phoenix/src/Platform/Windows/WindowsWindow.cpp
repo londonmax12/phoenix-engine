@@ -38,7 +38,7 @@ namespace phx {
 
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
-		m_Data.Height = props.Height;
+		m_Data.Width = props.Height;
 
 		PHX_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
@@ -50,7 +50,8 @@ namespace phx {
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
-
+		if (!props.Decorated)
+			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 		{
 			PHX_PROFILE_SCOPE("glfwCreateWindow");
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
@@ -60,7 +61,18 @@ namespace phx {
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(false);
+		SetVSync(true);
+
+		int count;
+		GLFWmonitor** monitors = glfwGetMonitors(&count);
+		const GLFWvidmode* videoMode = glfwGetVideoMode(monitors[0]);
+
+		int monitorX, monitorY;
+		glfwGetMonitorPos(monitors[0], &monitorX, &monitorY);
+		X = monitorX + (videoMode->width / 2) - (props.Width / 2);
+		Y = monitorY + (videoMode->height / 2) - (props.Height / 2);
+
+		glfwSetWindowPos(m_Window, X, Y);
 
 		// Callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -185,4 +197,19 @@ namespace phx {
 		return m_Data.VSync;
 	}
 
+	void WindowsWindow::SetWindowPos(int x, int y)
+	{
+		glfwSetWindowPos(m_Window, x, y);
+		X = x;
+		Y = y;
+	}
+
+	std::pair<int, int> WindowsWindow::GetWindowPos()
+	{
+		return std::pair<int, int>(X,Y);
+	}
+	void WindowsWindow::MaximizeWindow()
+	{
+		glfwMaximizeWindow(m_Window);
+	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "../vendor/glm/glm/glm.hpp"
 
 namespace phx {
 	class Camera

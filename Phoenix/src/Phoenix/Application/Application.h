@@ -28,10 +28,30 @@ namespace phx {
 		}
 	};
 
+	struct ApplicationSpecification {
+		std::string Name = "Phoenix Application";
+		bool InitRenderer = true;
+
+		int WindowWidth = 1600;
+		int WindowHeight = 900;
+
+		bool WindowDecorated = true;
+
+		ApplicationSpecification();
+		ApplicationSpecification(std::string name)
+			: Name(name) {}
+		ApplicationSpecification(std::string name, 
+			bool initRenderer = true, 
+			int windowWidth = 1600, 
+			int windowHeight = 900, 
+			bool windowDecorated = true)
+			: Name(name), InitRenderer(initRenderer), WindowWidth(windowWidth), WindowHeight(windowHeight), WindowDecorated(windowDecorated) {}
+	};
+
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Phoenix Application", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
+		Application(ApplicationSpecification spec, ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
 		virtual ~Application();
 
 		void Run();
@@ -52,6 +72,9 @@ namespace phx {
 		ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
 
 		virtual void OnInit() {}
+
+		int GetWindowWidth();
+		int GetWindowHeight();
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

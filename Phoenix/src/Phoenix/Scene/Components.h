@@ -7,11 +7,11 @@
 #include "Phoenix/Renderer/Texture.h"
 #include "Phoenix/Renderer/Mesh.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include "../vendor/glm/glm/glm.hpp"
+#include "../vendor/glm/glm/gtc/matrix_transform.hpp"
+
+#include "../vendor/glm/glm/gtx/quaternion.hpp"
 
 
 namespace phx {

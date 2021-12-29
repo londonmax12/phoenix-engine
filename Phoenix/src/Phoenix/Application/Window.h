@@ -12,11 +12,13 @@ namespace phx {
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
+		bool Decorated;
 
 		WindowProps(const std::string& title = "Phoenix Engine",
 			uint32_t width = 1600,
-			uint32_t height = 900)
-			: Title(title), Width(width), Height(height)
+			uint32_t height = 900,
+			bool decorated = true)
+			: Title(title), Width(width), Height(height), Decorated(decorated)
 		{
 		}
 	};
@@ -37,6 +39,11 @@ namespace phx {
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+
+		virtual void SetWindowPos(int x, int y) = 0;
+		virtual std::pair<int,int> GetWindowPos() = 0;
+
+		virtual void MaximizeWindow() = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

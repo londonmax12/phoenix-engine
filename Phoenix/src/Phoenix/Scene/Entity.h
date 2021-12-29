@@ -5,7 +5,7 @@
 #include "Phoenix/Logging/Log.h"
 #include "Phoenix/Application/UUID.h"
 
-#include "entt.hpp"
+#include "../vendor/entt/include/entt.hpp"
 
 namespace phx {
 	class Entity

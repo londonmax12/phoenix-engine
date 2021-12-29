@@ -5,7 +5,7 @@
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Camera.h"
 
-#include <glm/glm.hpp>
+#include "../vendor/glm/glm/glm.hpp"
 
 namespace phx {
 	class Mesh

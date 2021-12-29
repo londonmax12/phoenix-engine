@@ -9,7 +9,7 @@ namespace phx {
 	{
 	public:
 		PhoenixEditor(ApplicationCommandLineArgs args)
-			: Application("Phoenix Editor", args)
+			: Application(ApplicationSpecification("Phoenix Editor", true, 1600, 900, true), args)
 		{
 			PushLayer(new EditorLayer());
 		}
