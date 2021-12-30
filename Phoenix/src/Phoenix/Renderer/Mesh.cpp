@@ -3,12 +3,14 @@
 #include "Mesh.h"
 
 #include "RenderCommand.h"
+#include "Renderer.h"
 
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
 #include <glad/glad.h>
+#include <glm/glm/ext/matrix_transform.hpp>
 
 namespace phx {
 
@@ -28,8 +30,6 @@ namespace phx {
 	Mesh::Mesh(const std::string& filename)
 		: m_FilePath(filename)
 	{
-		m_MeshShader = Shader::Create("MeshShader", "assets/shaders/Renderer2D_Quad.vert", "assets/shaders/Renderer2D_Quad.frag");
-
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(filename, ImportFlags);
@@ -76,11 +76,5 @@ namespace phx {
 		}
 		m_IndexBuffer = IndexBuffer::Create(m_Indices.data(), m_Indices.size() * 4);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-	}
-
-	void Mesh::Render()
-	{ 
-		m_MeshShader->Bind();
-		RenderCommand::DrawIndexed(m_VertexArray,m_IndexBuffer->GetCount());
 	}
 }

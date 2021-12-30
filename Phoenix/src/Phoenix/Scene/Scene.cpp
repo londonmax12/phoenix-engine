@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 
 #include "Phoenix/Renderer/Renderer2D.h"
+#include "Phoenix/Renderer/Renderer3D.h"
+#include "Phoenix/Renderer/Renderer.h"
 
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
@@ -245,7 +247,11 @@ namespace phx {
 			for (auto entity : view)
 			{
 				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
-				mesh.Mesh.Render();
+				glm::mat4 transformMat = glm::translate(glm::mat4(1.0f), transform.Translation);
+				transformMat *= glm::scale(glm::mat4(1.0f), transform.Scale);
+				transformMat *= glm::toMat4(glm::quat(transform.Rotation));
+
+				Renderer3D::SubmitMesh(mesh.Mesh, transformMat, (int)entity);
 			}
 		}
 	}
@@ -356,10 +362,10 @@ namespace phx {
 
 			if (mainCamera)
 			{
-				Renderer2D::BeginScene(*mainCamera, cameraTransform);
-				m_Skybox.Render();
+				Renderer3D::BeginScene(*mainCamera, cameraTransform);
+				//m_Skybox.Render();
 				Render3D();
-				Renderer2D::EndScene();
+				Renderer3D::EndScene();
 			}
 
 			break;
@@ -380,10 +386,10 @@ namespace phx {
 		}
 		case phx::Scene::SceneType::Scene3D:
 		{
-			Renderer2D::BeginScene(camera);
-			m_Skybox.Render();
+			Renderer3D::BeginScene(camera);
+			//m_Skybox.Render();
 			Render3D();
-			Renderer2D::EndScene();
+			Renderer3D::EndScene();
 			break;
 		}
 		}		
@@ -427,7 +433,6 @@ namespace phx {
 			}
 
 			Renderer2D::BeginScene(camera);
-			m_Skybox.Render();
 			Render2D();
 			Renderer2D::EndScene();
 
@@ -435,9 +440,10 @@ namespace phx {
 		}
 		case phx::Scene::SceneType::Scene3D:
 		{
-			Renderer2D::BeginScene(camera);
+			Renderer3D::BeginScene(camera);
+			m_Skybox.Render();
 			Render3D();
-			Renderer2D::EndScene();
+			Renderer3D::EndScene();
 			break;
 		}
 		}

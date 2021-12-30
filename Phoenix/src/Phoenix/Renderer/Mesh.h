@@ -25,20 +25,14 @@ namespace phx {
 
 		static const int NumAttributes = 5;
 
-		void Render();
-
 		inline const std::string& GetFilePath() const { return m_FilePath; }
 		glm::vec3 m_Position = glm::vec3(0,0,0);
-	private:
 		std::vector<Vertex> m_Vertices;
-		std::vector<Vertex> m_TransformedVertices;
-
+		Ref<VertexArray> m_VertexArray;
+	private:
 		std::vector<uint32_t> m_Indices;
 
-		Ref<Shader> m_MeshShader;
-
 		Ref<VertexBuffer> m_VertexBuffer;
-		Ref<VertexArray> m_VertexArray;
 		Ref<IndexBuffer> m_IndexBuffer;
 
 		std::string m_FilePath;
