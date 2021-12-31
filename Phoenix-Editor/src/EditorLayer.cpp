@@ -67,6 +67,11 @@ namespace phx
 
 				NewScene(Scene::SceneType::Scene3D, true);
 			}
+			m_ContentBrowserPanel.UpdateAssetPath(m_Project->m_AssetPath);
+		}
+		else
+		{
+			m_ContentBrowserPanel.UpdateAssetPath("assets");
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);

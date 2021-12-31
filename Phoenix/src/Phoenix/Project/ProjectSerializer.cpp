@@ -13,6 +13,7 @@ namespace phx {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Project" << YAML::Value << m_Project->m_Name;
+		out << YAML::Key << "AssetPath" << YAML::Value << m_Project->m_AssetPath;
 		out << YAML::Key << "ActiveScene" << YAML::Value << m_Project->m_CurrentScene;
 		out << YAML::EndMap;
 
@@ -36,9 +37,11 @@ namespace phx {
 
 		std::string sceneName = data["Project"].as<std::string>();
 		std::string activeScene = data["ActiveScene"].as<std::string>();
+		std::string assetPath = data["AssetPath"].as<std::string>();
 
 		m_Project = Project::Create(sceneName, filepath);
 		m_Project->m_CurrentScene = activeScene;
+		m_Project->m_AssetPath = assetPath;
 
 		return m_Project;
 	}

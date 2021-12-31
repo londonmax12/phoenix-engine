@@ -472,8 +472,10 @@ namespace phx
 		camEnt.AddComponent<CameraComponent>();
 		SceneSerializer sceneSerialize(newScene);
 		std::string newScenePath = projectPath + "/Assets/Scenes/Main.phxscene";
+		std::string assetPath = projectPath + "/Assets/";
 		sceneSerialize.Serialize(newScenePath);
 		newProj->m_CurrentScene = newScenePath;
+		newProj->m_AssetPath = assetPath;
 
 		ProjectSerializer serializer(newProj);
 		serializer.Serialize(projPath);

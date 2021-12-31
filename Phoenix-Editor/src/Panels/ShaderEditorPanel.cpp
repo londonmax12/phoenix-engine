@@ -3,8 +3,6 @@
 #include "../EditorLayer.h"
 
 namespace phx {
-	extern const std::filesystem::path s_AssetPath;
-
 	ShaderEditorPanel::ShaderEditorPanel()
 	{
 		auto lang = TextEditor::LanguageDefinition::GLSL();

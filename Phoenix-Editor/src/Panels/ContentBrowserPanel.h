@@ -9,7 +9,7 @@
 namespace phx {
 	enum FileType {
 		Dir, DirEmpty,
-		PhoenixFile, ImageFile, AudioFile, MeshFile,
+		PhoenixFile, ImageFile, AudioFile, MeshFile, PrefabFile,
 		OtherFile
 	};
 	struct FileIcon
@@ -28,6 +28,10 @@ namespace phx {
 		ContentBrowserPanel();
 		void Refresh();
 		void OnImGuiRender();	
+
+		void UpdateAssetPath(std::string path);
+
+		std::filesystem::path m_AssetPath;
 	private:
 		std::filesystem::path m_CurrentDirectory;
 

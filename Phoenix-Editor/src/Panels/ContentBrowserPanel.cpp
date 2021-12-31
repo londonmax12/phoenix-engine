@@ -79,6 +79,10 @@ namespace phx {
 				{
 					newFileIcon.FileType = FileType::MeshFile;
 				}
+				else if (extension == ".phxobj")
+				{
+					newFileIcon.FileType = FileType::PrefabFile;
+				}
 				else
 				{
 					newFileIcon.FileType = FileType::OtherFile;
@@ -102,7 +106,9 @@ namespace phx {
 		m_Icons["scene_file"] = Texture2D::Create("resources/icons/content-browser/scene-icon.png");
 		m_Icons["mesh_file"] = Texture2D::Create("resources/icons/content-browser/mesh-icon.png");
 		m_Icons["audio_file"] = Texture2D::Create("resources/icons/content-browser/audio-icon.png");
+		m_Icons["prefab_file"] = Texture2D::Create("resources/icons/content-browser/prefab-icon.png");
 
+		
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
@@ -124,7 +130,7 @@ namespace phx {
 		bool getparents = false;
 		if (ImGui::Button("<", ImVec2(size, size)))
 		{
-			if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
+			if (m_CurrentDirectory != std::filesystem::path(m_AssetPath))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 				refresh = true;
@@ -163,7 +169,7 @@ namespace phx {
 		if (getparents)
 		{
 			m_ParentDirs.clear();
-			m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+			m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
 			getparents = false;
 		}
 
@@ -257,10 +263,10 @@ namespace phx {
 								m_CurrentDirectory /= itr.Path.filename();
 								refresh = true;
 								m_ParentDirs.clear();
-								m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+								m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
 							}
 						}
-						auto relativePath = std::filesystem::relative(itr.Path, s_AssetPath);
+						auto relativePath = std::filesystem::relative(itr.Path, m_AssetPath);
 						if (ImGui::BeginDragDropSource())
 						{
 							const wchar_t* itemPath = relativePath.c_str();
@@ -319,5 +325,11 @@ namespace phx {
 
 
 		ImGui::End();
+	}
+	void ContentBrowserPanel::UpdateAssetPath(std::string path)
+	{
+		m_AssetPath = path;
+		m_CurrentDirectory = path;
+		Refresh();
 	}
 }
