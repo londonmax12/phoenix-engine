@@ -71,6 +71,14 @@ namespace phx {
 				{
 					newFileIcon.FileType = FileType::PhoenixFile;
 				}
+				else if (extension == ".wav" || extension == ".ogg" || extension == ".mp3")
+				{
+					newFileIcon.FileType = FileType::AudioFile;
+				}
+				else if (extension == ".obj" || extension == ".ply" || extension == ".fbx")
+				{
+					newFileIcon.FileType = FileType::MeshFile;
+				}
 				else
 				{
 					newFileIcon.FileType = FileType::OtherFile;
@@ -85,11 +93,16 @@ namespace phx {
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_CurrentDirectory(s_AssetPath)
 	{
-		m_DirectoryEmptyIcon = Texture2D::Create("resources/icons/content-browser/directory-empty-icon.png");
-		m_DirectoryIcon = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
-		m_FileIcon = Texture2D::Create("resources/icons/content-browser/file-icon.png");
-		m_ImageIcon = Texture2D::Create("resources/icons/content-browser/image-icon.png");
-		m_PhoenixIcon = Texture2D::Create("resources/icons/content-browser/phoenix.png");
+		m_Icons["dir_empty"] = Texture2D::Create("resources/icons/content-browser/directory-empty-icon.png");
+		m_Icons["dir"] = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
+
+		m_Icons["default"] = Texture2D::Create("resources/icons/content-browser/file-icon.png");
+
+		m_Icons["image_file"] = Texture2D::Create("resources/icons/content-browser/image-icon.png");
+		m_Icons["scene_file"] = Texture2D::Create("resources/icons/content-browser/scene-icon.png");
+		m_Icons["mesh_file"] = Texture2D::Create("resources/icons/content-browser/mesh-icon.png");
+		m_Icons["audio_file"] = Texture2D::Create("resources/icons/content-browser/audio-icon.png");
+
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
 		m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
@@ -193,32 +206,44 @@ namespace phx {
 
 					ImGui::PushID(itr.Path.c_str());
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 					switch (itr.FileType)
 					{
 					case FileType::Dir:
 					{
-						ImGui::ImageButton((ImTextureID)m_DirectoryIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						ImGui::ImageButton((ImTextureID)m_Icons["dir"]->GetRendererID(), {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0});
 						break;
 					}
 					case FileType::DirEmpty:
 					{
-						ImGui::ImageButton((ImTextureID)m_DirectoryEmptyIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						ImGui::ImageButton((ImTextureID)m_Icons["dir_empty"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 						break;
 					}
 					case FileType::ImageFile:
 					{
-						ImGui::ImageButton((ImTextureID)m_ImageIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						ImGui::ImageButton((ImTextureID)m_Icons["image_file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 						break;
 					}
 					case FileType::PhoenixFile:
 					{
-						ImGui::ImageButton((ImTextureID)m_PhoenixIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						ImGui::ImageButton((ImTextureID)m_Icons["scene_file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					case FileType::MeshFile:
+					{
+						ImGui::ImageButton((ImTextureID)m_Icons["mesh_file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						break;
+					}
+					case FileType::AudioFile:
+					{
+						ImGui::ImageButton((ImTextureID)m_Icons["audio_file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 						break;
 					}
 					default:
 					{
-						ImGui::ImageButton((ImTextureID)m_FileIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+						ImGui::ImageButton((ImTextureID)m_Icons["default"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 						break;
 					}
 					}
@@ -272,7 +297,7 @@ namespace phx {
 						ImGui::EndPopup();
 					}
 
-					ImGui::PopStyleColor();
+					ImGui::PopStyleColor(3);
 					ImGui::TextWrapped(itr.Path.filename().string().c_str());
 
 					ImGui::NextColumn();

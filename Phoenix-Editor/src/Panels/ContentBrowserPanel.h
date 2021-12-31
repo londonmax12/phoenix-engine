@@ -1,13 +1,15 @@
 #pragma once
 
-#include <filesystem>
-
 #include "Phoenix/Renderer/Texture.h"
+
+#include <filesystem>
+#include <map>
+#include <string>
 
 namespace phx {
 	enum FileType {
 		Dir, DirEmpty,
-		PhoenixFile, ImageFile, ShaderFile,
+		PhoenixFile, ImageFile, AudioFile, MeshFile,
 		OtherFile
 	};
 	struct FileIcon
@@ -31,11 +33,7 @@ namespace phx {
 
 		bool refresh = false;
 
-		Ref<Texture2D> m_DirectoryIcon;
-		Ref<Texture2D> m_DirectoryEmptyIcon;
-		Ref<Texture2D> m_ImageIcon;
-		Ref<Texture2D> m_FileIcon;
-		Ref<Texture2D> m_PhoenixIcon;
+		std::map<std::string, Ref<Texture2D>> m_Icons;
 
 		Ref<Texture2D> m_RefreshIcon;
 
