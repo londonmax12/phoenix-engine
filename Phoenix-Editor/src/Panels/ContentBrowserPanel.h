@@ -26,6 +26,7 @@ namespace phx {
 	{
 	public:		
 		ContentBrowserPanel();
+		ContentBrowserPanel(std::string assetPath);
 		void Refresh();
 		void OnImGuiRender();	
 
@@ -35,6 +36,7 @@ namespace phx {
 	private:
 		std::filesystem::path m_CurrentDirectory;
 
+		bool getparents = false;
 		bool refresh = false;
 
 		std::map<std::string, Ref<Texture2D>> m_Icons;

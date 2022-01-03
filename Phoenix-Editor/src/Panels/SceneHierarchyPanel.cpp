@@ -12,7 +12,6 @@
 #include "Phoenix/Scene/Scene.h"
 
 namespace phx {
-
 	extern const std::filesystem::path s_AssetPath;
 
 	SceneHierarchyPanel::SceneHierarchyPanel()

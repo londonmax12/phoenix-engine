@@ -255,7 +255,6 @@ namespace phx
 			{
 				if (ImGui::BeginMenu("Windows"))
 				{
-					ImGui::MenuItem("Console", NULL, &m_ShowConsole);
 					ImGui::MenuItem("Content Browser", NULL, &m_ShowContentBrowser);
 					ImGui::MenuItem("Shader Editor", NULL, &m_ShowShaderEditor);
 					ImGui::Separator();
@@ -288,9 +287,6 @@ namespace phx
 
 		if (m_ShowShaderEditor)
 			m_ShaderEditorPanel.OnImGuiRender();
-
-		if (m_ShowConsole)
-			m_ConsolePanel.OnImGuiRender();
 
 		//ImGui::ShowDemoWindow();
 

@@ -7,7 +7,6 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
 #include "Panels/ShaderEditorPanel.h"
-#include "Panels/ConsolePanel.h"
 
 #include <string>
 
@@ -75,7 +74,6 @@ namespace phx {
 		bool m_ShowMetrics = true;
 		bool m_ShowContentBrowser = true;
 		bool m_ShowShaderEditor = false;
-		bool m_ShowConsole = false;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		glm::vec2 m_ViewportBounds[2];
@@ -87,7 +85,6 @@ namespace phx {
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
 		ShaderEditorPanel m_ShaderEditorPanel;
-		ConsolePanel m_ConsolePanel;
 
 		float m_GravityX = 0.0f;
 		float m_GravityY = -9.8f;

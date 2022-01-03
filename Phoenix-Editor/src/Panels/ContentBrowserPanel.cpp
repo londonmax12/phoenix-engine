@@ -3,6 +3,9 @@
 #include "ContentBrowserPanel.h"
 #include "ShaderEditorPanel.h"
 
+#include "Phoenix/Utils/Filesystem.h"
+#include "Phoenix/UI/GuiWidgets.h"
+
 #include <imgui.h>
 
 #include <atlbase.h>
@@ -18,27 +21,65 @@ namespace phx {
 	std::vector<std::filesystem::path> GetParents(std::filesystem::path root, std::filesystem::path current)
 	{
 		std::vector<std::filesystem::path> parents;
+		std::string rootStr = root.string();
+		std::string currentStr = current.string();
 
-		std::string path = std::string();
-		for (auto x : current.string())
+		if(rootStr[rootStr.length() - 1] == '/')
+			rootStr.erase(rootStr.length() - 1);
+
+		if (rootStr.find('/') != std::string::npos)
 		{
-			if (x == '\\')
-			{
-				parents.push_back(std::filesystem::path(path));
-			}
-			path += x;
+			rootStr.erase(rootStr.find_last_of('/'));
+			currentStr.replace(currentStr.find(rootStr), rootStr.length(), "");
 		}
-		if (path.empty())
+
+		if (currentStr[0] == '/')
 		{
-			parents.push_back(root);
+			currentStr.erase(0, 1);
+			rootStr += '/';
+		}
+		if (currentStr[currentStr.length() - 1] != '/')
+			currentStr += '/';
+
+		while (currentStr.find("\\") != std::string::npos)
+		{
+			currentStr.replace(currentStr.find('\\'), 1, "/");
+		}
+
+		if (currentStr.find('/') != std::string::npos)
+		{
+			std::string path = std::string();
+			for (auto& itr : currentStr)
+			{
+				path += itr;
+				if (itr == '/')
+				{
+					parents.push_back(std::filesystem::path(rootStr + path));
+				}
+			}
 		}
 		else
 		{
-			parents.push_back(std::filesystem::path(path));
+			parents.push_back(std::filesystem::path(rootStr + currentStr));	
 		}
 		return parents;
 	}
+	bool CompareFileIcon(const FileIcon& fi1,  const FileIcon& fi2)
+	{
+		if (fi1.FileType != fi2.FileType)
+		{
+			if (fi1.FileType == FileType::Dir)
+				return true;
+			else if (fi2.FileType == FileType::Dir)
+				return false;
 
+			if (fi1.FileType == FileType::DirEmpty)
+				return true;
+			else if (fi2.FileType == FileType::DirEmpty)
+				return false;
+		}
+		return fi1.Path.string() < fi2.Path.string();
+	}
 	void ContentBrowserPanel::Refresh()
 	{
 		m_Files.clear();
@@ -92,10 +133,10 @@ namespace phx {
 
 			m_Files.push_back(newFileIcon);
 		}
+		std::sort(m_Files.begin(), m_Files.end(), CompareFileIcon);
 	}
 
 	ContentBrowserPanel::ContentBrowserPanel()
-		: m_CurrentDirectory(s_AssetPath)
 	{
 		m_Icons["dir_empty"] = Texture2D::Create("resources/icons/content-browser/directory-empty-icon.png");
 		m_Icons["dir"] = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
@@ -111,7 +152,32 @@ namespace phx {
 		
 		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
 
-		m_ParentDirs = GetParents(s_AssetPath, m_CurrentDirectory);
+		m_AssetPath = s_AssetPath;
+		m_CurrentDirectory = m_AssetPath;
+		m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
+
+		Refresh();
+	}
+
+	ContentBrowserPanel::ContentBrowserPanel(std::string assetPath)
+	{
+		m_Icons["dir_empty"] = Texture2D::Create("resources/icons/content-browser/directory-empty-icon.png");
+		m_Icons["dir"] = Texture2D::Create("resources/icons/content-browser/directory-icon.png");
+
+		m_Icons["default"] = Texture2D::Create("resources/icons/content-browser/file-icon.png");
+
+		m_Icons["image_file"] = Texture2D::Create("resources/icons/content-browser/image-icon.png");
+		m_Icons["scene_file"] = Texture2D::Create("resources/icons/content-browser/scene-icon.png");
+		m_Icons["mesh_file"] = Texture2D::Create("resources/icons/content-browser/mesh-icon.png");
+		m_Icons["audio_file"] = Texture2D::Create("resources/icons/content-browser/audio-icon.png");
+		m_Icons["prefab_file"] = Texture2D::Create("resources/icons/content-browser/prefab-icon.png");
+
+
+		m_RefreshIcon = Texture2D::Create("resources/icons/content-browser/refresh-icon.png");
+
+		m_AssetPath = assetPath;
+		m_CurrentDirectory = m_AssetPath;
+		m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
 
 		Refresh();
 	}
@@ -120,17 +186,13 @@ namespace phx {
 	{
 		ImGui::Begin("Content Browser");
 
-		static ImGuiTextFilter filter;
-		filter.Draw("Search");
-
-		ImGui::Separator();
-
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		int size = ImGui::GetFontSize();
-		bool getparents = false;
+		
+		UI::PushHiddenButton();
 		if (ImGui::Button("<", ImVec2(size, size)))
 		{
-			if (m_CurrentDirectory != std::filesystem::path(m_AssetPath))
+			if (m_CurrentDirectory.string() + "/" != m_AssetPath)
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 				refresh = true;
@@ -147,7 +209,14 @@ namespace phx {
 				ImGui::SameLine();
 				ImGui::Text("/");
 				ImGui::SameLine();
-				if (ImGui::Button(itr.filename().string().c_str()))
+				std::string name = itr.string();
+				if (name.find('/') != std::string::npos)
+				{
+					name.erase(name.length() - 1);
+					name = name.substr(name.find_last_of('/') + 1, name.length() - 1);
+				}
+				const char* nameChr = name.c_str();
+				if (ImGui::Button(nameChr))
 				{
 					m_CurrentDirectory = itr;
 					refresh = true;
@@ -156,21 +225,21 @@ namespace phx {
 			}
 			else
 			{
+				index++;
 				ImGui::SameLine();
-				if (ImGui::Button(itr.filename().string().c_str()))
+				std::string buttonName = itr.string();
+				if (buttonName.find('/') != std::string::npos)
+				{
+					buttonName.erase(buttonName.find_last_of('/'));
+					buttonName = buttonName.substr(buttonName.find_last_of('/') + 1, buttonName.length() - 1);
+				}
+				if (ImGui::Button(buttonName.c_str()))
 				{
 					m_CurrentDirectory = itr;
 					refresh = true;
 					getparents = true;
 				}
-				index++;
 			}
-		}
-		if (getparents)
-		{
-			m_ParentDirs.clear();
-			m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
-			getparents = false;
 		}
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -188,12 +257,19 @@ namespace phx {
 		{
 			refresh = true;
 		}
+		UI::PopHiddenButton();
 		ImGui::PopStyleColor();
 
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		static ImGuiTextFilter filter;
+		/*
+		ImGui::SameLine();
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth());
+		filter.Draw("Search ##content_filter");
+		ImGui::PopItemWidth();*/
 
 		ImGui::Separator();
 
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		if (ImGui::ListBoxHeader("##listbox 1", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 2)))
 		{
 
@@ -262,8 +338,7 @@ namespace phx {
 							{
 								m_CurrentDirectory /= itr.Path.filename();
 								refresh = true;
-								m_ParentDirs.clear();
-								m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
+								getparents = true;
 							}
 						}
 						auto relativePath = std::filesystem::relative(itr.Path, m_AssetPath);
@@ -285,6 +360,11 @@ namespace phx {
 							CA2W newFile(newFileStr.c_str());
 
 							CopyFile(copyFile, newFile, false);
+							Refresh();
+						}
+						if (ImGui::MenuItem("Open in Explorer"))
+						{
+							Filesystem::OpenInFileExplorer(itr.Path.string());
 						}
 						/*if (ImGui::MenuItem("Rename"))
 						{
@@ -317,6 +397,12 @@ namespace phx {
 
 		ImGui::PopStyleColor();
 
+		if (getparents)
+		{
+			m_ParentDirs.clear();
+			m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
+			getparents = false;
+		}
 		if (refresh)
 		{
 			Refresh();
@@ -330,6 +416,8 @@ namespace phx {
 	{
 		m_AssetPath = path;
 		m_CurrentDirectory = path;
-		Refresh();
+		getparents = true;
+		refresh = true;
+		//m_ParentDirs = GetParents(m_AssetPath, m_CurrentDirectory);
 	}
 }
