@@ -462,7 +462,7 @@ namespace phx
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
 
@@ -472,7 +472,7 @@ namespace phx
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
 
-		float xPos1 = (ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5);
+		float xPos1 = m_SceneState == SceneState::Edit ? (ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5) : ImGui::GetContentRegionMax().x * 0.5f;
 		float xPos2 = (ImGui::GetContentRegionMax().x * 0.5f) + (size * 0.5);
 
 		ImGui::SetCursorPosX(xPos1);
@@ -494,27 +494,28 @@ namespace phx
 				ImGui::Text("Play");
 				ImGui::EndTooltip();
 			}
-		
-		ImGui::SameLine();
-		ImGui::SetCursorPosX(xPos2);
-		if (ImGui::ImageButton((ImTextureID)m_PlayTestIcon->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
-		{
-			if (m_SceneState == SceneState::Edit)
+
+		if (m_SceneState == SceneState::Edit) {
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(xPos2);
+			if (ImGui::ImageButton((ImTextureID)m_PlayTestIcon->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
 			{
-				OnScenePlayTest();
+				if (m_SceneState == SceneState::Edit)
+				{
+					OnScenePlayTest();
+				}
+				else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
+				{
+					OnSceneStop();
+				}
 			}
-			else if (m_SceneState == SceneState::Play || m_SceneState == SceneState::PhysicTest)
-			{
-				OnSceneStop();
-			}
-		}
-		if (m_SceneState == SceneState::Edit)
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::BeginTooltip();
 				ImGui::Text("Playtest");
 				ImGui::EndTooltip();
 			}
+		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
 		
@@ -645,7 +646,8 @@ namespace phx
 		if (m_SceneState == SceneState::Play)
 		{
 			Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
-			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera, camera.GetComponent<TransformComponent>().GetTransform());
+			if (camera)
+				Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera, camera.GetComponent<TransformComponent>().GetTransform());
 		}
 		else
 		{

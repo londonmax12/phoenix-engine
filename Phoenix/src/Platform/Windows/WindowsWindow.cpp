@@ -42,6 +42,7 @@ namespace phx {
 
 		PHX_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
+		glfwWindowHint(GLFW_SAMPLES, 16);
 		if (!s_GLFWInitialized)
 		{
 			PHX_PROFILE_SCOPE("glfwInit");

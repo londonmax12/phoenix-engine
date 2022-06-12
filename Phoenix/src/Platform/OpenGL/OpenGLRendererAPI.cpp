@@ -7,12 +7,14 @@ namespace phx {
 	{
 		PHX_PROFILE_FUNCTION();
 
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glEnable(GL_MULTISAMPLE);
+		//glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 		glFrontFace(GL_CCW);
+
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
