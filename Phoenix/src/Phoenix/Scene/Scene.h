@@ -20,7 +20,7 @@ namespace phx {
 		~Scene();
 
 		enum class SceneType {
-			Scene2D, Scene3D
+			Scene2D
 		};
 
 		static Ref<Scene> Copy(Ref<Scene> other);
@@ -38,7 +38,6 @@ namespace phx {
 		void OnRuntimeStop();
 
 		void Render2D();
-		void Render3D();
 
 		void UpdateScripts();
 

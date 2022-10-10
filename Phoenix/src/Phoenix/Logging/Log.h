@@ -23,7 +23,7 @@ namespace phx {
 
 }
 
-#ifdef PHX_DEBUG_MODE
+#ifndef PHX_DIST_MODE
 #define PHX_CORE_FATAL(...)::phx::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 #define PHX_CORE_ERROR(...)::phx::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define PHX_CORE_WARN(...)::phx::Log::GetCoreLogger()->warn(__VA_ARGS__)

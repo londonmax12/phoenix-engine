@@ -136,7 +136,6 @@ namespace phx {
 		switch (type)
 		{
 		case Scene::SceneType::Scene2D:    return "2D";
-		case Scene::SceneType::Scene3D:    return "3D";
 		}
 
 		PHX_CORE_ASSERT(false, "Unknown scene type");
@@ -146,10 +145,9 @@ namespace phx {
 	static Scene::SceneType SceneTypeFromString(const std::string& type)
 	{
 		if (type == "2D")    return Scene::SceneType::Scene2D;
-		if (type == "3D")    return Scene::SceneType::Scene3D;
 
 		PHX_CORE_ASSERT(false, "Unknown scene type");
-		return Scene::SceneType::Scene3D;
+		return Scene::SceneType::Scene2D;
 	}
 
 

@@ -5,7 +5,6 @@
 #include "Phoenix/Application/UUID.h"
 
 #include "Phoenix/Renderer/Texture.h"
-#include "Phoenix/Renderer/Mesh.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../vendor/glm/glm/glm.hpp"
@@ -163,17 +162,5 @@ namespace phx {
 
 		CircleCollider2DComponent() = default;
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
-	};
-
-
-
-	struct MeshComponent
-	{
-		Mesh Mesh;
-		std::string Path = std::string();
-
-		MeshComponent() = default;
-		MeshComponent(const MeshComponent&) = default;
-		MeshComponent(const std::string filepath) : Mesh(phx::Mesh(filepath)), Path(std::filesystem::path(filepath).string()) {}
 	};
 }

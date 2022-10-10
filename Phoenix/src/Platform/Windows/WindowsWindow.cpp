@@ -211,6 +211,6 @@ namespace phx {
 	}
 	void WindowsWindow::MaximizeWindow()
 	{
-		glfwMaximizeWindow(m_Window);
+		//glfwMaximizeWindow(m_Window);
 	}
 }

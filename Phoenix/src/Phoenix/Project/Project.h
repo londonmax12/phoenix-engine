@@ -11,7 +11,7 @@ namespace phx {
 
 		static Ref<Project> Create(std::string name, std::string path);
 
-		std::string m_CurrentScene;
+		std::string m_CurrentScene{};
 		std::string m_Path;
 		std::string m_AssetPath;
 		std::string m_Name;

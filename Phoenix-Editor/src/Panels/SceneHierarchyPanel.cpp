@@ -125,53 +125,6 @@ namespace phx {
 							}
 							break;
 						}
-						case Scene::SceneType::Scene3D:
-						{
-							if (ImGui::BeginMenu("2D Objects"))
-							{
-								if (ImGui::MenuItem("Plane Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Plane Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Plane.fbx");
-								}
-								ImGui::EndMenu();
-							}
-							if (ImGui::BeginMenu("3D Objects"))
-							{
-								if (ImGui::MenuItem("Cube Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Cube Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Cube.fbx");
-								}
-								if (ImGui::MenuItem("Sphere Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Sphere Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Sphere.fbx");
-								}
-								if (ImGui::MenuItem("Cylinder Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Cylinder Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Cylinder.fbx");
-								}
-								if (ImGui::MenuItem("Capsule Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Capsule Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Capsule.fbx");
-								}
-								if (ImGui::MenuItem("Cone Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Cone Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Cone.fbx");
-								}
-								if (ImGui::MenuItem("Torus Object"))
-								{
-									Entity& newEntity = m_Context->CreateEntity("Torus Object");
-									newEntity.AddComponent<MeshComponent>("resources/meshes/Torus.fbx");
-								}
-								ImGui::EndMenu();
-							}
-							break;
-						}
 						}
 						ImGui::EndMenu();
 					}
@@ -388,18 +341,6 @@ namespace phx {
 					}
 					ImGui::EndMenu();
 				}
-				break;
-			}
-			case Scene::SceneType::Scene3D:
-			{
-				/*if (!m_SelectionContext.HasComponent<MeshComponent>())
-				{
-					if (ImGui::MenuItem("Mesh"))
-					{
-						m_SelectionContext.AddComponent<MeshComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}*/ 
 				break;
 			}
 			}
@@ -629,36 +570,6 @@ namespace phx {
 					UI::DrawGap();
 					UI::DrawCheckbox("Is Sensor", &component.IsSensor);
 					UI::DrawCheckbox("Show Collider", &component.ShowCollider);
-				});
-		}
-
-		if (entity.HasComponent<MeshComponent>())
-		{
-			DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)
-				{
-					ImGui::Columns(2);
-					ImGui::SetColumnWidth(0, 100.0f);
-					ImGui::Text("3D Object");
-					ImGui::NextColumn();
-					if (!component.Path.empty())
-						ImGui::Button(component.Path.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
-					else
-						ImGui::Button("Drag File", ImVec2(ImGui::GetContentRegionAvail().x - 25, 25));
-
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-						{
-							const wchar_t* path = (const wchar_t*)payload->Data;
-							std::filesystem::path filepath = std::filesystem::path(s_AssetPath) / path;
-
-							component.Mesh = Mesh(filepath.string());
-							component.Path = filepath.string();
-						}
-
-						ImGui::EndDragDropTarget();
-					}
-					ImGui::Columns(1);
 				});
 		}
 	}

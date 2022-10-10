@@ -1,0 +1,6 @@
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\int\Release\Phoenix-Script.csproj.AssemblyReference.cache
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\int\Release\Phoenix-Script.csproj.CoreCompileInputs.cache
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\int\Release\Phoenix-Script.dll
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\int\Release\Phoenix-Script.pdb
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\Phoenix-Script.dll
+C:\Users\London\Desktop\Projects\C++\phoenix-engine\Phoenix-Editor\resources\scripts\Phoenix-Script.pdb

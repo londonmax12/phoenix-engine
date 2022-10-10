@@ -3,7 +3,6 @@
 #include "RenderCommand.h"
 
 #include "Phoenix/Renderer/OrthographicCamera.h"
-#include "Phoenix/Renderer/Mesh.h"
 
 #include "Shader.h"
 

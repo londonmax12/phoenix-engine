@@ -4,6 +4,7 @@
 #include "Phoenix/Input/Input.h"
 #include "Phoenix/Renderer/Buffer.h"
 #include "Phoenix/Renderer/Renderer.h"
+#include "Phoenix/Scripting/ScriptEngine/ScriptEngine.h"
 
 #include <GLFW/glfw3.h>
 
@@ -27,6 +28,7 @@ namespace phx {
 
 		if(spec.InitRenderer)
 			Renderer::Init();
+		ScriptEngine::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

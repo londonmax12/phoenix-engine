@@ -65,7 +65,7 @@ namespace phx
 			else
 			{
 
-				NewScene(Scene::SceneType::Scene3D, true);
+				NewScene(Scene::SceneType::Scene2D, true);
 			}
 			m_ContentBrowserPanel.UpdateAssetPath(m_Project->m_AssetPath);
 		}
@@ -222,10 +222,6 @@ namespace phx
 					{
 						NewScene(Scene::SceneType::Scene2D, true);
 					}
-					if (ImGui::MenuItem("3D Scene", "Ctrl+N"))
-					{
-						NewScene(Scene::SceneType::Scene3D, true);
-					}	
 					ImGui::EndMenu();
 				}
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
@@ -467,7 +463,7 @@ namespace phx
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
 
 
-		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiColumnsFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse);
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
@@ -558,7 +554,7 @@ namespace phx
 		{
 			if (control)
 			{
-				NewScene(Scene::SceneType::Scene3D);
+				NewScene(Scene::SceneType::Scene2D);
 			}
 			break;
 		}
@@ -774,7 +770,9 @@ namespace phx
 
 			m_ActiveScene = m_EditorScene;
 			m_EditorScenePath = path;
-			m_Project->SetCurrentScene(path.string());
+			std::string scene = path.string();
+			if (m_Project != nullptr)
+				m_Project->SetCurrentScene(scene);
 		}
 	}
 

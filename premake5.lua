@@ -147,60 +147,6 @@ group "Dependencies"
 			optimize "on"
 			buildoptions "/MD"
 
-	project "Discord"
-		location "vendor/Discord"
-		kind "StaticLib"
-		language "C++"
-		cppdialect "C++17"
-		staticruntime "on"
-
-		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-		files
-		{
-			"Phoenix/vendor/Discord/include/discord_register.h",
-			"Phoenix/vendor/Discord/include/discord_rpc.h",
-			"Phoenix/vendor/Discord/src/backoff.h",
-			"Phoenix/vendor/Discord/src/connection.h",
-			"Phoenix/vendor/Discord/src/discord_rpc.cpp",
-			"Phoenix/vendor/Discord/src/dllmain.cpp",
-			"Phoenix/vendor/Discord/src/msg_queue.h",
-			"Phoenix/vendor/Discord/src/rpc_connection.cpp",
-			"Phoenix/vendor/Discord/src/rpc_connection.h",
-			"Phoenix/vendor/Discord/src/serialization.cpp",
-			"Phoenix/vendor/Discord/src/serialization.h"
-		}
-
-		filter "system:windows"
-			systemversion "latest"
-			files 
-			{
-				"Phoenix/vendor/Discord/src/connection_win.cpp",
-				"Phoenix/vendor/Discord/src/discord_register_win.cpp"
-			}
-		
-		filter "system:linux"
-			pic "On"
-			systemversion "latest"
-			cppdialect "C++17"
-			files
-			{
-				"Phoenix/vendor/Discord/src/discord_register_linux.h"
-			}
-		filter "configurations:Debug"
-			runtime "Debug"
-			symbols "on"
-			buildoptions "/MDd"
-		filter "configurations:Release"
-			runtime "Release"
-			optimize "on"
-			buildoptions "/MDd"
-		filter "configurations:Dist"
-			runtime "Release"
-			optimize "on"
-			buildoptions "/MDd"
-
 	project "yaml-cpp"
 		location "vendor/yaml-cpp"
 		kind "StaticLib"
@@ -286,8 +232,8 @@ group "Dependencies"
 			runtime "Release"
 			buildoptions "/MD"
 			optimize "on"
-group ""
 
+group "Core"
 project "Phoenix"
 	location "Phoenix"
 	kind "StaticLib"
@@ -329,9 +275,6 @@ project "Phoenix"
 		"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp",
 		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.cpp",
 		"%{prj.name}/vendor/ImGuiColorTextEdit/TextEditor.h",
-		"%{prj.name}/vendor/Lua/**.h",
-		"%{prj.name}/vendor/Lua/**.hpp",
-		"%{prj.name}/vendor/Lua/**.c"
 	}
 
 	includedirs
@@ -342,22 +285,19 @@ project "Phoenix"
 		"%{prj.name}/vendor/GLFW/include",
 		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/ImGui",
-		"%{prj.name}/vendor/Discord/include",
-		"%{prj.name}/vendor/OpenAL/include",
-		"%{prj.name}/vendor/libsndfile/",
 		"%{prj.name}/vendor/glm",
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/entt/include",
 		"%{prj.name}/vendor/yaml_cpp/include",
 		"%{prj.name}/vendor/box2d/include",
 		"%{prj.name}/vendor/ImGuizmo",
-		"%{prj.name}/vendor/assimp/include",
+		"%{prj.name}/vendor/mono/include",
 		"VulkanSDK/{%{VULKAN_SDK}/include"
 	}
 
 	libdirs
 	{
-		"Phoenix/lib",
+		"%{prj.name}/vendor/mono/lib/%{cfg.buildcfg}"
 	}
 
 	links 
@@ -366,13 +306,9 @@ project "Phoenix"
 		"GLFW",
 		"GLAD",
 		"imgui",
-		"Discord",
 		"yaml-cpp",
 
-		"sndfile.lib",
-		"OpenAL32.lib",
-		"assimp.lib",
-
+		"libmono-static-sgen.lib",
 		"opengl32.lib"
 	}
 	filter "files:***.c"
@@ -389,6 +325,13 @@ project "Phoenix"
 			"_CRT_SECURE_NO_WARNINGS",
 			"GLFW_INCLUDE_NONE"
 		}
+		
+		links {
+			"Ws2_32.lib",
+			"Winmm.lib",
+			"Version.lib",
+			"Bcrypt.lib"
+		}
 
 	filter "configurations:Debug"
 		defines "PHX_DEBUG_MODE"
@@ -402,8 +345,7 @@ project "Phoenix"
 		{
 			"shaderc_sharedd.lib",
 			"spirv-cross-cored.lib",
-			"spirv-cross-glsld.lib",
-			"SPIRV-Toolsd.lib",
+			"spirv-cross-glsld.lib"
 		}
 
 	filter "configurations:Release"
@@ -427,6 +369,34 @@ project "Phoenix"
 			"%{Library.SPIRV_Cross_Release}",
 			"%{Library.SPIRV_Cross_GLSL_Release}"
 		}
+project "Phoenix-Script"
+	location "Phoenix-Script"
+	kind "SharedLib"
+	language "C#"
+	dotnetframework "4.7.2"
+	
+	targetdir ("Phoenix-Editor/resources/scripts")
+	objdir ("Phoenix-Editor/resources/scripts/int")
+
+	files
+	{
+		"%{prj.name}/src/**.cs",
+		"%{prj.name}/properties/**.cs"
+	}
+
+	filter "configurations:Debug"
+		optimize "Off"
+		symbols "Default"
+
+	filter "configurations:Release"
+		optimize "On"
+		symbols "Default"
+
+	filter "configurations:Dist"
+		optimize "Full"
+		symbols "Off"
+	
+group "Debugging"
 project "Sandbox" 
 	location "Sandbox"
 	kind "ConsoleApp"
@@ -479,7 +449,7 @@ project "Sandbox"
 		defines "PHX_DIST_MODE"
 		buildoptions "/MD"
 		optimize "on"
-	
+group "Tools"
 project "Phoenix-Editor" 
 	location "Phoenix-Editor"
 	kind "ConsoleApp"

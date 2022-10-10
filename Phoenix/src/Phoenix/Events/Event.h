@@ -9,7 +9,6 @@ namespace phx {
 	{
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
@@ -33,6 +32,15 @@ namespace phx {
 	class Event
 	{
 	public:
+		enum class EventType
+		{
+			None = 0,
+			WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
+			AppTick, AppUpdate, AppRender,
+			KeyPressed, KeyReleased, KeyTyped,
+			MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+		};
+
 		virtual ~Event() = default;
 
 		bool Handled = false;

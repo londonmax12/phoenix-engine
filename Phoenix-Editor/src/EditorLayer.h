@@ -1,7 +1,6 @@
 #pragma once
 #include <Phoenix.h>
 #include <Phoenix/Renderer/EditorCamera.h>
-#include <Phoenix/Audio/SoundSource.h>
 #include <Phoenix/Time/Timer.h>
 
 #include "Panels/SceneHierarchyPanel.h"
@@ -9,8 +8,6 @@
 #include "Panels/ShaderEditorPanel.h"
 
 #include <string>
-
-#include "Phoenix/Renderer/Mesh.h"
 
 namespace phx {
 	class EditorLayer : public Layer

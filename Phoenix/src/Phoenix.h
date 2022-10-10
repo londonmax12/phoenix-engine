@@ -36,7 +36,6 @@
 #include "Phoenix/Scene/SceneSerializer.h"
 #include "Phoenix/Scene/Components.h"
 #include "Phoenix/Scene/Entity.h"
-#include "Phoenix/Scene/Skybox.h"
 
 #include "Phoenix/Project/Project.h"
 #include "Phoenix/Project/ProjectSerializer.h"
@@ -57,10 +56,6 @@
 #include "Phoenix/Renderer/OrthographicCameraController.h"
 #include "Phoenix/Renderer/Texture.h"
 #include "Phoenix/Renderer/Framebuffer.h"
-//----------------------------------------
-
-//-----------------Audio------------------
-#include "Phoenix/Audio/Audio.h"
 //----------------------------------------
 
 //--------------Entry-Point---------------

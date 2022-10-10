@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 
 #include "Phoenix/Renderer/Renderer2D.h"
-#include "Phoenix/Renderer/Renderer3D.h"
 #include "Phoenix/Renderer/Renderer.h"
 
 #include "Phoenix/Scene/Components.h"
@@ -37,7 +36,7 @@ namespace phx {
 
 	Scene::~Scene()
 	{
-
+		delete m_PhysicsWorld;
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -108,8 +107,6 @@ namespace phx {
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-
-		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
 	}
@@ -240,22 +237,6 @@ namespace phx {
 		}
 	}
 
-	void Scene::Render3D()
-	{
-		{
-			auto view = m_Registry.view<TransformComponent, MeshComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
-				glm::mat4 transformMat = glm::translate(glm::mat4(1.0f), transform.Translation);
-				transformMat *= glm::scale(glm::mat4(1.0f), transform.Scale);
-				transformMat *= glm::toMat4(glm::quat(transform.Rotation));
-
-				Renderer3D::SubmitMesh(mesh.Mesh, transformMat, (int)entity);
-			}
-		}
-	}
-
 	void Scene::UpdateScripts()
 	{
 		// TODO: Rework script system
@@ -340,36 +321,7 @@ namespace phx {
 			}
 
 			break;
-		}			
-		case phx::Scene::SceneType::Scene3D:
-		{
-			Camera* mainCamera = nullptr;
-			glm::mat4 cameraTransform;
-			{
-				auto view = m_Registry.view<TransformComponent, CameraComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-					if (camera.Primary)
-					{
-						mainCamera = &camera.Camera;
-						cameraTransform = transform.GetTransform();
-						break;
-					}
-				}
-			}
-
-			if (mainCamera)
-			{
-				Renderer3D::BeginScene(*mainCamera, cameraTransform);
-				//m_Skybox.Render();
-				Render3D();
-				Renderer3D::EndScene();
-			}
-
-			break;
-		}			
+		}					
 		}
 	}
 
@@ -382,14 +334,6 @@ namespace phx {
 			Renderer2D::BeginScene(camera);
 			Render2D();
 			Renderer2D::EndScene();
-			break;
-		}
-		case phx::Scene::SceneType::Scene3D:
-		{
-			Renderer3D::BeginScene(camera);
-			//m_Skybox.Render();
-			Render3D();
-			Renderer3D::EndScene();
 			break;
 		}
 		}		
@@ -438,14 +382,6 @@ namespace phx {
 
 			break;
 		}
-		case phx::Scene::SceneType::Scene3D:
-		{
-			Renderer3D::BeginScene(camera);
-			m_Skybox.Render();
-			Render3D();
-			Renderer3D::EndScene();
-			break;
-		}
 		}
 	}
 
@@ -478,8 +414,6 @@ namespace phx {
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
-
-		CopyComponentIfExists<MeshComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
@@ -556,11 +490,6 @@ namespace phx {
 
 	template<>
 	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
 	}
 }

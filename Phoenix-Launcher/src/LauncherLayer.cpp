@@ -125,7 +125,7 @@ namespace phx
 				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 10));
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 6));
 				ImGui::SetNextItemWidth(700 - button_size.x - style.FramePadding.x * 2.0f - style.ItemInnerSpacing.x - 1);
-				ImGui::InputTextWithHint("##phoenix_install_location", "C:/Users/user/Phoenix", m_Properties.InstallPath.data(), MAX_PROJECT_FILEPATH_LENGTH, ImGuiInputTextFlags_ReadOnly);
+				ImGui::InputTextWithHint("##Phoenix_install_location", "C:/Program Files/Phoenix", m_Properties.InstallPath.data(), MAX_PROJECT_FILEPATH_LENGTH, ImGuiInputTextFlags_ReadOnly);
 				ImGui::SameLine();
 				if (ImGui::Button("..."))
 				{
@@ -301,7 +301,7 @@ namespace phx
 			ImGui::SameLine();
 			if (ImGui::Button("Open Project...", ImVec2(buttonWidth, imageButtonSize)))
 			{
-				std::string result = FileDialogs::OpenFile("Phoenix Project (*.phxproj)\0*.phxproj\0");
+				std::string result = FileDialogs::OpenFile("Phoenix Strat (*.r6strat)\0*.r6strat\0");
 				if (!result.empty())
 				{
 					std::replace(result.begin(), result.end(), '\\', '/');
@@ -384,7 +384,7 @@ namespace phx
 
 		if (!s_ProjectToOpen.empty())
 		{
-			std::filesystem::path phxDir = Environment::GetEnvironmentalVariable("PHOENIX_DIR");
+			std::filesystem::path phxDir = Environment::GetEnvironmentalVariable("PHX_DIR");
 			std::string phoenixWorkingDirectory = (phxDir / "Phoenix-Editor").string();
 
 			#ifdef PHX_DEBUG_MODE
@@ -393,7 +393,7 @@ namespace phx
 						phxDir = phxDir / "bin" / "Release-windows-x86_64" / "Phoenix-Editor";
 			#endif
 
-			std::string phxExe = (phxDir / "Phoenix-Editor.exe").string();
+			std::string phxExe = (phxDir / "Phoenix.exe").string();
 			std::string commandLine = phxExe + " " + s_ProjectToOpen;
 
 			PROCESS_INFORMATION processInfo;
@@ -416,7 +416,7 @@ namespace phx
 		if (ImGui::BeginPopupModal("Enviroment Error", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar))
 		{
 			ImGui::PushFont(boldFont);
-			ImGui::TextUnformatted("Failed to open the Phoenix Launcher! Is the install directory correct?");
+			ImGui::TextUnformatted("Failed to open the Phoenix Editor! Is the install directory correct?");
 			ImGui::PopFont();
 
 			ImVec2 label_size = ImGui::CalcTextSize("...", NULL, true);
@@ -426,7 +426,7 @@ namespace phx
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 10));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 6));
 			ImGui::SetNextItemWidth(700 - button_size.x - style.FramePadding.x * 2.0f - style.ItemInnerSpacing.x - 1);
-			ImGui::InputTextWithHint("##phoenix_install_location", "C:/Users/user/Phoenix", m_Properties.InstallPath.data(), MAX_PROJECT_FILEPATH_LENGTH, ImGuiInputTextFlags_ReadOnly);
+			ImGui::InputTextWithHint("##Phoenix_install_location", "C:/Users/user/Phoenix", m_Properties.InstallPath.data(), MAX_PROJECT_FILEPATH_LENGTH, ImGuiInputTextFlags_ReadOnly);
 			ImGui::SameLine();
 			if (ImGui::Button("..."))
 			{
@@ -436,7 +436,7 @@ namespace phx
 
 			if (ImGui::Button("Confirm"))
 			{
-				bool success = Environment::SetEnvironmentalVariable("PHOENIX_DIR", m_Properties.InstallPath);
+				bool success = Environment::SetEnvironmentalVariable("PHX_DIR", m_Properties.InstallPath);
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
