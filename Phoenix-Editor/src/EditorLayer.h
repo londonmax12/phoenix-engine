@@ -33,6 +33,8 @@ namespace phx {
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& path);
 
+		void OpenProject();
+
 		void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
 
 		void OnScenePlay();

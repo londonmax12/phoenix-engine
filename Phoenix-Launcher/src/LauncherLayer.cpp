@@ -463,7 +463,7 @@ namespace phx
 
 		std::filesystem::create_directories(projPathFS / "Assets" / "Textures");
 		std::filesystem::create_directories(projPathFS / "Assets" / "Scenes");
-		std::filesystem::create_directories(projPathFS / "Assets" / "Meshes");
+		std::filesystem::create_directories(projPathFS / "Assets" / "Scripts");
 
 		Ref<Project> newProj = Project::Create(name, projectPath);
 

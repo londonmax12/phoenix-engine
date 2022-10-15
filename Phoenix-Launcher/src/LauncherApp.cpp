@@ -13,7 +13,7 @@ namespace phx {
 	{
 	public:
 		PhoenixLauncher(ApplicationCommandLineArgs args)
-			: Application(ApplicationSpecification("Phoenix Launcher", false, 1000, 600, false), args)
+			: Application(ApplicationSpecification("Phoenix Launcher", false, 1000, 600, false, false), args)
 		{
 			{
 				PWSTR roamingFilePath;

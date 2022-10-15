@@ -9,6 +9,7 @@
 #include "Phoenix/Scene/Entity.h"
 
 #include "Phoenix/Scripting/ScriptableEntity.h"
+#include "Phoenix/Scripting/ScriptEngine/ScriptEngine.h"
 
 #include "box2d/b2_world.h"
 #include "box2d/b2_body.h"
@@ -107,6 +108,8 @@ namespace phx {
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<ScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+
 
 		return newScene;
 	}
@@ -117,12 +120,14 @@ namespace phx {
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
+		m_EntityMap[uuid] = entity;
 		return entity;
 	}
 
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+		m_EntityMap.erase(entity.GetUUID());
 	}
 
 	void Scene::SetGravity(float x, float y)
@@ -133,6 +138,14 @@ namespace phx {
 
 	void Scene::OnRuntimeStart()
 	{
+		ScriptEngine::OnRuntimeStart(this);
+
+		auto view = m_Registry.view<ScriptComponent>();
+		for (auto e : view) {
+			Entity entity = { e, this };
+			ScriptEngine::OnCreateEntity(entity);
+		}
+
 		switch (m_SceneType)
 		{
 		case phx::Scene::SceneType::Scene2D:
@@ -200,6 +213,7 @@ namespace phx {
 
 	void Scene::OnRuntimeStop()
 	{
+		ScriptEngine::OnRuntimeStop();
 		switch (m_SceneType)
 		{
 		case phx::Scene::SceneType::Scene2D:
@@ -237,9 +251,8 @@ namespace phx {
 		}
 	}
 
-	void Scene::UpdateScripts()
+	void Scene::UpdateScripts(DeltaTime dt)
 	{
-		// TODO: Rework script system
 		/* {
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 				{
@@ -254,11 +267,19 @@ namespace phx {
 					nsc.Instance->OnUpdate(dt);
 				});
 			}*/
+
+		{
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				ScriptEngine::OnUpdateEntity(entity, dt.GetSeconds());
+			}
+		}
 	}
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
-		UpdateScripts();
+		UpdateScripts(dt);
 		
 		switch (m_SceneType)
 		{
@@ -342,7 +363,7 @@ namespace phx {
 
 	void Scene::OnUpdatePhysics(DeltaTime dt, EditorCamera& camera)
 	{
-		UpdateScripts();
+		UpdateScripts(dt);
 
 		switch (m_SceneType)
 		{
@@ -414,6 +435,7 @@ namespace phx {
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<ScriptComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
@@ -426,6 +448,11 @@ namespace phx {
 				return Entity{ entity, this };
 		}
 		return {};
+	}
+
+	Entity Scene::GetEntityByUUID(UUID uuid)
+	{
+		return { m_EntityMap.at(uuid), this };
 	}
 
 	template<typename T>
@@ -443,6 +470,12 @@ namespace phx {
 
 	template<>
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
 
 	}

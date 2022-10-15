@@ -116,10 +116,6 @@ namespace phx {
 				{
 					newFileIcon.FileType = FileType::AudioFile;
 				}
-				else if (extension == ".obj" || extension == ".ply" || extension == ".fbx")
-				{
-					newFileIcon.FileType = FileType::MeshFile;
-				}
 				else if (extension == ".phxobj")
 				{
 					newFileIcon.FileType = FileType::PrefabFile;
@@ -145,7 +141,6 @@ namespace phx {
 
 		m_Icons["image_file"] = Texture2D::Create("resources/icons/content-browser/image-icon.png");
 		m_Icons["scene_file"] = Texture2D::Create("resources/icons/content-browser/scene-icon.png");
-		m_Icons["mesh_file"] = Texture2D::Create("resources/icons/content-browser/mesh-icon.png");
 		m_Icons["audio_file"] = Texture2D::Create("resources/icons/content-browser/audio-icon.png");
 		m_Icons["prefab_file"] = Texture2D::Create("resources/icons/content-browser/prefab-icon.png");
 
@@ -168,7 +163,6 @@ namespace phx {
 
 		m_Icons["image_file"] = Texture2D::Create("resources/icons/content-browser/image-icon.png");
 		m_Icons["scene_file"] = Texture2D::Create("resources/icons/content-browser/scene-icon.png");
-		m_Icons["mesh_file"] = Texture2D::Create("resources/icons/content-browser/mesh-icon.png");
 		m_Icons["audio_file"] = Texture2D::Create("resources/icons/content-browser/audio-icon.png");
 		m_Icons["prefab_file"] = Texture2D::Create("resources/icons/content-browser/prefab-icon.png");
 

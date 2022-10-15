@@ -233,9 +233,16 @@ namespace phx
 					SaveSceneAs();
 				}
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
 				{
 					OpenScene();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Open Project..."))
+				{
+					OpenProject();
 				}
 
 				ImGui::Separator();
@@ -463,7 +470,7 @@ namespace phx
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
 
 
-		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiColumnsFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse);
+		ImGui::Begin("Toolbar", nullptr,  ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiColumnsFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse);
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
@@ -741,7 +748,6 @@ namespace phx
 
 	void EditorLayer::OpenScene()
 	{
-
 		std::string filepath = FileDialogs::OpenFile("Phoenix Scene (*.phxscene)\0*.phxscene\0");
 		if (!filepath.empty())
 		{
@@ -773,6 +779,26 @@ namespace phx
 			std::string scene = path.string();
 			if (m_Project != nullptr)
 				m_Project->SetCurrentScene(scene);
+		}
+	}
+
+	void EditorLayer::OpenProject()
+	{
+		std::string filepath = FileDialogs::OpenFile("Phoenix Project (*.phxproj)\0*.phxproj\0");
+		if (!filepath.empty())
+		{
+			ProjectSerializer projSerializer(m_Project);
+			m_Project = projSerializer.Deserialize(filepath);
+			if (!m_Project->m_CurrentScene.empty())
+			{
+				OpenScene(m_Project->m_CurrentScene);
+			}
+			else
+			{
+
+				NewScene(Scene::SceneType::Scene2D, true);
+			}
+			m_ContentBrowserPanel.UpdateAssetPath(m_Project->m_AssetPath);
 		}
 	}
 

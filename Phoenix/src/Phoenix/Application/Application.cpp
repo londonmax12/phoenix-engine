@@ -28,7 +28,11 @@ namespace phx {
 
 		if(spec.InitRenderer)
 			Renderer::Init();
-		ScriptEngine::Init();
+
+        if(spec.InitScripting)
+			ScriptEngine::Init();
+
+
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

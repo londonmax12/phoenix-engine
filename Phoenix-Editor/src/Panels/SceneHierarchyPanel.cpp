@@ -288,6 +288,11 @@ namespace phx {
 			{
 			case Scene::SceneType::Scene2D:
 			{
+				if (ImGui::MenuItem("Script"))
+				{
+					m_SelectionContext.AddComponent<ScriptComponent>();
+					ImGui::CloseCurrentPopup();
+				}
 				if (ImGui::BeginMenu("Rendering"))
 				{
 					if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
@@ -486,6 +491,16 @@ namespace phx {
 
 					UI::DrawDragFloat("Tiling Factor", &component.TilingFactor, 0.1f);
 			});
+		}
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+				{
+					static char buffer[64];
+					strcpy(buffer, component.Name.c_str());
+					ImGui::InputText("Script Class", buffer, sizeof(buffer));
+						component.Name = buffer;
+				});
 		}
 		if (entity.HasComponent<CircleRendererComponent>())
 		{

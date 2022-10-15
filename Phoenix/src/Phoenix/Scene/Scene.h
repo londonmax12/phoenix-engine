@@ -2,7 +2,6 @@
 
 #include "Phoenix/Application/UUID.h"
 #include "Phoenix/Renderer/EditorCamera.h"
-#include "Phoenix/Scene/Skybox.h"
 #include "Phoenix/Time/DeltaTime.h"
 
 #include <vector>
@@ -39,7 +38,7 @@ namespace phx {
 
 		void Render2D();
 
-		void UpdateScripts();
+		void UpdateScripts(DeltaTime dt);
 
 		void OnUpdateRuntime(DeltaTime dt);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
@@ -51,6 +50,8 @@ namespace phx {
 		uint32_t GetRegistrySize() { return m_Registry.size(); }
 
 		Entity GetPrimaryCameraEntity();
+
+		Entity GetEntityByUUID(UUID uuid);
 
 		template<typename... Components>
 		auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
@@ -68,8 +69,7 @@ namespace phx {
 
 		SceneType m_SceneType = SceneType::Scene2D;
 
-		SkyBox m_Skybox = SkyBox("assets/skybox/Skybox_Back.bmp");
-
+		std::unordered_map<UUID, entt::entity> m_EntityMap;
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;

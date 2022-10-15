@@ -87,6 +87,15 @@ namespace phx {
 		CameraComponent(const CameraComponent&) = default;
 	};
 
+	struct ScriptComponent
+	{
+		std::string Name;
+
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+	};
+
+
 	class ScriptableEntity;
 
 	struct NativeScriptComponent

@@ -21,7 +21,8 @@
     <OutputPath>..\Phoenix-Editor\resources\scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Phoenix-Editor\resources\scripts\int\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +34,8 @@
     <OutputPath>..\Phoenix-Editor\resources\scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Phoenix-Editor\resources\scripts\int\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,7 +47,8 @@
     <OutputPath>..\Phoenix-Editor\resources\scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Phoenix-Editor\resources\scripts\int\Dist\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -56,7 +59,13 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Dist|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Main.cs" />
+    <Compile Include="src\Scene\Entity.cs" />
+    <Compile Include="src\Input\Input.cs" />
+    <Compile Include="src\Input\Key.cs" />
+    <Compile Include="src\Core\InternalCalls.cs" />
+    <Compile Include="src\Player.cs" />
+    <Compile Include="src\Types\Vector2.cs" />
+    <Compile Include="src\Types\Vector3.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

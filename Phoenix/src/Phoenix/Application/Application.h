@@ -37,15 +37,18 @@ namespace phx {
 
 		bool WindowDecorated = true;
 
+		bool InitScripting = true;
+
 		ApplicationSpecification();
 		ApplicationSpecification(std::string name)
 			: Name(name) {}
-		ApplicationSpecification(std::string name, 
-			bool initRenderer = true, 
-			int windowWidth = 1600, 
-			int windowHeight = 900, 
-			bool windowDecorated = true)
-			: Name(name), InitRenderer(initRenderer), WindowWidth(windowWidth), WindowHeight(windowHeight), WindowDecorated(windowDecorated) {}
+		ApplicationSpecification(std::string name,
+			bool initRenderer = true,
+			int windowWidth = 1600,
+			int windowHeight = 900,
+			bool windowDecorated = true,
+			bool initScripting = true)
+			: Name(name), InitRenderer(initRenderer), WindowWidth(windowWidth), WindowHeight(windowHeight), WindowDecorated(windowDecorated), InitScripting(initScripting) {}
 	};
 
 	class Application

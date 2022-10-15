@@ -29,6 +29,7 @@ namespace phx {
 		}
 		catch (YAML::ParserException e)
 		{
+			PHX_CORE_ERROR("Failed to load project from filepath: {}, {}", filepath, e.msg);
 			return m_Project;
 		}
 
