@@ -10,25 +10,33 @@ Phoenix is a WIP game engine written in C++ with an OpenGL renderer
 To build project files for Windows run GenerateWinProjects.bat or run Premake
 
 ## Features and To Do
-- Multi-platform :white_square_button:
-  - Editor :white_square_button:
+- Editor
+  - Multi Platform
     1. Windows :white_check_mark:
     2. Linux :white_square_button:
     3. Mac :white_square_button:
+- Engine
   - Multiple Rendering APIS :white_square_button:
     1. OpenGL :white_check_mark:
     2. Vulkan :white_square_button:
     3. DirectX :white_square_button:
     4. Metal :white_square_button:
-- Scripting :white_square_button:
-- Fast ECS :white_check_mark:
-- Launcher :white_check_mark:
-- Editor :white_check_mark:
-  1. Scene serialization :white_check_mark:
-  2. Project serialization :white_check_mark:
-- Game Types :white_square_button:
-  1. 2D :white_check_mark:
-  2. 3D :white_square_button:
+  - Scripting :white_check_mark:
+  - ECS :white_check_mark:
+  - Audio
+    - 2D Audio :white_check_mark:
+    - 3D Audio :white_check_mark:
+  - Fast Particle System :white_square_button:
+  - Serialization
+    1. Scene serialization :white_check_mark:
+    2. Project serialization :white_check_mark:
+    3. Script serialization :white_square_button:
+  - Game Types
+    1. 2D :white_check_mark:
+    2. 3D :white_square_button:
+    
+ - Launcher :white_check_mark:
+
 
 ## Preview
 ![editor](https://user-images.githubusercontent.com/56260362/195051853-c1669047-f6e3-44b7-a63e-4bc8f88bcab1.png)
