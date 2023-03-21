@@ -181,7 +181,7 @@ namespace phx {
 		ImGui::Begin("Content Browser");
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-		int size = ImGui::GetFontSize();
+		float size = ImGui::GetFontSize();
 		
 		UI::PushHiddenButton();
 		if (ImGui::Button("<", ImVec2(size, size)))

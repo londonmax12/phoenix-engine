@@ -431,6 +431,9 @@ namespace phx {
 						if (UI::DrawDragFloat("Far", &orthoFar))
 							camera.SetOrthographicFarClip(orthoFar);
 
+						glm::vec4 clearColor = camera.GetClearColor();
+						UI::DrawColorControls("Clear Color", clearColor);
+						camera.SetClearColor(clearColor);
 						UI::DrawCheckbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
 					}
 				});
@@ -497,7 +500,7 @@ namespace phx {
 			DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
 				{
 					static char buffer[64];
-					strcpy(buffer, component.Name.c_str());
+					strcpy_s(buffer, component.Name.c_str());
 					ImGui::InputText("Script Class", buffer, sizeof(buffer));
 						component.Name = buffer;
 				});

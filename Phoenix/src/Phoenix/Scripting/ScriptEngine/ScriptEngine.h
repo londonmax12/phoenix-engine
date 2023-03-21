@@ -63,7 +63,7 @@ namespace phx {
 		static void OnUpdateEntity(Entity entity, float deltaTime);
 
 		static Scene* GetSceneContext() { return m_SceneContext; }
-
+		static MonoImage* GetAssemblyImage() { return m_CoreAssemblyImage; }
 	private:
 		static bool InitMono();
 		static void ShutdownMono();

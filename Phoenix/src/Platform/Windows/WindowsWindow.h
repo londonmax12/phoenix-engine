@@ -27,6 +27,8 @@ namespace phx {
 		virtual void MaximizeWindow() override;
 
 		virtual void* GetNativeWindow() const { return m_Window; };
+
+		virtual std::pair<int, int> GetRelativeMousePos() override;
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();

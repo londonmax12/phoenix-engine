@@ -14,6 +14,8 @@ namespace phx {
 
 	class Scene
 	{
+	private:
+		entt::registry m_Registry;
 	public:
 		Scene();
 		~Scene();
@@ -40,18 +42,21 @@ namespace phx {
 
 		void UpdateScripts(DeltaTime dt);
 
-		void OnUpdateRuntime(DeltaTime dt);
+		void OnUpdateRuntime(DeltaTime dt, Camera* camera, glm::mat4 cameraTransform);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		void OnUpdatePhysics(DeltaTime dt, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		void DuplicateEntity(Entity entity);
 
-		uint32_t GetRegistrySize() { return m_Registry.size(); }
+		size_t GetRegistrySize() { return m_Registry.size(); }
+		entt::registry* GetRegistry() { return &m_Registry; }
 
 		Entity GetPrimaryCameraEntity();
 
 		Entity GetEntityByUUID(UUID uuid);
+
+
 
 		template<typename... Components>
 		auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
@@ -59,7 +64,6 @@ namespace phx {
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 
-		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		
 		float m_GravityX = 0.0f;

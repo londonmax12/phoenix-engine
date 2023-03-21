@@ -65,8 +65,14 @@
     <Compile Include="..\src\Input\Key.cs">
       <Link>src\Input\Key.cs</Link>
     </Compile>
+    <Compile Include="..\src\Scene\Components.cs">
+      <Link>src\Scene\Components.cs</Link>
+    </Compile>
     <Compile Include="..\src\Scene\Entity.cs">
       <Link>src\Scene\Entity.cs</Link>
+    </Compile>
+    <Compile Include="..\src\Types\Color.cs">
+      <Link>src\Types\Color.cs</Link>
     </Compile>
     <Compile Include="..\src\Types\Vector2.cs">
       <Link>src\Types\Vector2.cs</Link>

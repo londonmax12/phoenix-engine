@@ -107,17 +107,15 @@ namespace phx
 
 		Renderer2D::ResetStats();
 
-		m_Framebuffer->Bind();
-		RenderCommand::ClearColor({ 0.12, 0.12, 0.12, 1 });
-		RenderCommand::Clear();
-
-		m_Framebuffer->ClearAttachment(1, -1);
-		//Renderer2D::BeginScene(m_CameraController.GetCamera());
-
 		switch (m_SceneState)
 		{
 		case phx::EditorLayer::SceneState::Edit:
 		{
+			m_Framebuffer->Bind();
+			RenderCommand::ClearColor({ 0.12f, 0.12f, 0.12f, 1.f });
+			RenderCommand::Clear();
+
+			m_Framebuffer->ClearAttachment(1, -1);
 
 			m_EditorCamera.OnUpdate(dt);
 
@@ -126,11 +124,39 @@ namespace phx
 		}			
 		case phx::EditorLayer::SceneState::Play:
 		{
-			m_ActiveScene->OnUpdateRuntime(dt);
+			Camera* mainCamera = nullptr;
+			glm::mat4 cameraTransform{};
+			{
+				auto view = m_ActiveScene->GetRegistry()->view<TransformComponent, CameraComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+					if (camera.Primary)
+					{
+						mainCamera = &camera.Camera;
+						cameraTransform = transform.GetTransform();
+						break;
+					}
+				}
+			}
+			m_Framebuffer->Bind();
+			RenderCommand::ClearColor(mainCamera->GetClearColor());
+			RenderCommand::Clear();
+
+			m_Framebuffer->ClearAttachment(1, -1);
+
+			m_ActiveScene->OnUpdateRuntime(dt, mainCamera, cameraTransform);
 			break;
 		}
 		case phx::EditorLayer::SceneState::PhysicTest:
 		{
+			m_Framebuffer->Bind();
+			RenderCommand::ClearColor({ 0.12f, 0.12f, 0.12f, 1.f });
+			RenderCommand::Clear();
+
+			m_Framebuffer->ClearAttachment(1, -1);
+
 			m_EditorCamera.OnUpdate(dt);
 
 			m_ActiveScene->OnUpdatePhysics(dt, m_EditorCamera);
@@ -344,8 +370,6 @@ namespace phx
 			ImGui::Text("Hovered Entity: %s", name.c_str());
 			ImGui::End();
 		}
-
-		//renderThemeEditor();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 

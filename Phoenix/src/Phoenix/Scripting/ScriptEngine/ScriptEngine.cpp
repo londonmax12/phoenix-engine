@@ -17,6 +17,7 @@ namespace phx {
 		}
 
 		ScriptRegistry::RegisterFunctions();
+		ScriptRegistry::RegisterComponents();
 
 		m_EntityClass = new ScriptClass("Phoenix", "Entity", m_CoreAssemblyImage);
 		MonoObject* instance = m_EntityClass->Instantiate();

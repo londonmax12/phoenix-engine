@@ -14,3 +14,8 @@ Phoenix/vendor/VulkanSDK
 Sandbox/PhoenixSesson-Shutdown.json
 Sandbox/PhoenixSesson-Runtime.json
 Sandbox/PhoenixSesson-Startup.json
+libs/mono/
+Phoenix-Editor/resources/scripts/int/Debug/Phoenix-Script.csproj.CoreCompileInputs.cache
+*.dll
+*.pdb
+*.cache

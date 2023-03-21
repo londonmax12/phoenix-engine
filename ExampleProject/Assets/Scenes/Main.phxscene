@@ -1,6 +1,30 @@
 Scene: Untitled
 SceneType: 2D
 Entities:
+  - Entity: 5082736670011738581
+    TagComponent:
+      Tag: Square Object
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      ClassName: Sandbox.Player
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Textured: false
+      TextureTiling: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+      IsSensor: false
   - Entity: 14299843668550516617
     TagComponent:
       Tag: Main Camera

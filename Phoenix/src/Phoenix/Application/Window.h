@@ -48,5 +48,7 @@ namespace phx {
 		virtual void* GetNativeWindow() const = 0;
 
 		static Scope<Window> Create(const WindowProps& props = WindowProps());
+
+		virtual std::pair<int, int> GetRelativeMousePos() = 0;
 	};
 };

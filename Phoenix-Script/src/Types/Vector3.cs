@@ -16,7 +16,6 @@ namespace Phoenix
             y = scalar;
             z = scalar;
         }
-
         public Vector3(float X, float Y, float Z)
         {
             x = X;

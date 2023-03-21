@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phoenix
 {
-    public struct Vector2
+    public class Vector2
     {
         public float x, y;
 

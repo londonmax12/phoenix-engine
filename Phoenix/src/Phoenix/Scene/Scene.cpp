@@ -277,7 +277,7 @@ namespace phx {
 		}
 	}
 
-	void Scene::OnUpdateRuntime(DeltaTime dt)
+	void Scene::OnUpdateRuntime(DeltaTime dt, Camera* mainCamera, glm::mat4 cameraTransform)
 	{
 		UpdateScripts(dt);
 		
@@ -313,24 +313,6 @@ namespace phx {
 					transform.Translation.x = position.x;
 					transform.Translation.y = position.y;
 					transform.Rotation.z = body->GetAngle();
-				}
-			}
-
-			Camera* mainCamera = nullptr;
-			glm::mat4 cameraTransform;
-
-			{
-				auto view = m_Registry.view<TransformComponent, CameraComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
-
-					if (camera.Primary)
-					{
-						mainCamera = &camera.Camera;
-						cameraTransform = transform.GetTransform();
-						break;
-					}
 				}
 			}
 

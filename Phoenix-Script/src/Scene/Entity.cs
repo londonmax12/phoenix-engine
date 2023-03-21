@@ -28,5 +28,25 @@ namespace Phoenix
                 InternalCalls.TransformComponent_SetTranslation(entityID, ref value);
             }
         }
+
+        public bool HasComponent<T>() where T : Component, new()
+        {
+            Type componentType = typeof(T);
+            return InternalCalls.Entity_HasComponent(entityID, componentType);
+        }
+
+        public T GetComponent<T>() where T : Component, new()
+        {
+            if (!HasComponent<T>())
+                return null;
+
+            T component = new T() { Entity = this };
+            return component;
+        }
+
+        public ulong GetID()
+        {
+            return entityID;
+        }
     }
 }

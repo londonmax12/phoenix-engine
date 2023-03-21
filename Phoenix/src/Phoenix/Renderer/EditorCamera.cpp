@@ -99,33 +99,6 @@ namespace phx {
 			else if (Input::IsMouseButtonPressed(Mouse::Button2))
 				MouseZoom(delta.y);
 		}
-		else
-		{
-			m_CameraMode = CameraMode::FLYCAM;
-			if (Input::IsMouseButtonPressed(Mouse::Button1))
-			{
-				MouseRotate(delta);
-			}
-
-			float speed = m_CameraMode == CameraMode::ARCBALL ? m_Speed / 2 : Input::IsKeyPressed(Key::LeftShift) ? m_Speed * 2 : m_Speed;
-
-			if (Input::IsKeyPressed(Key::A))
-			{
-				m_FocalPoint -= GetRightDirection() * (speed * dt);
-			}
-			if (Input::IsKeyPressed(Key::D))
-			{
-				m_FocalPoint += GetRightDirection() * (speed * dt);
-			}
-			if (Input::IsKeyPressed(Key::W))
-			{
-				m_FocalPoint += GetForwardDirection() * (speed * dt);
-			}
-			if (Input::IsKeyPressed(Key::S))
-			{
-				m_FocalPoint -= GetForwardDirection() * (speed * dt);
-			}
-		}
 		UpdateView();
 	}
 

@@ -32,6 +32,13 @@ namespace phx {
 		Shutdown();
 	}
 
+	std::pair<int, int> WindowsWindow::GetRelativeMousePos()
+	{
+		double xpos, ypos;
+		glfwGetCursorPos(m_Window, &xpos, &ypos);
+		return { (int)xpos, (int)ypos };
+	}
+
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		PHX_PROFILE_FUNCTION();
