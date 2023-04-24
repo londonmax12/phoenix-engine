@@ -24,16 +24,14 @@ To build project files for Windows run GenerateWinProjects.bat or run Premake
   - Scripting :white_check_mark:
   - ECS :white_check_mark:
   - Audio
-    - 2D Audio :white_check_mark:
-    - 3D Audio :white_check_mark:
-  - Fast Particle System :white_square_button:
+    - 2D Audio :white_square_button:
+  - Particle System :white_square_button:
   - Serialization
     1. Scene serialization :white_check_mark:
     2. Project serialization :white_check_mark:
     3. Script serialization :white_square_button:
   - Game Types
     1. 2D :white_check_mark:
-    2. 3D :white_square_button:
     
  - Launcher :white_check_mark:
 
